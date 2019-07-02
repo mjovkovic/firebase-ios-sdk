@@ -22,11 +22,11 @@
 
 namespace absl {
 bool HaveLeakSanitizer() { return false; }
-void DoIgnoreLeak(const void*) { }
-void RegisterLivePointers(const void*, size_t) { }
-void UnRegisterLivePointers(const void*, size_t) { }
-LeakCheckDisabler::LeakCheckDisabler() { }
-LeakCheckDisabler::~LeakCheckDisabler() { }
+void DoIgnoreLeak(const void*) {}
+void RegisterLivePointers(const void*, size_t) {}
+void UnRegisterLivePointers(const void*, size_t) {}
+LeakCheckDisabler::LeakCheckDisabler() {}
+LeakCheckDisabler::~LeakCheckDisabler() {}
 }  // namespace absl
 
 #else

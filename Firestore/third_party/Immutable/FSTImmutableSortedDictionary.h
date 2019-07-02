@@ -28,7 +28,7 @@ extern const NSUInteger kSortedDictionaryArrayToRBTreeSizeThreshold;
  * FSTImmutableSortedDictionary is a dictionary. It is immutable, but has methods to create new
  * dictionaries that are mutations of it, in an efficient way.
  */
-@interface FSTImmutableSortedDictionary <KeyType, __covariant ValueType> : NSObject
+@interface FSTImmutableSortedDictionary<KeyType, __covariant ValueType> : NSObject
 
 + (FSTImmutableSortedDictionary *)dictionaryWithComparator:(NSComparator)comparator;
 + (FSTImmutableSortedDictionary *)dictionaryWithDictionary:

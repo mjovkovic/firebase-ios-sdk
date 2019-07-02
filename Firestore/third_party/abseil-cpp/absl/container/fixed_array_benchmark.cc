@@ -25,8 +25,9 @@ namespace {
 // set an int to a constant..
 class SimpleClass {
  public:
-  SimpleClass() : i(3) { }
+  SimpleClass() : i(3) {}
   ~SimpleClass() { i = 0; }
+
  private:
   int i;
 };

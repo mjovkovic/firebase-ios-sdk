@@ -19,11 +19,11 @@
 #include <limits>
 
 #include "absl/base/attributes.h"
+#include "absl/base/call_once.h"
 #include "absl/base/internal/atomic_hook.h"
 #include "absl/base/internal/cycleclock.h"
 #include "absl/base/internal/spinlock_wait.h"
 #include "absl/base/internal/sysinfo.h" /* For NumCPUs() */
-#include "absl/base/call_once.h"
 
 // Description of lock-word:
 //  31..00: [............................3][2][1][0]
@@ -146,7 +146,7 @@ void SpinLock::SlowLock() {
         // new lock state will be the number of cycles this thread waited if
         // this thread obtains the lock.
         lock_value = TryLockInternal(lock_value, wait_cycles);
-        continue;   // Skip the delay at the end of the loop.
+        continue;  // Skip the delay at the end of the loop.
       }
     }
 
@@ -223,8 +223,8 @@ uint64_t SpinLock::DecodeWaitCycles(uint32_t lock_value) {
   // Cast to uint32_t first to ensure bits [63:32] are cleared.
   const uint64_t scaled_wait_time =
       static_cast<uint32_t>(lock_value & kWaitTimeMask);
-  return scaled_wait_time
-      << (PROFILE_TIMESTAMP_SHIFT - LOCKWORD_RESERVED_SHIFT);
+  return scaled_wait_time << (PROFILE_TIMESTAMP_SHIFT -
+                              LOCKWORD_RESERVED_SHIFT);
 }
 
 }  // namespace base_internal

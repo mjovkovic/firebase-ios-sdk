@@ -4,7 +4,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FSTTreeSortedDictionaryEnumerator <KeyType, ValueType> : NSEnumerator<ValueType>
+@interface FSTTreeSortedDictionaryEnumerator<KeyType, ValueType> : NSEnumerator <ValueType>
 
 - (id)init __attribute__((
     unavailable("Use initWithImmutableSortedDictionary:startKey:isReverse: instead.")));

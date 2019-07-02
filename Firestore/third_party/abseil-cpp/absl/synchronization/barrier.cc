@@ -20,9 +20,7 @@
 namespace absl {
 
 // Return whether int *arg is zero.
-static bool IsZero(void *arg) {
-  return 0 == *reinterpret_cast<int *>(arg);
-}
+static bool IsZero(void *arg) { return 0 == *reinterpret_cast<int *>(arg); }
 
 bool Barrier::Block() {
   MutexLock l(&this->lock_);

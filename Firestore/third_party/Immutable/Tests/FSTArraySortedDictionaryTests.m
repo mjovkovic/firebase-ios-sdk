@@ -16,8 +16,8 @@
 - (NSComparator)defaultComparator {
   return ^(id obj1, id obj2) {
     NSAssert([obj1 respondsToSelector:@selector(compare:)] &&
-                  [obj2 respondsToSelector:@selector(compare:)],
-              @"Objects must support compare: %@ %@", obj1, obj2);
+                 [obj2 respondsToSelector:@selector(compare:)],
+             @"Objects must support compare: %@ %@", obj1, obj2);
     return [obj1 compare:obj2];
   };
 }

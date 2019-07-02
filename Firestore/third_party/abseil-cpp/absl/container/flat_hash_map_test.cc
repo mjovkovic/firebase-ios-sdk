@@ -127,9 +127,7 @@ struct Hash {
 
 struct Eq {
   using is_transparent = void;
-  bool operator()(size_t lhs, size_t rhs) const {
-    return lhs == rhs;
-  }
+  bool operator()(size_t lhs, size_t rhs) const { return lhs == rhs; }
   bool operator()(size_t lhs, const LazyInt& rhs) const {
     return lhs == rhs.value;
   }

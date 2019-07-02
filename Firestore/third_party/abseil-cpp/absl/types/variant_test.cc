@@ -31,13 +31,13 @@
 #include <utility>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
 #include "absl/base/port.h"
 #include "absl/memory/memory.h"
 #include "absl/meta/type_traits.h"
 #include "absl/strings/string_view.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 #ifdef ABSL_HAVE_EXCEPTIONS
 
@@ -51,7 +51,7 @@
 
 #endif  // ABSL_HAVE_EXCEPTIONS
 
-#define ABSL_VARIANT_TEST_EXPECT_BAD_VARIANT_ACCESS(...)                 \
+#define ABSL_VARIANT_TEST_EXPECT_BAD_VARIANT_ACCESS(...)                       \
   ABSL_VARIANT_TEST_EXPECT_FAIL((void)(__VA_ARGS__), absl::bad_variant_access, \
                                 "Bad variant access")
 
@@ -138,38 +138,38 @@ void ToValuelessByException(absl::variant<H, T...>& v) {  // NOLINT
 
 // An indexed sequence of distinct structures holding a single
 // value of type T
-template<typename T, size_t N>
+template <typename T, size_t N>
 struct ValueHolder {
   explicit ValueHolder(const T& x) : value(x) {}
   typedef T value_type;
   value_type value;
   static const size_t kIndex = N;
 };
-template<typename T, size_t N>
+template <typename T, size_t N>
 const size_t ValueHolder<T, N>::kIndex;
 
 // The following three functions make ValueHolder compatible with
 // EXPECT_EQ and EXPECT_NE
-template<typename T, size_t N>
+template <typename T, size_t N>
 inline bool operator==(const ValueHolder<T, N>& left,
                        const ValueHolder<T, N>& right) {
   return left.value == right.value;
 }
 
-template<typename T, size_t N>
+template <typename T, size_t N>
 inline bool operator!=(const ValueHolder<T, N>& left,
                        const ValueHolder<T, N>& right) {
   return left.value != right.value;
 }
 
-template<typename T, size_t N>
-inline std::ostream& operator<<(
-    std::ostream& stream, const ValueHolder<T, N>& object) {
+template <typename T, size_t N>
+inline std::ostream& operator<<(std::ostream& stream,
+                                const ValueHolder<T, N>& object) {
   return stream << object.value;
 }
 
 // Makes a variant holding twelve uniquely typed T wrappers.
-template<typename T>
+template <typename T>
 struct VariantFactory {
   typedef variant<ValueHolder<T, 1>, ValueHolder<T, 2>, ValueHolder<T, 3>,
                   ValueHolder<T, 4>>
@@ -178,8 +178,8 @@ struct VariantFactory {
 
 // A typelist in 1:1 with VariantFactory, to use type driven unit tests.
 typedef ::testing::Types<ValueHolder<size_t, 1>, ValueHolder<size_t, 2>,
-                         ValueHolder<size_t, 3>,
-                         ValueHolder<size_t, 4>> VariantTypes;
+                         ValueHolder<size_t, 3>, ValueHolder<size_t, 4>>
+    VariantTypes;
 
 // Increments the provided counter pointer in the destructor
 struct IncrementInDtor {
@@ -214,8 +214,8 @@ inline bool operator==(const IncrementInDtor& left,
 }
 
 // This is defined so EXPECT_EQ can work with IncrementInDtor
-inline std::ostream& operator<<(
-    std::ostream& stream, const IncrementInDtor& object) {
+inline std::ostream& operator<<(std::ostream& stream,
+                                const IncrementInDtor& object) {
   return stream << object.counter;
 }
 
@@ -225,6 +225,7 @@ class CopyNoAssign {
   explicit CopyNoAssign(int value) : foo(value) {}
   CopyNoAssign(const CopyNoAssign& other) : foo(other.foo) {}
   int foo;
+
  private:
   const CopyNoAssign& operator=(const CopyNoAssign&);
 };
@@ -234,13 +235,10 @@ class CopyNoAssign {
 // test the overloads of variant::emplace.
 class NonCopyable {
  public:
-  NonCopyable()
-      : value(0) {}
-  explicit NonCopyable(int value1)
-      : value(value1) {}
+  NonCopyable() : value(0) {}
+  explicit NonCopyable(int value1) : value(value1) {}
 
-  NonCopyable(int value1, int value2)
-      : value(value1 + value2) {}
+  NonCopyable(int value1, int value2) : value(value1 + value2) {}
 
   NonCopyable(int value1, int value2, int value3)
       : value(value1 + value2 + value3) {}
@@ -670,8 +668,8 @@ TEST(VariantTest, TestSelfAssignment) {
   object.operator=(object);
   EXPECT_EQ(0, counter);
 
-  // A std::string long enough that it's likely to defeat any inline representation
-  // optimization.
+  // A std::string long enough that it's likely to defeat any inline
+  // representation optimization.
   const std::string long_str(128, 'a');
 
   std::string foo = long_str;
@@ -2297,7 +2295,8 @@ TEST(VariantTest, TestRvalueConversion) {
   ASSERT_TRUE(absl::holds_alternative<int32_t>(variant2));
   EXPECT_EQ(42, absl::get<int32_t>(variant2));
 
-  variant2 = ConvertVariantTo<variant<int32_t, uint32_t>>(variant<uint32_t>(42));
+  variant2 =
+      ConvertVariantTo<variant<int32_t, uint32_t>>(variant<uint32_t>(42));
   ASSERT_TRUE(absl::holds_alternative<uint32_t>(variant2));
   EXPECT_EQ(42, absl::get<uint32_t>(variant2));
 
@@ -2435,7 +2434,8 @@ TEST(VariantTest, TestRvalueConversionViaConvertVariantTo) {
       ConvertVariantTo<variant<int32_t, uint32_t>>(variant<int32_t>(42)));
   EXPECT_THAT(absl::get_if<int32_t>(&variant2), Pointee(42));
 
-  variant2 = ConvertVariantTo<variant<int32_t, uint32_t>>(variant<uint32_t>(42));
+  variant2 =
+      ConvertVariantTo<variant<int32_t, uint32_t>>(variant<uint32_t>(42));
   EXPECT_THAT(absl::get_if<uint32_t>(&variant2), Pointee(42));
 
   variant<Convertible1, Convertible2> variant3(

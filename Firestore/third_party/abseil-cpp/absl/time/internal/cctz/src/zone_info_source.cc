@@ -36,8 +36,9 @@ namespace {
 // defers to the fallback factory.
 std::unique_ptr<absl::time_internal::cctz::ZoneInfoSource> DefaultFactory(
     const std::string& name,
-    const std::function<std::unique_ptr<absl::time_internal::cctz::ZoneInfoSource>(
-        const std::string& name)>& fallback_factory) {
+    const std::function<
+        std::unique_ptr<absl::time_internal::cctz::ZoneInfoSource>(
+            const std::string& name)>& fallback_factory) {
   return fallback_factory(name);
 }
 
@@ -66,8 +67,8 @@ ZoneInfoSourceFactory default_factory = DefaultFactory;
 #define __has_attribute(x) 0
 #endif
 #if __has_attribute(weak) || defined(__GNUC__)
-ZoneInfoSourceFactory zone_info_source_factory
-    __attribute__((weak)) = DefaultFactory;
+ZoneInfoSourceFactory zone_info_source_factory __attribute__((weak)) =
+    DefaultFactory;
 #else
 // Make it a "strong" definition if we have no other choice.
 ZoneInfoSourceFactory zone_info_source_factory = DefaultFactory;

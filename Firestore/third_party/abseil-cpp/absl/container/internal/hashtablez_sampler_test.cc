@@ -18,8 +18,6 @@
 #include <limits>
 #include <random>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/container/internal/have_sse.h"
 #include "absl/synchronization/blocking_counter.h"
@@ -28,6 +26,8 @@
 #include "absl/synchronization/notification.h"
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 #if SWISSTABLE_HAVE_SSE2
 constexpr int kProbeLength = 16;

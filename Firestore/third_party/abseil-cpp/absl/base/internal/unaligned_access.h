@@ -30,7 +30,7 @@
 // (namespaces, inline) which are absent or incompatible in C.
 #if defined(__cplusplus)
 
-#if defined(ADDRESS_SANITIZER) || defined(THREAD_SANITIZER) ||\
+#if defined(ADDRESS_SANITIZER) || defined(THREAD_SANITIZER) || \
     defined(MEMORY_SANITIZER)
 // Consider we have an unaligned load/store of 4 bytes from address 0x...05.
 // AddressSanitizer will treat it as a 3-byte access to the range 05:07 and

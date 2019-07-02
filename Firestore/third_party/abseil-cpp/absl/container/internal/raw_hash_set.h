@@ -456,8 +456,8 @@ inline bool IsValidCapacity(size_t n) { return ((n + 1) & n) == 0 && n > 0; }
 //   DELETED -> EMPTY
 //   EMPTY -> EMPTY
 //   FULL -> DELETED
-inline void ConvertDeletedToEmptyAndFullToDeleted(
-    ctrl_t* ctrl, size_t capacity) {
+inline void ConvertDeletedToEmptyAndFullToDeleted(ctrl_t* ctrl,
+                                                  size_t capacity) {
   assert(ctrl[capacity] == kSentinel);
   assert(IsValidCapacity(capacity));
   for (ctrl_t* pos = ctrl; pos != ctrl + capacity + 1; pos += Group::kWidth) {
@@ -1770,10 +1770,10 @@ class raw_hash_set {
   // TODO(alkis): Investigate removing some of these fields:
   // - ctrl/slots can be derived from each other
   // - size can be moved into the slot array
-  ctrl_t* ctrl_ = EmptyGroup();    // [(capacity + 1) * ctrl_t]
-  slot_type* slots_ = nullptr;     // [capacity * slot_type]
-  size_t size_ = 0;                // number of full slots
-  size_t capacity_ = 0;            // total number of slots
+  ctrl_t* ctrl_ = EmptyGroup();  // [(capacity + 1) * ctrl_t]
+  slot_type* slots_ = nullptr;   // [capacity * slot_type]
+  size_t size_ = 0;              // number of full slots
+  size_t capacity_ = 0;          // total number of slots
   HashtablezInfoHandle infoz_;
   absl::container_internal::CompressedTuple<size_t /* growth_left */, hasher,
                                             key_equal, allocator_type>

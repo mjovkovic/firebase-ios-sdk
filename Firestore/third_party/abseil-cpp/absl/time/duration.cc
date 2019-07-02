@@ -348,7 +348,7 @@ namespace time_internal {
 // the remainder.  If it does not saturate, the remainder remain accurate,
 // but the returned quotient will over/underflow int64_t and should not be used.
 int64_t IDivDuration(bool satq, const Duration num, const Duration den,
-                   Duration* rem) {
+                     Duration* rem) {
   int64_t q = 0;
   if (IDivFastPath(num, den, &q, rem)) {
     return q;
@@ -495,9 +495,7 @@ double FDivDuration(Duration num, Duration den) {
 // Trunc/Floor/Ceil.
 //
 
-Duration Trunc(Duration d, Duration unit) {
-  return d - (d % unit);
-}
+Duration Trunc(Duration d, Duration unit) { return d - (d % unit); }
 
 Duration Floor(const Duration d, const Duration unit) {
   const absl::Duration td = Trunc(d, unit);
@@ -585,15 +583,9 @@ double ToDoubleMicroseconds(Duration d) {
 double ToDoubleMilliseconds(Duration d) {
   return FDivDuration(d, Milliseconds(1));
 }
-double ToDoubleSeconds(Duration d) {
-  return FDivDuration(d, Seconds(1));
-}
-double ToDoubleMinutes(Duration d) {
-  return FDivDuration(d, Minutes(1));
-}
-double ToDoubleHours(Duration d) {
-  return FDivDuration(d, Hours(1));
-}
+double ToDoubleSeconds(Duration d) { return FDivDuration(d, Seconds(1)); }
+double ToDoubleMinutes(Duration d) { return FDivDuration(d, Minutes(1)); }
+double ToDoubleHours(Duration d) { return FDivDuration(d, Hours(1)); }
 
 timespec ToTimespec(Duration d) {
   timespec ts;
@@ -826,7 +818,7 @@ bool ConsumeDurationNumber(const char** dpp, int64_t* int_part,
 // in "*unit".  The given string pointer is modified to point to the first
 // unconsumed char.
 bool ConsumeDurationUnit(const char** start, Duration* unit) {
-  const char *s = *start;
+  const char* s = *start;
   bool ok = true;
   if (strncmp(s, "ns", 2) == 0) {
     s += 2;
@@ -902,7 +894,7 @@ bool ParseDuration(const std::string& dur_string, Duration* d) {
   return true;
 }
 
-bool ParseFlag(const std::string& text, Duration* dst, std::string* ) {
+bool ParseFlag(const std::string& text, Duration* dst, std::string*) {
   return ParseDuration(text, dst);
 }
 

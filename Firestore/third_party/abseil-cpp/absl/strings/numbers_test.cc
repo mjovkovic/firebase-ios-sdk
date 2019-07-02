@@ -33,16 +33,17 @@
 #include <string>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 #include "absl/strings/internal/numbers_test_common.h"
 #include "absl/strings/internal/pow10_helper.h"
 
 namespace {
 
+using absl::SimpleAtoi;
 using absl::numbers_internal::kSixDigitsToBufferSize;
 using absl::numbers_internal::safe_strto32_base;
 using absl::numbers_internal::safe_strto64_base;
@@ -52,7 +53,6 @@ using absl::numbers_internal::SixDigitsToBuffer;
 using absl::strings_internal::Itoa;
 using absl::strings_internal::strtouint32_test_cases;
 using absl::strings_internal::strtouint64_test_cases;
-using absl::SimpleAtoi;
 using testing::Eq;
 using testing::MatchesRegex;
 
@@ -660,8 +660,8 @@ TEST(stringtest, safe_strtou32_base) {
     EXPECT_EQ(e.expect_ok, safe_strtou32_base(e.str, &value, e.base))
         << "str=\"" << e.str << "\" base=" << e.base;
     if (e.expect_ok) {
-      EXPECT_EQ(e.expected, value) << "i=" << i << " str=\"" << e.str
-                                   << "\" base=" << e.base;
+      EXPECT_EQ(e.expected, value)
+          << "i=" << i << " str=\"" << e.str << "\" base=" << e.base;
     }
   }
 }
@@ -678,8 +678,8 @@ TEST(stringtest, safe_strtou32_base_length_delimited) {
                                  &value, e.base))
         << "str=\"" << e.str << "\" base=" << e.base;
     if (e.expect_ok) {
-      EXPECT_EQ(e.expected, value) << "i=" << i << " str=" << e.str
-                                   << " base=" << e.base;
+      EXPECT_EQ(e.expected, value)
+          << "i=" << i << " str=" << e.str << " base=" << e.base;
     }
   }
 }
@@ -761,7 +761,7 @@ void ExhaustiveFloat(uint32_t cases, R&& runnable) {
   runnable(0.0f);
   runnable(-0.0f);
   if (cases >= 2e9) {  // more than 2 billion?  Might as well run them all.
-    for (float f = 0; f < std::numeric_limits<float>::max(); ) {
+    for (float f = 0; f < std::numeric_limits<float>::max();) {
       f = nextafterf(f, std::numeric_limits<float>::max());
       runnable(-f);
       runnable(f);
@@ -1061,14 +1061,10 @@ TEST(StrToInt32Base, PrefixOnly) {
     int32_t value;
   };
   Int32TestLine int32_test_line[] = {
-    { "", false, 0 },
-    { "-", false, 0 },
-    { "-0", true, 0 },
-    { "0", true, 0 },
-    { "0x", false, 0 },
-    { "-0x", false, 0 },
+      {"", false, 0}, {"-", false, 0},  {"-0", true, 0},
+      {"0", true, 0}, {"0x", false, 0}, {"-0x", false, 0},
   };
-  const int base_array[] = { 0, 2, 8, 10, 16 };
+  const int base_array[] = {0, 2, 8, 10, 16};
 
   for (const Int32TestLine& line : int32_test_line) {
     for (const int base : base_array) {
@@ -1095,11 +1091,11 @@ TEST(StrToUint32Base, PrefixOnly) {
     uint32_t value;
   };
   Uint32TestLine uint32_test_line[] = {
-    { "", false, 0 },
-    { "0", true, 0 },
-    { "0x", false, 0 },
+      {"", false, 0},
+      {"0", true, 0},
+      {"0x", false, 0},
   };
-  const int base_array[] = { 0, 2, 8, 10, 16 };
+  const int base_array[] = {0, 2, 8, 10, 16};
 
   for (const Uint32TestLine& line : uint32_test_line) {
     for (const int base : base_array) {
@@ -1126,14 +1122,10 @@ TEST(StrToInt64Base, PrefixOnly) {
     int64_t value;
   };
   Int64TestLine int64_test_line[] = {
-    { "", false, 0 },
-    { "-", false, 0 },
-    { "-0", true, 0 },
-    { "0", true, 0 },
-    { "0x", false, 0 },
-    { "-0x", false, 0 },
+      {"", false, 0}, {"-", false, 0},  {"-0", true, 0},
+      {"0", true, 0}, {"0x", false, 0}, {"-0x", false, 0},
   };
-  const int base_array[] = { 0, 2, 8, 10, 16 };
+  const int base_array[] = {0, 2, 8, 10, 16};
 
   for (const Int64TestLine& line : int64_test_line) {
     for (const int base : base_array) {
@@ -1160,11 +1152,11 @@ TEST(StrToUint64Base, PrefixOnly) {
     uint64_t value;
   };
   Uint64TestLine uint64_test_line[] = {
-    { "", false, 0 },
-    { "0", true, 0 },
-    { "0x", false, 0 },
+      {"", false, 0},
+      {"0", true, 0},
+      {"0x", false, 0},
   };
-  const int base_array[] = { 0, 2, 8, 10, 16 };
+  const int base_array[] = {0, 2, 8, 10, 16};
 
   for (const Uint64TestLine& line : uint64_test_line) {
     for (const int base : base_array) {

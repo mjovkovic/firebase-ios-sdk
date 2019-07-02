@@ -18,9 +18,9 @@
 #include <map>
 #include <tuple>
 
-#include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
+#include "gtest/gtest.h"
 
 TEST(StrReplaceAll, OneReplacement) {
   std::string s;
@@ -155,9 +155,8 @@ TEST(StrReplaceAll, ManyReplacementsInMap) {
 TEST(StrReplaceAll, ReplacementsInPlace) {
   std::string s = std::string("$who bought $count #Noun. Thanks $who!");
   int count;
-  count = absl::StrReplaceAll({{"$count", absl::StrCat(5)},
-                              {"$who", "Bob"},
-                              {"#Noun", "Apples"}}, &s);
+  count = absl::StrReplaceAll(
+      {{"$count", absl::StrCat(5)}, {"$who", "Bob"}, {"#Noun", "Apples"}}, &s);
   EXPECT_EQ(count, 4);
   EXPECT_EQ("Bob bought 5 Apples. Thanks Bob!", s);
 }
@@ -182,7 +181,7 @@ struct Cont {
 };
 
 template <int index>
-absl::string_view get(const Cont& c) {
+absl::string_view get(const Cont &c) {
   auto splitter = absl::StrSplit(c.data, ':');
   auto it = splitter.begin();
   for (int i = 0; i < index; ++i) ++it;
@@ -218,7 +217,7 @@ TEST(StrReplaceAll, VariableNumber) {
   }
 
   {
-    std::map<const char*, const char*> replacements;
+    std::map<const char *, const char *> replacements;
     replacements["aa"] = "x";
     replacements["a"] = "X";
     s = "aaa";

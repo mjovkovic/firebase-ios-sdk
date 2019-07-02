@@ -13,9 +13,9 @@
 // limitations under the License.
 
 #include <memory>
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/debugging/leak_check.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -34,7 +34,8 @@ TEST(LeakCheckTest, LeakMemoryAfterDisablerScope) {
   // failed exit code.
   { absl::LeakCheckDisabler disabler; }
   char* foo = strdup("lsan should also complain about this leaked string");
-  ABSL_RAW_LOG(INFO, "Re-enabled leak detection.Should detect leaked std::string %s",
+  ABSL_RAW_LOG(INFO,
+               "Re-enabled leak detection.Should detect leaked std::string %s",
                foo);
 }
 

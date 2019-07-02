@@ -25,9 +25,9 @@
 #include <type_traits>
 #include <utility>
 
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
 #include "absl/base/dynamic_annotations.h"
+#include "gtest/gtest.h"
 
 #ifdef __ANDROID__
 // Android assert messages only go to system log, so death tests cannot inspect
@@ -196,64 +196,64 @@ TEST(StringViewTest, STLComparator) {
   EXPECT_EQ(result, absl::string_view((x)).compare(absl::string_view((y))) op 0)
 
 TEST(StringViewTest, ComparisonOperators) {
-  COMPARE(true, ==, "",   "");
+  COMPARE(true, ==, "", "");
   COMPARE(true, ==, "", absl::string_view());
   COMPARE(true, ==, absl::string_view(), "");
-  COMPARE(true, ==, "a",  "a");
+  COMPARE(true, ==, "a", "a");
   COMPARE(true, ==, "aa", "aa");
-  COMPARE(false, ==, "a",  "");
-  COMPARE(false, ==, "",   "a");
-  COMPARE(false, ==, "a",  "b");
-  COMPARE(false, ==, "a",  "aa");
+  COMPARE(false, ==, "a", "");
+  COMPARE(false, ==, "", "a");
+  COMPARE(false, ==, "a", "b");
+  COMPARE(false, ==, "a", "aa");
   COMPARE(false, ==, "aa", "a");
 
-  COMPARE(false, !=, "",   "");
-  COMPARE(false, !=, "a",  "a");
+  COMPARE(false, !=, "", "");
+  COMPARE(false, !=, "a", "a");
   COMPARE(false, !=, "aa", "aa");
-  COMPARE(true, !=, "a",  "");
-  COMPARE(true, !=, "",   "a");
-  COMPARE(true, !=, "a",  "b");
-  COMPARE(true, !=, "a",  "aa");
+  COMPARE(true, !=, "a", "");
+  COMPARE(true, !=, "", "a");
+  COMPARE(true, !=, "a", "b");
+  COMPARE(true, !=, "a", "aa");
   COMPARE(true, !=, "aa", "a");
 
-  COMPARE(true, <, "a",  "b");
-  COMPARE(true, <, "a",  "aa");
+  COMPARE(true, <, "a", "b");
+  COMPARE(true, <, "a", "aa");
   COMPARE(true, <, "aa", "b");
   COMPARE(true, <, "aa", "bb");
-  COMPARE(false, <, "a",  "a");
-  COMPARE(false, <, "b",  "a");
+  COMPARE(false, <, "a", "a");
+  COMPARE(false, <, "b", "a");
   COMPARE(false, <, "aa", "a");
-  COMPARE(false, <, "b",  "aa");
+  COMPARE(false, <, "b", "aa");
   COMPARE(false, <, "bb", "aa");
 
-  COMPARE(true, <=, "a",  "a");
-  COMPARE(true, <=, "a",  "b");
-  COMPARE(true, <=, "a",  "aa");
+  COMPARE(true, <=, "a", "a");
+  COMPARE(true, <=, "a", "b");
+  COMPARE(true, <=, "a", "aa");
   COMPARE(true, <=, "aa", "b");
   COMPARE(true, <=, "aa", "bb");
-  COMPARE(false, <=, "b",  "a");
+  COMPARE(false, <=, "b", "a");
   COMPARE(false, <=, "aa", "a");
-  COMPARE(false, <=, "b",  "aa");
+  COMPARE(false, <=, "b", "aa");
   COMPARE(false, <=, "bb", "aa");
 
-  COMPARE(false, >=, "a",  "b");
-  COMPARE(false, >=, "a",  "aa");
+  COMPARE(false, >=, "a", "b");
+  COMPARE(false, >=, "a", "aa");
   COMPARE(false, >=, "aa", "b");
   COMPARE(false, >=, "aa", "bb");
-  COMPARE(true, >=, "a",  "a");
-  COMPARE(true, >=, "b",  "a");
+  COMPARE(true, >=, "a", "a");
+  COMPARE(true, >=, "b", "a");
   COMPARE(true, >=, "aa", "a");
-  COMPARE(true, >=, "b",  "aa");
+  COMPARE(true, >=, "b", "aa");
   COMPARE(true, >=, "bb", "aa");
 
-  COMPARE(false, >, "a",  "a");
-  COMPARE(false, >, "a",  "b");
-  COMPARE(false, >, "a",  "aa");
+  COMPARE(false, >, "a", "a");
+  COMPARE(false, >, "a", "b");
+  COMPARE(false, >, "a", "aa");
   COMPARE(false, >, "aa", "b");
   COMPARE(false, >, "aa", "bb");
-  COMPARE(true, >, "b",  "a");
+  COMPARE(true, >, "b", "a");
   COMPARE(true, >, "aa", "a");
-  COMPARE(true, >, "b",  "aa");
+  COMPARE(true, >, "b", "aa");
   COMPARE(true, >, "bb", "aa");
 }
 
@@ -265,7 +265,7 @@ TEST(StringViewTest, ComparisonOperatorsByCharacterPosition) {
     COMPARE(true, ==, x, y);
     for (int j = 0; j < i; j++) {
       std::string z = x;
-      z[j] = 'b';       // Differs in position 'j'
+      z[j] = 'b';  // Differs in position 'j'
       COMPARE(false, ==, x, z);
       COMPARE(true, <, x, z);
       COMPARE(true, >, z, x);
@@ -353,7 +353,7 @@ TEST(StringViewTest, STL1) {
   EXPECT_TRUE(e.empty());
   EXPECT_TRUE(e.begin() == e.end());
 
-  char buf[4] = { '%', '%', '%', '%' };
+  char buf[4] = {'%', '%', '%', '%'};
   EXPECT_EQ(a.copy(buf, 4), 4);
   EXPECT_EQ(buf[0], a[0]);
   EXPECT_EQ(buf[1], a[1]);
@@ -585,9 +585,9 @@ TEST(StringViewTest, STL2FindLast) {
 
   d = absl::string_view();
   EXPECT_EQ(h.find_last_of(a), absl::string_view::npos);
-  EXPECT_EQ(g.find_last_of(a), g.size()-1);
+  EXPECT_EQ(g.find_last_of(a), g.size() - 1);
   EXPECT_EQ(a.find_last_of(b), 2);
-  EXPECT_EQ(a.find_last_of(c), a.size()-1);
+  EXPECT_EQ(a.find_last_of(c), a.size() - 1);
   EXPECT_EQ(f.find_last_of(i), 6);
   EXPECT_EQ(a.find_last_of('a'), 0);
   EXPECT_EQ(a.find_last_of('b'), 1);
@@ -618,7 +618,7 @@ TEST(StringViewTest, STL2FindLast) {
   EXPECT_EQ(d.find_last_of(f, 4), absl::string_view::npos);
   EXPECT_EQ(e.find_last_of(f, 4), absl::string_view::npos);
 
-  EXPECT_EQ(a.find_last_not_of(b), a.size()-1);
+  EXPECT_EQ(a.find_last_not_of(b), a.size() - 1);
   EXPECT_EQ(a.find_last_not_of(c), 22);
   EXPECT_EQ(b.find_last_not_of(a), absl::string_view::npos);
   EXPECT_EQ(b.find_last_not_of(b), absl::string_view::npos);
@@ -627,8 +627,8 @@ TEST(StringViewTest, STL2FindLast) {
   EXPECT_EQ(a.find_last_not_of(b, 3), 3);
   EXPECT_EQ(a.find_last_not_of(b, 2), absl::string_view::npos);
   // empty std::string nonsense
-  EXPECT_EQ(f.find_last_not_of(d), f.size()-1);
-  EXPECT_EQ(f.find_last_not_of(e), f.size()-1);
+  EXPECT_EQ(f.find_last_not_of(d), f.size() - 1);
+  EXPECT_EQ(f.find_last_not_of(e), f.size() - 1);
   EXPECT_EQ(f.find_last_not_of(d, 4), 4);
   EXPECT_EQ(f.find_last_not_of(e, 4), 4);
   EXPECT_EQ(d.find_last_not_of(d), absl::string_view::npos);
@@ -692,7 +692,7 @@ TEST(StringViewTest, TruncSubstr) {
   EXPECT_EQ("hi", absl::ClippedSubstr(hi, 0));
   EXPECT_EQ("i", absl::ClippedSubstr(hi, 1));
   EXPECT_EQ("", absl::ClippedSubstr(hi, 2));
-  EXPECT_EQ("", absl::ClippedSubstr(hi, 3));  // truncation
+  EXPECT_EQ("", absl::ClippedSubstr(hi, 3));     // truncation
   EXPECT_EQ("", absl::ClippedSubstr(hi, 3, 2));  // truncation
 }
 
@@ -709,23 +709,11 @@ TEST(StringViewTest, FindConformance) {
     std::string haystack;
     std::string needle;
   } specs[] = {
-    {"", ""},
-    {"", "a"},
-    {"a", ""},
-    {"a", "a"},
-    {"a", "b"},
-    {"aa", ""},
-    {"aa", "a"},
-    {"aa", "b"},
-    {"ab", "a"},
-    {"ab", "b"},
-    {"abcd", ""},
-    {"abcd", "a"},
-    {"abcd", "d"},
-    {"abcd", "ab"},
-    {"abcd", "bc"},
-    {"abcd", "cd"},
-    {"abcd", "abcd"},
+      {"", ""},         {"", "a"},      {"a", ""},      {"a", "a"},
+      {"a", "b"},       {"aa", ""},     {"aa", "a"},    {"aa", "b"},
+      {"ab", "a"},      {"ab", "b"},    {"abcd", ""},   {"abcd", "a"},
+      {"abcd", "d"},    {"abcd", "ab"}, {"abcd", "bc"}, {"abcd", "cd"},
+      {"abcd", "abcd"},
   };
   for (const auto& s : specs) {
     SCOPED_TRACE(s.haystack);
@@ -735,16 +723,13 @@ TEST(StringViewTest, FindConformance) {
     for (size_t i = 0; i <= sp.size(); ++i) {
       size_t pos = (i == sp.size()) ? absl::string_view::npos : i;
       SCOPED_TRACE(pos);
-      EXPECT_EQ(sp.find(s.needle, pos),
-                st.find(s.needle, pos));
-      EXPECT_EQ(sp.rfind(s.needle, pos),
-                st.rfind(s.needle, pos));
+      EXPECT_EQ(sp.find(s.needle, pos), st.find(s.needle, pos));
+      EXPECT_EQ(sp.rfind(s.needle, pos), st.rfind(s.needle, pos));
       EXPECT_EQ(sp.find_first_of(s.needle, pos),
                 st.find_first_of(s.needle, pos));
       EXPECT_EQ(sp.find_first_not_of(s.needle, pos),
                 st.find_first_not_of(s.needle, pos));
-      EXPECT_EQ(sp.find_last_of(s.needle, pos),
-                st.find_last_of(s.needle, pos));
+      EXPECT_EQ(sp.find_last_of(s.needle, pos), st.find_last_of(s.needle, pos));
       EXPECT_EQ(sp.find_last_not_of(s.needle, pos),
                 st.find_last_not_of(s.needle, pos));
     }
@@ -951,7 +936,7 @@ TEST(StringViewTest, ConstexprCompiles) {
 #endif
 
 #if !defined(__clang__) || 3 < __clang_major__ || \
-  (3 == __clang_major__ && 4 < __clang_minor__)
+    (3 == __clang_major__ && 4 < __clang_minor__)
   // older clang versions (< 3.5) complain that:
   //   "cannot perform pointer arithmetic on null pointer"
   constexpr absl::string_view::iterator const_begin_empty = sp.begin();
@@ -1065,8 +1050,7 @@ TEST(FindOneCharTest, EdgeCases) {
 
 #ifndef THREAD_SANITIZER  // Allocates too much memory for tsan.
 TEST(HugeStringView, TwoPointTwoGB) {
-  if (sizeof(size_t) <= 4 || RunningOnValgrind())
-    return;
+  if (sizeof(size_t) <= 4 || RunningOnValgrind()) return;
   // Try a huge std::string piece.
   const size_t size = size_t{2200} * 1000 * 1000;
   std::string s(size, 'a');

@@ -18,16 +18,16 @@
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <functional>
 #include <limits>
-#include <mutex>               // NOLINT(build/c++11)
+#include <mutex>  // NOLINT(build/c++11)
 #include <string>
-#include <thread>              // NOLINT(build/c++11)
+#include <thread>  // NOLINT(build/c++11)
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/cycleclock.h"
 #include "absl/base/internal/thread_identity.h"
 #include "absl/strings/str_cat.h"
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
+#include "gtest/gtest.h"
 
 // In this test we explicitly avoid the use of synchronization
 // primitives which might use PerThreadSem, most notably absl::Mutex.
@@ -78,7 +78,7 @@ struct ThreadData {
 // Need friendship with PerThreadSem.
 class PerThreadSemTest : public testing::Test {
  public:
-  static void TimingThread(ThreadData* t) {
+  static void TimingThread(ThreadData *t) {
     t->identity2 = GetOrCreateCurrentThreadIdentity();
     t->identity2_written.Post();
     while (t->num_iterations--) {
@@ -91,9 +91,10 @@ class PerThreadSemTest : public testing::Test {
     static const int kNumIterations = 100;
     ThreadData t;
     t.num_iterations = kNumIterations;
-    t.timeout = timeout ?
-        KernelTimeout(absl::Now() + absl::Seconds(10000))  // far in the future
-        : KernelTimeout::Never();
+    t.timeout = timeout
+                    ? KernelTimeout(absl::Now() +
+                                    absl::Seconds(10000))  // far in the future
+                    : KernelTimeout::Never();
     t.identity1 = GetOrCreateCurrentThreadIdentity();
 
     // We can't use the Thread class here because it uses the Mutex
@@ -126,14 +127,10 @@ class PerThreadSemTest : public testing::Test {
   static void Post(base_internal::ThreadIdentity *id) {
     PerThreadSem::Post(id);
   }
-  static bool Wait(KernelTimeout t) {
-    return PerThreadSem::Wait(t);
-  }
+  static bool Wait(KernelTimeout t) { return PerThreadSem::Wait(t); }
 
   // convenience overload
-  static bool Wait(absl::Time t) {
-    return Wait(KernelTimeout(t));
-  }
+  static bool Wait(absl::Time t) { return Wait(KernelTimeout(t)); }
 
   static void Tick(base_internal::ThreadIdentity *identity) {
     PerThreadSem::Tick(identity);
@@ -159,8 +156,8 @@ TEST_F(PerThreadSemTest, Timeouts) {
   // issues on various platforms.
   const absl::Duration slop = absl::Microseconds(200);
   EXPECT_LE(delay - slop, elapsed)
-      << "Wait returned " << delay - elapsed
-      << " early (with " << slop << " slop), start time was " << start;
+      << "Wait returned " << delay - elapsed << " early (with " << slop
+      << " slop), start time was " << start;
 
   absl::Time negative_timeout = absl::UnixEpoch() - absl::Milliseconds(100);
   EXPECT_FALSE(Wait(negative_timeout));

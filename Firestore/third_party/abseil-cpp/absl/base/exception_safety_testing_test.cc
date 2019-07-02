@@ -21,9 +21,9 @@
 #include <type_traits>
 #include <vector>
 
+#include "absl/memory/memory.h"
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest.h"
-#include "absl/memory/memory.h"
 
 namespace testing {
 

@@ -207,8 +207,8 @@ int BigUnsigned<max_words>::ReadDigits(const char* begin, const char* end,
     ++dropped_digits;
   }
   if (begin < end && *std::prev(end) == '.') {
-    // If the std::string ends in '.', either before or after dropping zeroes, then
-    // drop the decimal point and look for more digits to drop.
+    // If the std::string ends in '.', either before or after dropping zeroes,
+    // then drop the decimal point and look for more digits to drop.
     dropped_digits = 0;
     --end;
     while (begin < end && *std::prev(end) == '0') {

@@ -21,9 +21,9 @@
 #include <cstdio>
 #include <cstring>
 
+#include "absl/strings/string_view.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/strings/string_view.h"
 
 namespace {
 

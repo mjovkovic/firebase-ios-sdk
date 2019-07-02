@@ -14,8 +14,8 @@
 
 #include "absl/base/internal/exception_safety_testing.h"
 
-#include "gtest/gtest.h"
 #include "absl/meta/type_traits.h"
+#include "gtest/gtest.h"
 
 namespace testing {
 

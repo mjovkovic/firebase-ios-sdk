@@ -17,7 +17,7 @@ namespace absl {
 namespace str_format_internal {
 namespace {
 
-const char kDigit[2][32] = { "0123456789abcdef", "0123456789ABCDEF" };
+const char kDigit[2][32] = {"0123456789abcdef", "0123456789ABCDEF"};
 
 // Reduce *capacity by s.size(), clipped to a 0 minimum.
 void ReducePadding(string_view s, size_t *capacity) {
@@ -68,9 +68,7 @@ class ConvertedIntInfo {
   };
   template <typename T>
   struct IsNegImpl<T, false> {
-    static bool Eval(T) {
-      return false;
-    }
+    static bool Eval(T) { return false; }
   };
 
   template <typename T>
@@ -165,8 +163,7 @@ bool ConvertIntImplInner(const ConvertedIntInfo &info,
 
   int precision = conv.precision();
   bool precision_specified = precision >= 0;
-  if (!precision_specified)
-    precision = 1;
+  if (!precision_specified) precision = 1;
 
   if (conv.flags().alt && conv.conv().id() == ConversionChar::o) {
     // From POSIX description of the '#' (alt) flag:
@@ -223,8 +220,7 @@ bool ConvertIntArg(T v, const ConversionSpec conv, FormatSinkImpl *sink) {
   }
   if (conv.conv().id() == ConversionChar::c)
     return ConvertCharImpl(static_cast<unsigned char>(v), conv, sink);
-  if (!conv.conv().is_integral())
-    return false;
+  if (!conv.conv().is_integral()) return false;
   if (!conv.conv().is_signed() && IsSigned<T>::value) {
     using U = typename MakeUnsigned<T>::type;
     return FormatConvertImpl(static_cast<U>(v), conv, sink).value;
@@ -239,8 +235,7 @@ bool ConvertFloatArg(T v, const ConversionSpec conv, FormatSinkImpl *sink) {
 
 inline bool ConvertStringArg(string_view v, const ConversionSpec conv,
                              FormatSinkImpl *sink) {
-  if (conv.conv().id() != ConversionChar::s)
-    return false;
+  if (conv.conv().id() != ConversionChar::s) return false;
   if (conv.flags().basic) {
     sink->Append(v);
     return true;
@@ -284,8 +279,7 @@ ConvertResult<Conv::s | Conv::p> FormatConvertImpl(const char *v,
 // ==================== Raw pointers ====================
 ConvertResult<Conv::p> FormatConvertImpl(VoidPtr v, const ConversionSpec conv,
                                          FormatSinkImpl *sink) {
-  if (conv.conv().id() != ConversionChar::p)
-    return {false};
+  if (conv.conv().id() != ConversionChar::p) return {false};
   if (!v.value) {
     sink->Append("(nil)");
     return {true};
@@ -370,7 +364,6 @@ IntegralConvertResult FormatConvertImpl(absl::uint128 v,
 }
 
 ABSL_INTERNAL_FORMAT_DISPATCH_OVERLOADS_EXPAND_();
-
 
 }  // namespace str_format_internal
 

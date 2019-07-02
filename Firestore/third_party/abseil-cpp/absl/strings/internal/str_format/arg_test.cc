@@ -10,8 +10,8 @@
 
 #include <ostream>
 #include <string>
-#include "gtest/gtest.h"
 #include "absl/strings/str_format.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace str_format_internal {
@@ -65,7 +65,7 @@ TEST_F(FormatArgImplTest, ToInt) {
 extern const char kMyArray[];
 
 TEST_F(FormatArgImplTest, CharArraysDecayToCharPtr) {
-  const char* a = "";
+  const char *a = "";
   EXPECT_EQ(FormatArgImplFriend::GetVTablePtrForTest(FormatArgImpl(a)),
             FormatArgImplFriend::GetVTablePtrForTest(FormatArgImpl("")));
   EXPECT_EQ(FormatArgImplFriend::GetVTablePtrForTest(FormatArgImpl(a)),

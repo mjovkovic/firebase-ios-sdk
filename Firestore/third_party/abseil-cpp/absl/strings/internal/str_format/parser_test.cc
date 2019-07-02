@@ -2,9 +2,9 @@
 
 #include <string.h>
 
+#include "absl/base/macros.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/base/macros.h"
 
 namespace absl {
 namespace str_format_internal {
@@ -17,19 +17,14 @@ TEST(LengthModTest, Names) {
   struct Expectation {
     int line;
     LengthMod::Id id;
-    const char *name;
+    const char* name;
   };
   const Expectation kExpect[] = {
-    {__LINE__, LengthMod::none, ""  },
-    {__LINE__, LengthMod::h,    "h" },
-    {__LINE__, LengthMod::hh,   "hh"},
-    {__LINE__, LengthMod::l,    "l" },
-    {__LINE__, LengthMod::ll,   "ll"},
-    {__LINE__, LengthMod::L,    "L" },
-    {__LINE__, LengthMod::j,    "j" },
-    {__LINE__, LengthMod::z,    "z" },
-    {__LINE__, LengthMod::t,    "t" },
-    {__LINE__, LengthMod::q,    "q" },
+      {__LINE__, LengthMod::none, ""}, {__LINE__, LengthMod::h, "h"},
+      {__LINE__, LengthMod::hh, "hh"}, {__LINE__, LengthMod::l, "l"},
+      {__LINE__, LengthMod::ll, "ll"}, {__LINE__, LengthMod::L, "L"},
+      {__LINE__, LengthMod::j, "j"},   {__LINE__, LengthMod::z, "z"},
+      {__LINE__, LengthMod::t, "t"},   {__LINE__, LengthMod::q, "q"},
   };
   EXPECT_EQ(ABSL_ARRAYSIZE(kExpect), LengthMod::kNumValues);
   for (auto e : kExpect) {
@@ -77,7 +72,7 @@ class ConsumeUnboundConversionTest : public ::testing::Test {
             string_view(p, src.data() + src.size() - p)};
   }
 
-  bool Run(const char *fmt, bool force_positional = false) {
+  bool Run(const char* fmt, bool force_positional = false) {
     int next = force_positional ? -1 : 0;
     o = UnboundConversion();  // refresh
     return ConsumeUnboundConversion(fmt, fmt + strlen(fmt), &o, &next) ==
@@ -94,18 +89,18 @@ TEST_F(ConsumeUnboundConversionTest, ConsumeSpecification) {
     string_view src_post;
   };
   const Expectation kExpect[] = {
-    {__LINE__, "",     "",     ""  },
-    {__LINE__, "b",    "",     "b" },  // 'b' is invalid
-    {__LINE__, "ba",   "",     "ba"},  // 'b' is invalid
-    {__LINE__, "l",    "",     "l" },  // just length mod isn't okay
-    {__LINE__, "d",    "d",    ""  },  // basic
-    {__LINE__, "d ",   "d",    " " },  // leave suffix
-    {__LINE__, "dd",   "d",    "d" },  // don't be greedy
-    {__LINE__, "d9",   "d",    "9" },  // leave non-space suffix
-    {__LINE__, "dzz",  "d",    "zz"},  // length mod as suffix
-    {__LINE__, "1$*2$d", "1$*2$d", ""  },  // arg indexing and * allowed.
-    {__LINE__, "0-14.3hhd", "0-14.3hhd", ""},  // precision, width
-    {__LINE__, " 0-+#14.3hhd", " 0-+#14.3hhd", ""},  // flags
+      {__LINE__, "", "", ""},
+      {__LINE__, "b", "", "b"},                  // 'b' is invalid
+      {__LINE__, "ba", "", "ba"},                // 'b' is invalid
+      {__LINE__, "l", "", "l"},                  // just length mod isn't okay
+      {__LINE__, "d", "d", ""},                  // basic
+      {__LINE__, "d ", "d", " "},                // leave suffix
+      {__LINE__, "dd", "d", "d"},                // don't be greedy
+      {__LINE__, "d9", "d", "9"},                // leave non-space suffix
+      {__LINE__, "dzz", "d", "zz"},              // length mod as suffix
+      {__LINE__, "1$*2$d", "1$*2$d", ""},        // arg indexing and * allowed.
+      {__LINE__, "0-14.3hhd", "0-14.3hhd", ""},  // precision, width
+      {__LINE__, " 0-+#14.3hhd", " 0-+#14.3hhd", ""},  // flags
   };
   for (const auto& e : kExpect) {
     SCOPED_TRACE(e.line);
@@ -260,7 +255,9 @@ TEST_F(ConsumeUnboundConversionTest, Flags) {
       for (int k = 0; k < kNumFlags; ++k)
         if ((i >> k) & 1) fmt += kAllFlags[k];
       // flag order shouldn't matter
-      if (rev == 1) { std::reverse(fmt.begin(), fmt.end()); }
+      if (rev == 1) {
+        std::reverse(fmt.begin(), fmt.end());
+      }
       fmt += 'd';
       SCOPED_TRACE(fmt);
       EXPECT_TRUE(Run(fmt.c_str()));

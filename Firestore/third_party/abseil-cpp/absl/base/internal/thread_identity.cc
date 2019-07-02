@@ -55,11 +55,11 @@ void AllocateThreadIdentityKey(ThreadIdentityReclaimerFunction reclaimer) {
 #ifdef __GNUC__
 __attribute__((visibility("protected")))
 #endif  // __GNUC__
-  ABSL_PER_THREAD_TLS_KEYWORD ThreadIdentity* thread_identity_ptr;
+ABSL_PER_THREAD_TLS_KEYWORD ThreadIdentity* thread_identity_ptr;
 #endif  // TLS or CPP11
 
-void SetCurrentThreadIdentity(
-    ThreadIdentity* identity, ThreadIdentityReclaimerFunction reclaimer) {
+void SetCurrentThreadIdentity(ThreadIdentity* identity,
+                              ThreadIdentityReclaimerFunction reclaimer) {
   assert(CurrentThreadIdentityIfPresent() == nullptr);
   // Associate our destructor.
   // NOTE: This call to pthread_setspecific is currently the only immovable
@@ -112,7 +112,7 @@ void ClearCurrentThreadIdentity() {
     ABSL_THREAD_IDENTITY_MODE == ABSL_THREAD_IDENTITY_MODE_USE_CPP11
   thread_identity_ptr = nullptr;
 #elif ABSL_THREAD_IDENTITY_MODE == \
-      ABSL_THREAD_IDENTITY_MODE_USE_POSIX_SETSPECIFIC
+    ABSL_THREAD_IDENTITY_MODE_USE_POSIX_SETSPECIFIC
   // pthread_setspecific expected to clear value on destruction
   assert(CurrentThreadIdentityIfPresent() == nullptr);
 #endif

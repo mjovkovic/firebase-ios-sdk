@@ -37,8 +37,7 @@ static void BM_SpinLock(benchmark::State& state) {
   }
 }
 
-BENCHMARK_TEMPLATE(BM_SpinLock,
-                   absl::base_internal::SCHEDULE_KERNEL_ONLY)
+BENCHMARK_TEMPLATE(BM_SpinLock, absl::base_internal::SCHEDULE_KERNEL_ONLY)
     ->UseRealTime()
     ->Threads(1)
     ->ThreadPerCpu();

@@ -214,10 +214,16 @@ NS_ASSUME_NONNULL_BEGIN
   FSTLLRBColor rightColor =
       self.right.color == FSTLLRBColorBlack ? FSTLLRBColorRed : FSTLLRBColorBlack;
 
-  id<FSTLLRBNode> nleft =
-      [self.left copyWith:nil withValue:nil withColor:leftColor withLeft:nil withRight:nil];
-  id<FSTLLRBNode> nright =
-      [self.right copyWith:nil withValue:nil withColor:rightColor withLeft:nil withRight:nil];
+  id<FSTLLRBNode> nleft = [self.left copyWith:nil
+                                    withValue:nil
+                                    withColor:leftColor
+                                     withLeft:nil
+                                    withRight:nil];
+  id<FSTLLRBNode> nright = [self.right copyWith:nil
+                                      withValue:nil
+                                      withColor:rightColor
+                                       withLeft:nil
+                                      withRight:nil];
 
   return [self copyWith:nil withValue:nil withColor:color withLeft:nleft withRight:nright];
 }
@@ -282,8 +288,9 @@ NS_ASSUME_NONNULL_BEGIN
   int blackDepth = 0;
 
   if ([self isRed] && [self.left isRed]) {
-    @throw
-        [[NSException alloc] initWithName:@"check" reason:@"Red node has a red child" userInfo:nil];
+    @throw [[NSException alloc] initWithName:@"check"
+                                      reason:@"Red node has a red child"
+                                    userInfo:nil];
   }
 
   if ([self.right isRed]) {

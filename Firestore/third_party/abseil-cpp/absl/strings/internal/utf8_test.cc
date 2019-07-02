@@ -17,8 +17,8 @@
 #include <cstdint>
 #include <utility>
 
-#include "gtest/gtest.h"
 #include "absl/base/port.h"
+#include "gtest/gtest.h"
 
 namespace {
 

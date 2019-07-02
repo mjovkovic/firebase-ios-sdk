@@ -16,8 +16,8 @@
 #include <windows.h>
 #endif
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/scoped_set_env.h"
+#include "gtest/gtest.h"
 
 namespace {
 

@@ -73,11 +73,11 @@
 #include <cstdio>
 #include <string>
 
-#include "absl/strings/internal/str_format/arg.h"  // IWYU pragma: export
-#include "absl/strings/internal/str_format/bind.h"  // IWYU pragma: export
-#include "absl/strings/internal/str_format/checker.h"  // IWYU pragma: export
+#include "absl/strings/internal/str_format/arg.h"        // IWYU pragma: export
+#include "absl/strings/internal/str_format/bind.h"       // IWYU pragma: export
+#include "absl/strings/internal/str_format/checker.h"    // IWYU pragma: export
 #include "absl/strings/internal/str_format/extension.h"  // IWYU pragma: export
-#include "absl/strings/internal/str_format/parser.h"  // IWYU pragma: export
+#include "absl/strings/internal/str_format/parser.h"     // IWYU pragma: export
 
 namespace absl {
 

@@ -25,9 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
     if (idx > 0) {
       if (comparator(keys[idx - 1], obj) != NSOrderedAscending) {
         [NSException raise:NSInvalidArgumentException
-                    format:
-                        @"Can't create FSTImmutableSortedDictionary with keys "
-                        @"with same ordering!"];
+                    format:@"Can't create FSTImmutableSortedDictionary with keys "
+                           @"with same ordering!"];
       }
     }
   }];

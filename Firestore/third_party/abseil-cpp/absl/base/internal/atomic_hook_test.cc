@@ -14,8 +14,8 @@
 
 #include "absl/base/internal/atomic_hook.h"
 
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -23,7 +23,7 @@ int value = 0;
 void TestHook(int x) { value = x; }
 
 TEST(AtomicHookTest, NoDefaultFunction) {
-  ABSL_CONST_INIT static absl::base_internal::AtomicHook<void(*)(int)> hook;
+  ABSL_CONST_INIT static absl::base_internal::AtomicHook<void (*)(int)> hook;
   value = 0;
 
   // Test the default DummyFunction.

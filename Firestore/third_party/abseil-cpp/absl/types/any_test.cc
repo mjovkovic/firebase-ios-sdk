@@ -19,11 +19,11 @@
 #include <utility>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
 #include "absl/base/internal/exception_testing.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/container/internal/test_instance_tracker.h"
+#include "gtest/gtest.h"
 
 namespace {
 using absl::test_internal::CopyableOnlyInstance;
@@ -389,8 +389,8 @@ TEST(AnyTest, ConversionAssignment) {
 // 4521: multiple copy constructors specified
 // We wrote multiple of them to test that the correct overloads are selected.
 #ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4521)
+#pragma warning(push)
+#pragma warning(disable : 4521)
 #endif
 
 // Weird type for testing, only used to make sure we "properly" perfect-forward
@@ -410,7 +410,7 @@ struct WeirdConstructor42 {
   int value;
 };
 #ifdef _MSC_VER
-#pragma warning( pop )
+#pragma warning(pop)
 #endif
 
 TEST(AnyTest, WeirdConversionConstruction) {
@@ -642,9 +642,8 @@ TEST(AnyTest, ConversionConstructionCausesOneCopy) {
 #if defined(ABSL_HAVE_STD_ANY)
 
 // If using a std `any` implementation, we can't check for a specific message.
-#define ABSL_ANY_TEST_EXPECT_BAD_ANY_CAST(...)                      \
-  ABSL_BASE_INTERNAL_EXPECT_FAIL((__VA_ARGS__), absl::bad_any_cast, \
-                                 "")
+#define ABSL_ANY_TEST_EXPECT_BAD_ANY_CAST(...) \
+  ABSL_BASE_INTERNAL_EXPECT_FAIL((__VA_ARGS__), absl::bad_any_cast, "")
 
 #else
 

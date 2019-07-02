@@ -46,8 +46,7 @@ TEST(Charmap, AllTests) {
   ASSERT_TRUE(!symbols.contains('!'));
   ASSERT_TRUE(!symbols.contains('?'));
   int cnt = 0;
-  for (unsigned char ch = 1; ch != 0; ++ch)
-    cnt += symbols.contains(ch);
+  for (unsigned char ch = 1; ch != 0; ++ch) cnt += symbols.contains(ch);
   ASSERT_EQ(cnt, 4);
 
   const absl::strings_internal::Charmap lets("^abcde", 3);

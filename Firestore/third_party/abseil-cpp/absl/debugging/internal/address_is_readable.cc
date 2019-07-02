@@ -76,7 +76,7 @@ bool AddressIsReadable(const void *addr) {
   // crashing, to test the validity of pages when dumping the stack.  Beware
   // that we may leak file descriptors, but we're unlikely to leak many.
   int bytes_written;
-  int current_pid = getpid() & 0xffff;   // we use only the low order 16 bits
+  int current_pid = getpid() & 0xffff;  // we use only the low order 16 bits
   do {  // until we do not get EBADF trying to use file descriptors
     int pid;
     int read_fd;
@@ -110,7 +110,7 @@ bool AddressIsReadable(const void *addr) {
     do {
       bytes_written = syscall(SYS_write, write_fd, addr, 1);
     } while (bytes_written == -1 && errno == EINTR);
-    if (bytes_written == 1) {   // remove the byte from the pipe
+    if (bytes_written == 1) {  // remove the byte from the pipe
       char c;
       while (read(read_fd, &c, 1) == -1 && errno == EINTR) {
       }

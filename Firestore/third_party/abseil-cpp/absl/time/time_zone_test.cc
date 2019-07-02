@@ -14,9 +14,9 @@
 
 #include "absl/time/internal/cctz/include/cctz/time_zone.h"
 
-#include "gtest/gtest.h"
 #include "absl/time/internal/test_util.h"
 #include "absl/time/time.h"
+#include "gtest/gtest.h"
 
 namespace cctz = absl::time_internal::cctz;
 

@@ -1,8 +1,8 @@
 #include <string>
 
+#include "absl/strings/str_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/strings/str_format.h"
 
 namespace absl {
 namespace str_format_internal {

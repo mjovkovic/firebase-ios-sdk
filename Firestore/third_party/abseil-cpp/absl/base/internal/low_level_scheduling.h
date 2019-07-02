@@ -87,13 +87,9 @@ class SchedulingGuard {
 // End of public interfaces.
 //------------------------------------------------------------------------------
 
-inline bool SchedulingGuard::ReschedulingIsAllowed() {
-  return false;
-}
+inline bool SchedulingGuard::ReschedulingIsAllowed() { return false; }
 
-inline bool SchedulingGuard::DisableRescheduling() {
-  return false;
-}
+inline bool SchedulingGuard::DisableRescheduling() { return false; }
 
 inline void SchedulingGuard::EnableRescheduling(bool /* disable_result */) {
   return;

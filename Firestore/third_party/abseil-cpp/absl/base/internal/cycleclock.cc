@@ -95,9 +95,7 @@ int64_t CycleClock::Now() {
       .count();
 }
 
-double CycleClock::Frequency() {
-  return 1e9;
-}
+double CycleClock::Frequency() { return 1e9; }
 
 #endif
 

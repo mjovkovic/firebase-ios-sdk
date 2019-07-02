@@ -22,8 +22,8 @@
 #error all known Linux and Apple targets have alarm
 #endif
 
-#include "gtest/gtest.h"
 #include "absl/time/time.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -110,8 +110,8 @@ TEST(SleepFor, Bounded) {
   EXPECT_TRUE(AssertSleepForBounded(d, early, late, timeout,
                                     AlarmPolicy::kWithoutAlarm));
 #if defined(ABSL_HAVE_ALARM)
-  EXPECT_TRUE(AssertSleepForBounded(d, early, late, timeout,
-                                    AlarmPolicy::kWithAlarm));
+  EXPECT_TRUE(
+      AssertSleepForBounded(d, early, late, timeout, AlarmPolicy::kWithAlarm));
 #endif
 }
 

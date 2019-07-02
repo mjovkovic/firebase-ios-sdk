@@ -55,13 +55,9 @@ double UnscaledCycleClock::Frequency() {
 
 #elif defined(__powerpc__) || defined(__ppc__)
 
-int64_t UnscaledCycleClock::Now() {
-  return __ppc_get_timebase();
-}
+int64_t UnscaledCycleClock::Now() { return __ppc_get_timebase(); }
 
-double UnscaledCycleClock::Frequency() {
-  return __ppc_get_timebase_freq();
-}
+double UnscaledCycleClock::Frequency() { return __ppc_get_timebase_freq(); }
 
 #elif defined(__aarch64__)
 
@@ -85,9 +81,7 @@ double UnscaledCycleClock::Frequency() {
 
 #pragma intrinsic(__rdtsc)
 
-int64_t UnscaledCycleClock::Now() {
-  return __rdtsc();
-}
+int64_t UnscaledCycleClock::Now() { return __rdtsc(); }
 
 double UnscaledCycleClock::Frequency() {
   return base_internal::NominalCPUFrequency();

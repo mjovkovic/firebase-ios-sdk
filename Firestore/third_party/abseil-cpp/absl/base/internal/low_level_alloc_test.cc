@@ -35,9 +35,9 @@ namespace {
 
 // a block of memory obtained from the allocator
 struct BlockDesc {
-  char *ptr;      // pointer to memory
-  int len;        // number of bytes
-  int fill;       // filled with data starting with this
+  char *ptr;  // pointer to memory
+  int len;    // number of bytes
+  int fill;   // filled with data starting with this
 };
 
 // Check that the pattern placed in the block d
@@ -90,39 +90,37 @@ static void Test(bool use_new_arena, bool call_malloc_hook, int n) {
       fflush(stdout);
     }
 
-    switch (rand() & 1) {      // toss a coin
-    case 0:     // coin came up heads: add a block
-      using_low_level_alloc = true;
-      block_desc.len = rand() & 0x3fff;
-      block_desc.ptr =
-        reinterpret_cast<char *>(
-                        arena == 0
-                        ? LowLevelAlloc::Alloc(block_desc.len)
-                        : LowLevelAlloc::AllocWithArena(block_desc.len, arena));
-      using_low_level_alloc = false;
-      RandomizeBlockDesc(&block_desc);
-      rnd = rand();
-      it = allocated.find(rnd);
-      if (it != allocated.end()) {
-        CheckBlockDesc(it->second);
+    switch (rand() & 1) {  // toss a coin
+      case 0:              // coin came up heads: add a block
         using_low_level_alloc = true;
-        LowLevelAlloc::Free(it->second.ptr);
+        block_desc.len = rand() & 0x3fff;
+        block_desc.ptr = reinterpret_cast<char *>(
+            arena == 0 ? LowLevelAlloc::Alloc(block_desc.len)
+                       : LowLevelAlloc::AllocWithArena(block_desc.len, arena));
         using_low_level_alloc = false;
-        it->second = block_desc;
-      } else {
-        allocated[rnd] = block_desc;
-      }
-      break;
-    case 1:     // coin came up tails: remove a block
-      it = allocated.begin();
-      if (it != allocated.end()) {
-        CheckBlockDesc(it->second);
-        using_low_level_alloc = true;
-        LowLevelAlloc::Free(it->second.ptr);
-        using_low_level_alloc = false;
-        allocated.erase(it);
-      }
-      break;
+        RandomizeBlockDesc(&block_desc);
+        rnd = rand();
+        it = allocated.find(rnd);
+        if (it != allocated.end()) {
+          CheckBlockDesc(it->second);
+          using_low_level_alloc = true;
+          LowLevelAlloc::Free(it->second.ptr);
+          using_low_level_alloc = false;
+          it->second = block_desc;
+        } else {
+          allocated[rnd] = block_desc;
+        }
+        break;
+      case 1:  // coin came up tails: remove a block
+        it = allocated.begin();
+        if (it != allocated.end()) {
+          CheckBlockDesc(it->second);
+          using_low_level_alloc = true;
+          LowLevelAlloc::Free(it->second.ptr);
+          using_low_level_alloc = false;
+          allocated.erase(it);
+        }
+        break;
     }
   }
   // remove all remaining blocks

@@ -118,6 +118,7 @@ class OnDestruction {
  public:
   explicit OnDestruction(Function fn) : fn_(fn) {}
   ~OnDestruction() { fn_(); }
+
  private:
   Function fn_;
 };

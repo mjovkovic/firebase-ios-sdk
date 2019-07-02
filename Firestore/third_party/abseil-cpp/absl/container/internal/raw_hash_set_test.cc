@@ -23,8 +23,6 @@
 #include <random>
 #include <string>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/base/internal/cycleclock.h"
 #include "absl/base/internal/raw_logging.h"
@@ -33,6 +31,8 @@
 #include "absl/container/internal/hash_policy_testing.h"
 #include "absl/container/internal/hashtable_debug.h"
 #include "absl/strings/string_view.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace container_internal {
@@ -242,8 +242,8 @@ TEST(Group, CountLeadingEmptyOrDeleted) {
       std::vector<ctrl_t> f(Group::kWidth, empty);
       f[Group::kWidth * 2 / 3] = full;
       f[Group::kWidth / 2] = full;
-      EXPECT_EQ(
-          Group::kWidth / 2, Group{f.data()}.CountLeadingEmptyOrDeleted());
+      EXPECT_EQ(Group::kWidth / 2,
+                Group{f.data()}.CountLeadingEmptyOrDeleted());
     }
   }
 }
@@ -353,7 +353,8 @@ struct CustomAlloc : std::allocator<T> {
   template <typename U>
   CustomAlloc(const CustomAlloc<U>& other) {}
 
-  template<class U> struct rebind {
+  template <class U>
+  struct rebind {
     using other = CustomAlloc<U>;
   };
 };
@@ -867,7 +868,7 @@ TEST(Table, Erase) {
 TEST(Table, EraseMaintainsValidIterator) {
   IntTable t;
   const int kNumElements = 100;
-  for (int i = 0; i < kNumElements; i ++) {
+  for (int i = 0; i < kNumElements; i++) {
     EXPECT_TRUE(t.emplace(i).second);
   }
   EXPECT_EQ(t.size(), kNumElements);
@@ -892,7 +893,8 @@ TEST(Table, EraseMaintainsValidIterator) {
 std::vector<int64_t> CollectBadMergeKeys(size_t N) {
   static constexpr int kGroupSize = Group::kWidth - 1;
 
-  auto topk_range = [](size_t b, size_t e, IntTable* t) -> std::vector<int64_t> {
+  auto topk_range = [](size_t b, size_t e,
+                       IntTable* t) -> std::vector<int64_t> {
     for (size_t i = b; i != e; ++i) {
       t->emplace(i);
     }
@@ -1046,8 +1048,8 @@ using ProbeStatsPerSize = std::map<size_t, ProbeStats>;
 // 1. Create new table and reserve it to keys.size() * 2
 // 2. Insert all keys xored with seed
 // 3. Collect ProbeStats from final table.
-ProbeStats CollectProbeStatsOnKeysXoredWithSeed(const std::vector<int64_t>& keys,
-                                                size_t num_iters) {
+ProbeStats CollectProbeStatsOnKeysXoredWithSeed(
+    const std::vector<int64_t>& keys, size_t num_iters) {
   const size_t reserve_size = keys.size() * 2;
 
   ProbeStats stats;
@@ -1092,15 +1094,15 @@ ExpectedStats XorSeedExpectedStats() {
   switch (container_internal::Group::kWidth) {
     case 8:
       if (kRandomizesInserts) {
-  return {0.05,
-          1.0,
-          {{0.95, 0.5}},
-          {{0.95, 0}, {0.99, 2}, {0.999, 4}, {0.9999, 10}}};
+        return {0.05,
+                1.0,
+                {{0.95, 0.5}},
+                {{0.95, 0}, {0.99, 2}, {0.999, 4}, {0.9999, 10}}};
       } else {
-  return {0.05,
-          2.0,
-          {{0.95, 0.1}},
-          {{0.95, 0}, {0.99, 2}, {0.999, 4}, {0.9999, 10}}};
+        return {0.05,
+                2.0,
+                {{0.95, 0.1}},
+                {{0.95, 0}, {0.99, 2}, {0.999, 4}, {0.9999, 10}}};
       }
     case 16:
       if (kRandomizesInserts) {
@@ -1144,7 +1146,7 @@ ProbeStats CollectProbeStatsOnLinearlyTransformedKeys(
   std::random_device rd;
   std::mt19937 rng(rd());
   auto linear_transform = [](size_t x, size_t y) { return x * 17 + y * 13; };
-  std::uniform_int_distribution<size_t> dist(0, keys.size()-1);
+  std::uniform_int_distribution<size_t> dist(0, keys.size() - 1);
   while (num_iters--) {
     IntTable t1;
     size_t num_keys = keys.size() / 10;

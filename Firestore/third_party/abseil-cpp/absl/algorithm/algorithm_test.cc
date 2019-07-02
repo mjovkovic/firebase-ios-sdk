@@ -91,12 +91,12 @@ TEST(EqualTest, WeirdIterators) {
 
 TEST(EqualTest, CustomComparison) {
   int n[] = {1, 2, 3, 4};
-  std::vector<int*> v1{&n[0], &n[1], &n[2]};
-  std::vector<int*> v2 = v1;
-  std::vector<int*> v3{&n[0], &n[1], &n[3]};
-  std::vector<int*> v4{&n[0], &n[1]};
+  std::vector<int *> v1{&n[0], &n[1], &n[2]};
+  std::vector<int *> v2 = v1;
+  std::vector<int *> v3{&n[0], &n[1], &n[3]};
+  std::vector<int *> v4{&n[0], &n[1]};
 
-  auto eq = [](int* a, int* b) { return *a == *b; };
+  auto eq = [](int *a, int *b) { return *a == *b; };
 
   EXPECT_TRUE(absl::equal(v1.begin(), v1.end(), v2.begin(), v2.end(), eq));
   EXPECT_FALSE(absl::equal(v1.begin(), v1.end(), v3.begin(), v3.end(), eq));
@@ -121,7 +121,7 @@ TEST(EqualTest, MoveOnlyPredicate) {
 }
 
 struct CountingTrivialPred {
-  int* count;
+  int *count;
   bool operator()(int, int) const {
     ++*count;
     return true;

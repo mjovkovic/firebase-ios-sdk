@@ -16,8 +16,8 @@
 
 #include <cmath>
 
-#include "gtest/gtest.h"
 #include "absl/strings/str_format.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace strings_internal {
@@ -25,9 +25,9 @@ namespace strings_internal {
 namespace {
 
 struct TestCase {
-  int power;           // Testing Pow10(power)
+  int power;             // Testing Pow10(power)
   uint64_t significand;  // Raw bits of the expected value
-  int radix;           // significand is adjusted by 2^radix
+  int radix;             // significand is adjusted by 2^radix
 };
 
 TEST(Pow10HelperTest, Works) {

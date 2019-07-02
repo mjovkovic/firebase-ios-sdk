@@ -18,10 +18,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/container/internal/hash_generator_testing.h"
 #include "absl/container/internal/hash_policy_testing.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace container_internal {

@@ -19,8 +19,8 @@
 #include <cstdint>
 #include <string>
 
-#include "gtest/gtest.h"
 #include "absl/strings/substitute.h"
+#include "gtest/gtest.h"
 
 #ifdef __ANDROID__
 // Android assert messages only go to system log, so death tests cannot inspect
@@ -108,19 +108,11 @@ TEST(StrCat, Basics) {
 
   std::string strs[] = {"Hello", "Cruel", "World"};
 
-  std::string stdstrs[] = {
-    "std::Hello",
-    "std::Cruel",
-    "std::World"
-  };
+  std::string stdstrs[] = {"std::Hello", "std::Cruel", "std::World"};
 
   absl::string_view pieces[] = {"Hello", "Cruel", "World"};
 
-  const char* c_strs[] = {
-    "Hello",
-    "Cruel",
-    "World"
-  };
+  const char* c_strs[] = {"Hello", "Cruel", "World"};
 
   int32_t i32s[] = {'H', 'C', 'W'};
   uint64_t ui64s[] = {12345678910LL, 10987654321LL};
@@ -305,19 +297,11 @@ TEST(StrAppend, Basics) {
 
   std::string strs[] = {"Hello", "Cruel", "World"};
 
-  std::string stdstrs[] = {
-    "std::Hello",
-    "std::Cruel",
-    "std::World"
-  };
+  std::string stdstrs[] = {"std::Hello", "std::Cruel", "std::World"};
 
   absl::string_view pieces[] = {"Hello", "Cruel", "World"};
 
-  const char* c_strs[] = {
-    "Hello",
-    "Cruel",
-    "World"
-  };
+  const char* c_strs[] = {"Hello", "Cruel", "World"};
 
   int32_t i32s[] = {'H', 'C', 'W'};
   uint64_t ui64s[] = {12345678910LL, 10987654321LL};
@@ -537,8 +521,6 @@ void TestFastPrints() {
   EXPECT_EQ("ffff", absl::StrCat(absl::Hex(minus_one_16bit)));
 }
 
-TEST(Numbers, TestFunctionsMovedOverFromNumbersMain) {
-  TestFastPrints();
-}
+TEST(Numbers, TestFunctionsMovedOverFromNumbersMain) { TestFastPrints(); }
 
 }  // namespace

@@ -16,10 +16,10 @@
 #include <limits>
 #include <string>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/time/internal/test_util.h"
 #include "absl/time/time.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 using testing::HasSubstr;
 

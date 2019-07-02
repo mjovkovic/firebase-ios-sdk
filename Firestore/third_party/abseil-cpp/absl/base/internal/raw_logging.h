@@ -111,7 +111,7 @@ void RawLog(absl::LogSeverity severity, const char* file, int line,
 // In POSIX this means calling write(), which is async-signal safe and does
 // not malloc.  If the platform supports the SYS_write syscall, we invoke that
 // directly to side-step any libc interception.
-void SafeWriteToStderr(const char *s, size_t len);
+void SafeWriteToStderr(const char* s, size_t len);
 
 // compile-time function to get the "base" filename, that is, the part of
 // a filename after the last "/" or "\" path separator.  The search starts at

@@ -75,8 +75,8 @@ inline int hex_digit_to_int(char c) {
 inline bool IsSurrogate(char32_t c, absl::string_view src, std::string* error) {
   if (c >= 0xD800 && c <= 0xDFFF) {
     if (error) {
-      *error = absl::StrCat("invalid surrogate character (0xD800-DFFF): \\",
-                            src);
+      *error =
+          absl::StrCat("invalid surrogate character (0xD800-DFFF): \\", src);
     }
     return true;
   }
@@ -119,17 +119,39 @@ bool CUnescapeInternal(absl::string_view source, bool leave_nulls_escaped,
         return false;
       }
       switch (*p) {
-        case 'a':  *d++ = '\a';  break;
-        case 'b':  *d++ = '\b';  break;
-        case 'f':  *d++ = '\f';  break;
-        case 'n':  *d++ = '\n';  break;
-        case 'r':  *d++ = '\r';  break;
-        case 't':  *d++ = '\t';  break;
-        case 'v':  *d++ = '\v';  break;
-        case '\\': *d++ = '\\';  break;
-        case '?':  *d++ = '\?';  break;    // \?  Who knew?
-        case '\'': *d++ = '\'';  break;
-        case '"':  *d++ = '\"';  break;
+        case 'a':
+          *d++ = '\a';
+          break;
+        case 'b':
+          *d++ = '\b';
+          break;
+        case 'f':
+          *d++ = '\f';
+          break;
+        case 'n':
+          *d++ = '\n';
+          break;
+        case 'r':
+          *d++ = '\r';
+          break;
+        case 't':
+          *d++ = '\t';
+          break;
+        case 'v':
+          *d++ = '\v';
+          break;
+        case '\\':
+          *d++ = '\\';
+          break;
+        case '?':
+          *d++ = '\?';
+          break;  // \?  Who knew?
+        case '\'':
+          *d++ = '\'';
+          break;
+        case '"':
+          *d++ = '\"';
+          break;
         case '0':
         case '1':
         case '2':
@@ -143,7 +165,7 @@ bool CUnescapeInternal(absl::string_view source, bool leave_nulls_escaped,
           unsigned int ch = *p - '0';
           if (p < last_byte && is_octal_digit(p[1])) ch = ch * 8 + *++p - '0';
           if (p < last_byte && is_octal_digit(p[1]))
-            ch = ch * 8 + *++p - '0';      // now points at last digit
+            ch = ch * 8 + *++p - '0';  // now points at last digit
           if (ch > 0xff) {
             if (error) {
               *error = "Value of \\" +
@@ -285,7 +307,7 @@ bool CUnescapeInternal(absl::string_view source, bool leave_nulls_escaped,
           return false;
         }
       }
-      p++;                                 // read past letter we escaped
+      p++;  // read past letter we escaped
     }
   }
   *dest_len = d - dest;
@@ -303,10 +325,7 @@ bool CUnescapeInternal(absl::string_view source, bool leave_nulls_escaped,
   strings_internal::STLStringResizeUninitialized(dest, source.size());
 
   ptrdiff_t dest_size;
-  if (!CUnescapeInternal(source,
-                         leave_nulls_escaped,
-                         &(*dest)[0],
-                         &dest_size,
+  if (!CUnescapeInternal(source, leave_nulls_escaped, &(*dest)[0], &dest_size,
                          error)) {
     return false;
   }
@@ -333,12 +352,36 @@ std::string CEscapeInternal(absl::string_view src, bool use_hex,
   for (unsigned char c : src) {
     bool is_hex_escape = false;
     switch (c) {
-      case '\n': dest.append("\\" "n"); break;
-      case '\r': dest.append("\\" "r"); break;
-      case '\t': dest.append("\\" "t"); break;
-      case '\"': dest.append("\\" "\""); break;
-      case '\'': dest.append("\\" "'"); break;
-      case '\\': dest.append("\\" "\\"); break;
+      case '\n':
+        dest.append(
+            "\\"
+            "n");
+        break;
+      case '\r':
+        dest.append(
+            "\\"
+            "r");
+        break;
+      case '\t':
+        dest.append(
+            "\\"
+            "t");
+        break;
+      case '\"':
+        dest.append(
+            "\\"
+            "\"");
+        break;
+      case '\'':
+        dest.append(
+            "\\"
+            "'");
+        break;
+      case '\\':
+        dest.append(
+            "\\"
+            "\\");
+        break;
       default:
         // Note that if we emit \xNN and the src character after that is a hex
         // digit then that digit must be escaped too to prevent it being
@@ -347,7 +390,9 @@ std::string CEscapeInternal(absl::string_view src, bool use_hex,
             (!absl::ascii_isprint(c) ||
              (last_hex_escape && absl::ascii_isxdigit(c)))) {
           if (use_hex) {
-            dest.append("\\" "x");
+            dest.append(
+                "\\"
+                "x");
             dest.push_back(kHexChar[c / 16]);
             dest.push_back(kHexChar[c % 16]);
             is_hex_escape = true;
@@ -845,7 +890,7 @@ size_t Base64EscapeInternal(const unsigned char* src, size_t szsrc, char* dest,
 
   // Three bytes of data encodes to four characters of cyphertext.
   // So we can pump through three-byte chunks atomically.
-  if (szsrc >= 3) {  // "limit_src - 3" is UB if szsrc < 3.
+  if (szsrc >= 3) {                    // "limit_src - 3" is UB if szsrc < 3.
     while (cur_src < limit_src - 3) {  // While we have >= 32 bits.
       uint32_t in = absl::big_endian::Load32(cur_src) >> 8;
 
@@ -957,8 +1002,8 @@ void Base64EscapeInternal(const unsigned char* src, size_t szsrc, String* dest,
 template <typename String>
 bool Base64UnescapeInternal(const char* src, size_t slen, String* dest,
                             const signed char* unbase64) {
-  // Determine the size of the output std::string.  Base64 encodes every 3 bytes into
-  // 4 characters.  any leftover chars are added directly for good measure.
+  // Determine the size of the output std::string.  Base64 encodes every 3 bytes
+  // into 4 characters.  any leftover chars are added directly for good measure.
   // This is documented in the base64 RFC: http://tools.ietf.org/html/rfc3548
   const size_t dest_len = 3 * (slen / 4) + (slen % 4);
 

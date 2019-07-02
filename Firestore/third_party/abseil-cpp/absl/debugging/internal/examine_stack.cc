@@ -114,10 +114,12 @@ static void DumpPCAndFrameSize(void (*writerfn)(const char*, void*),
   writerfn(buf, writerfn_arg);
 }
 
-void DumpPCAndFrameSizesAndStackTrace(
-    void* pc, void* const stack[], int frame_sizes[], int depth,
-    int min_dropped_frames, bool symbolize_stacktrace,
-    void (*writerfn)(const char*, void*), void* writerfn_arg) {
+void DumpPCAndFrameSizesAndStackTrace(void* pc, void* const stack[],
+                                      int frame_sizes[], int depth,
+                                      int min_dropped_frames,
+                                      bool symbolize_stacktrace,
+                                      void (*writerfn)(const char*, void*),
+                                      void* writerfn_arg) {
   if (pc != nullptr) {
     // We don't know the stack frame size for PC, use 0.
     if (symbolize_stacktrace) {

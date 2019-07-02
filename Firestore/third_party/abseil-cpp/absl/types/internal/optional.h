@@ -372,14 +372,14 @@ struct optional_hash_base {
 };
 
 template <typename T>
-struct optional_hash_base<T, decltype(std::hash<absl::remove_const_t<T> >()(
-                                 std::declval<absl::remove_const_t<T> >()))> {
+struct optional_hash_base<T, decltype(std::hash<absl::remove_const_t<T>>()(
+                                 std::declval<absl::remove_const_t<T>>()))> {
   using argument_type = absl::optional<T>;
   using result_type = size_t;
   size_t operator()(const absl::optional<T>& opt) const {
     absl::type_traits_internal::AssertHashEnabled<absl::remove_const_t<T>>();
     if (opt) {
-      return std::hash<absl::remove_const_t<T> >()(*opt);
+      return std::hash<absl::remove_const_t<T>>()(*opt);
     } else {
       return static_cast<size_t>(0x297814aaad196e6dULL);
     }

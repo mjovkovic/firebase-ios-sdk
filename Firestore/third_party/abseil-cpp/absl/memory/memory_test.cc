@@ -36,10 +36,10 @@ using ::testing::Return;
 // been called, via the instance_count variable.
 class DestructorVerifier {
  public:
-  DestructorVerifier() { ++instance_count_;  }
+  DestructorVerifier() { ++instance_count_; }
   DestructorVerifier(const DestructorVerifier&) = delete;
   DestructorVerifier& operator=(const DestructorVerifier&) = delete;
-  ~DestructorVerifier() {  --instance_count_; }
+  ~DestructorVerifier() { --instance_count_; }
 
   // The number of instances of this class currently active.
   static int instance_count() { return instance_count_; }
@@ -156,9 +156,7 @@ struct ArrayWatch {
     allocs().push_back(n);
     return ::operator new[](n);
   }
-  void operator delete[](void* p) {
-    return ::operator delete[](p);
-  }
+  void operator delete[](void* p) { return ::operator delete[](p); }
   static std::vector<size_t>& allocs() {
     static auto& v = *new std::vector<size_t>;
     return v;
@@ -171,8 +169,7 @@ TEST(Make_UniqueTest, Array) {
   ArrayWatch::allocs().clear();
 
   auto p = absl::make_unique<ArrayWatch[]>(5);
-  static_assert(std::is_same<decltype(p),
-                             std::unique_ptr<ArrayWatch[]>>::value,
+  static_assert(std::is_same<decltype(p), std::unique_ptr<ArrayWatch[]>>::value,
                 "unexpected return type");
   EXPECT_THAT(ArrayWatch::allocs(), ElementsAre(5 * sizeof(ArrayWatch)));
 }
@@ -181,7 +178,7 @@ TEST(Make_UniqueTest, NotAmbiguousWithStdMakeUnique) {
   // Ensure that absl::make_unique is not ambiguous with std::make_unique.
   // In C++14 mode, the below call to make_unique has both types as candidates.
   struct TakesStdType {
-    explicit TakesStdType(const std::vector<int> &vec) {}
+    explicit TakesStdType(const std::vector<int>& vec) {}
   };
   using absl::make_unique;
   (void)make_unique<TakesStdType>(std::vector<int>());
@@ -642,8 +639,7 @@ TEST(AllocatorNoThrowTest, CustomAllocator) {
   struct CanThrowAllocator {
     using is_nothrow = std::false_type;
   };
-  struct UnspecifiedAllocator {
-  };
+  struct UnspecifiedAllocator {};
   EXPECT_TRUE(absl::allocator_is_nothrow<NoThrowAllocator>::value);
   EXPECT_FALSE(absl::allocator_is_nothrow<CanThrowAllocator>::value);
   EXPECT_FALSE(absl::allocator_is_nothrow<UnspecifiedAllocator>::value);

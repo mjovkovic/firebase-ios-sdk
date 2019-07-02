@@ -37,9 +37,7 @@ std::mutex time_zone_mutex;
 
 }  // namespace
 
-time_zone time_zone::Impl::UTC() {
-  return time_zone(UTCImpl());
-}
+time_zone time_zone::Impl::UTC() { return time_zone(UTCImpl()); }
 
 bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
   const time_zone::Impl* const utc_impl = UTCImpl();

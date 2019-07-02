@@ -55,8 +55,8 @@ bool Notification::HasBeenNotified() const {
 
 void Notification::WaitForNotification() const {
   if (!HasBeenNotifiedInternal(&this->notified_yet_)) {
-    this->mutex_.LockWhen(Condition(&HasBeenNotifiedInternal,
-                                    &this->notified_yet_));
+    this->mutex_.LockWhen(
+        Condition(&HasBeenNotifiedInternal, &this->notified_yet_));
     this->mutex_.Unlock();
   }
 }

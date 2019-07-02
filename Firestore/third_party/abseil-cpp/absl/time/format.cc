@@ -24,10 +24,10 @@ namespace cctz = absl::time_internal::cctz;
 namespace absl {
 
 extern const char RFC3339_full[] = "%Y-%m-%dT%H:%M:%E*S%Ez";
-extern const char RFC3339_sec[] =  "%Y-%m-%dT%H:%M:%S%Ez";
+extern const char RFC3339_sec[] = "%Y-%m-%dT%H:%M:%S%Ez";
 
 extern const char RFC1123_full[] = "%a, %d %b %E4Y %H:%M:%S %z";
-extern const char RFC1123_no_wday[] =  "%d %b %E4Y %H:%M:%S %z";
+extern const char RFC1123_no_wday[] = "%d %b %E4Y %H:%M:%S %z";
 
 namespace {
 

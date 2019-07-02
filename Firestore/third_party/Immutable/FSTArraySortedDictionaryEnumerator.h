@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FSTArraySortedDictionaryEnumerator <KeyType, ValueType> : NSEnumerator<ValueType>
+@interface FSTArraySortedDictionaryEnumerator<KeyType, ValueType> : NSEnumerator <ValueType>
 
 - (id)init __attribute__((unavailable("Use initWithKeys:startPos:endPos:isReverse: instead.")));
 

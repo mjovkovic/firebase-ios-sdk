@@ -22,7 +22,6 @@
 #include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/base/internal/low_level_scheduling.h"
 #include "absl/base/internal/scheduling_mode.h"
@@ -31,6 +30,7 @@
 #include "absl/base/macros.h"
 #include "absl/synchronization/blocking_counter.h"
 #include "absl/synchronization/notification.h"
+#include "gtest/gtest.h"
 
 constexpr int32_t kNumThreads = 10;
 constexpr int32_t kIters = 1000;
@@ -62,20 +62,37 @@ static SpinLock static_cooperative_spinlock(
 static SpinLock static_noncooperative_spinlock(
     base_internal::kLinkerInitialized, base_internal::SCHEDULE_KERNEL_ONLY);
 
-
 // Simple integer hash function based on the public domain lookup2 hash.
 // http://burtleburtle.net/bob/c/lookup2.c
 static uint32_t Hash32(uint32_t a, uint32_t c) {
   uint32_t b = 0x9e3779b9UL;  // The golden ratio; an arbitrary value.
-  a -= b; a -= c; a ^= (c >> 13);
-  b -= c; b -= a; b ^= (a << 8);
-  c -= a; c -= b; c ^= (b >> 13);
-  a -= b; a -= c; a ^= (c >> 12);
-  b -= c; b -= a; b ^= (a << 16);
-  c -= a; c -= b; c ^= (b >> 5);
-  a -= b; a -= c; a ^= (c >> 3);
-  b -= c; b -= a; b ^= (a << 10);
-  c -= a; c -= b; c ^= (b >> 15);
+  a -= b;
+  a -= c;
+  a ^= (c >> 13);
+  b -= c;
+  b -= a;
+  b ^= (a << 8);
+  c -= a;
+  c -= b;
+  c ^= (b >> 13);
+  a -= b;
+  a -= c;
+  a ^= (c >> 12);
+  b -= c;
+  b -= a;
+  b ^= (a << 16);
+  c -= a;
+  c -= b;
+  c ^= (b >> 5);
+  a -= b;
+  a -= c;
+  a ^= (c >> 3);
+  b -= c;
+  b -= a;
+  b ^= (a << 10);
+  c -= a;
+  c -= b;
+  c ^= (b >> 15);
   return c;
 }
 
@@ -127,7 +144,7 @@ TEST(SpinLock, WaitCyclesEncoding) {
   // We should be able to encode up to (1^kMaxCycleBits - 1) without clamping
   // but the lower kProfileTimestampShift will be dropped.
   const int kMaxCyclesShift =
-    32 - kLockwordReservedShift + kProfileTimestampShift;
+      32 - kLockwordReservedShift + kProfileTimestampShift;
   const uint64_t kMaxCycles = (int64_t{1} << kMaxCyclesShift) - 1;
 
   // These bits should be zero after encoding.
@@ -164,22 +181,22 @@ TEST(SpinLock, WaitCyclesEncoding) {
             SpinLockTest::DecodeWaitCycles(~kLockwordReservedMask));
 
   // Check that we cannot produce kSpinLockSleeper during encoding.
-  int64_t sleeper_cycles =
-      kSpinLockSleeper << (kProfileTimestampShift - kLockwordReservedShift);
+  int64_t sleeper_cycles = kSpinLockSleeper
+                           << (kProfileTimestampShift - kLockwordReservedShift);
   uint32_t sleeper_value =
       SpinLockTest::EncodeWaitCycles(start_time, start_time + sleeper_cycles);
   EXPECT_NE(sleeper_value, kSpinLockSleeper);
 
   // Test clamping
   uint32_t max_value =
-    SpinLockTest::EncodeWaitCycles(start_time, start_time + kMaxCycles);
+      SpinLockTest::EncodeWaitCycles(start_time, start_time + kMaxCycles);
   uint64_t max_value_decoded = SpinLockTest::DecodeWaitCycles(max_value);
   uint64_t expected_max_value_decoded = kMaxCycles & ~kProfileTimestampMask;
   EXPECT_EQ(expected_max_value_decoded, max_value_decoded);
 
   const int64_t step = (1 << kProfileTimestampShift);
-  uint32_t after_max_value =
-    SpinLockTest::EncodeWaitCycles(start_time, start_time + kMaxCycles + step);
+  uint32_t after_max_value = SpinLockTest::EncodeWaitCycles(
+      start_time, start_time + kMaxCycles + step);
   uint64_t after_max_value_decoded =
       SpinLockTest::DecodeWaitCycles(after_max_value);
   EXPECT_EQ(expected_max_value_decoded, after_max_value_decoded);
@@ -187,13 +204,11 @@ TEST(SpinLock, WaitCyclesEncoding) {
   uint32_t before_max_value = SpinLockTest::EncodeWaitCycles(
       start_time, start_time + kMaxCycles - step);
   uint64_t before_max_value_decoded =
-    SpinLockTest::DecodeWaitCycles(before_max_value);
+      SpinLockTest::DecodeWaitCycles(before_max_value);
   EXPECT_GT(expected_max_value_decoded, before_max_value_decoded);
 }
 
-TEST(SpinLockWithThreads, StaticSpinLock) {
-  ThreadedTest(&static_spinlock);
-}
+TEST(SpinLockWithThreads, StaticSpinLock) { ThreadedTest(&static_spinlock); }
 TEST(SpinLockWithThreads, StackSpinLock) {
   SpinLock spinlock;
   ThreadedTest(&spinlock);

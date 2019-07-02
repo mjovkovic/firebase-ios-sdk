@@ -20,9 +20,9 @@
 #include <unordered_set>
 #include <vector>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/string_view.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 

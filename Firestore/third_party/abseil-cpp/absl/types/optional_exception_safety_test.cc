@@ -14,8 +14,8 @@
 
 #include "absl/types/optional.h"
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/exception_safety_testing.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 

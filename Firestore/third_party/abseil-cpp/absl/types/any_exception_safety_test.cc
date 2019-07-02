@@ -17,8 +17,8 @@
 #include <typeinfo>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/exception_safety_testing.h"
+#include "gtest/gtest.h"
 
 using Thrower = testing::ThrowingValue<>;
 using NoThrowMoveThrower =

@@ -47,6 +47,7 @@ class RaiiLocker {
  public:
   explicit RaiiLocker(MutexType* mu) : mu_(mu) { mu_->Lock(); }
   ~RaiiLocker() { mu_->Unlock(); }
+
  private:
   MutexType* mu_;
 };
@@ -56,6 +57,7 @@ class RaiiLocker<std::mutex> {
  public:
   explicit RaiiLocker(std::mutex* mu) : mu_(mu) { mu_->lock(); }
   ~RaiiLocker() { mu_->unlock(); }
+
  private:
   std::mutex* mu_;
 };

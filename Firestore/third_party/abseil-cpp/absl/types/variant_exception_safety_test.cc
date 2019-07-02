@@ -19,11 +19,11 @@
 #include <utility>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
 #include "absl/base/internal/exception_safety_testing.h"
 #include "absl/memory/memory.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 // See comment in absl/base/config.h
 #if !defined(ABSL_INTERNAL_MSVC_2017_DBG_MODE)
@@ -320,8 +320,8 @@ TEST(VariantExceptionSafetyTest, MoveAssign) {
     // The fix is targeted for gcc-9.
     // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87431#c7
     // https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=267614
-#if !(defined(ABSL_HAVE_STD_VARIANT) && \
-      defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE == 8)
+#if !(defined(ABSL_HAVE_STD_VARIANT) && defined(_GLIBCXX_RELEASE) && \
+      _GLIBCXX_RELEASE == 8)
     // - otherwise (index() != j), equivalent to
     // emplace<j>(get<j>(std::move(rhs)))
     // - If an exception is thrown during the call to Tj's move construction

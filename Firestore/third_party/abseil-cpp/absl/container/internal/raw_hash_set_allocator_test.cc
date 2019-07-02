@@ -15,9 +15,9 @@
 #include <limits>
 #include <scoped_allocator>
 
-#include "gtest/gtest.h"
 #include "absl/container/internal/raw_hash_set.h"
 #include "absl/container/internal/tracked.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace container_internal {

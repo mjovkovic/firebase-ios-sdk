@@ -5,8 +5,8 @@
 #include <cmath>
 #include <string>
 
-#include "gtest/gtest.h"
 #include "absl/strings/internal/str_format/bind.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace str_format_internal {
@@ -37,8 +37,8 @@ std::string EscCharImpl(int v) {
     return std::string(1, static_cast<char>(v));
   }
   char buf[64];
-  int n = snprintf(buf, sizeof(buf), "\\%#.2x",
-                   static_cast<unsigned>(v & 0xff));
+  int n =
+      snprintf(buf, sizeof(buf), "\\%#.2x", static_cast<unsigned>(v & 0xff));
   assert(n > 0 && n < sizeof(buf));
   return std::string(buf, n);
 }
@@ -104,26 +104,20 @@ std::string StrPrint(const char *format, ...) {
   return result;
 }
 
-class FormatConvertTest : public ::testing::Test { };
+class FormatConvertTest : public ::testing::Test {};
 
 template <typename T>
-void TestStringConvert(const T& str) {
+void TestStringConvert(const T &str) {
   const FormatArgImpl args[] = {FormatArgImpl(str)};
   struct Expectation {
     const char *out;
     const char *fmt;
   };
   const Expectation kExpect[] = {
-    {"hello",  "%1$s"      },
-    {"",       "%1$.s"     },
-    {"",       "%1$.0s"    },
-    {"h",      "%1$.1s"    },
-    {"he",     "%1$.2s"    },
-    {"hello",  "%1$.10s"   },
-    {" hello", "%1$6s"     },
-    {"   he",  "%1$5.2s"   },
-    {"he   ",  "%1$-5.2s"  },
-    {"hello ", "%1$-6.10s" },
+      {"hello", "%1$s"},       {"", "%1$.s"},        {"", "%1$.0s"},
+      {"h", "%1$.1s"},         {"he", "%1$.2s"},     {"hello", "%1$.10s"},
+      {" hello", "%1$6s"},     {"   he", "%1$5.2s"}, {"he   ", "%1$-5.2s"},
+      {"hello ", "%1$-6.10s"},
   };
   for (const Expectation &e : kExpect) {
     UntypedFormatSpecImpl format(e.fmt);
@@ -133,13 +127,13 @@ void TestStringConvert(const T& str) {
 
 TEST_F(FormatConvertTest, BasicString) {
   TestStringConvert("hello");  // As char array.
-  TestStringConvert(static_cast<const char*>("hello"));
+  TestStringConvert(static_cast<const char *>("hello"));
   TestStringConvert(std::string("hello"));
   TestStringConvert(string_view("hello"));
 }
 
 TEST_F(FormatConvertTest, NullString) {
-  const char* p = nullptr;
+  const char *p = nullptr;
   UntypedFormatSpecImpl format("%s");
   EXPECT_EQ("", FormatPack(format, {FormatArgImpl(p)}));
 }
@@ -147,7 +141,7 @@ TEST_F(FormatConvertTest, NullString) {
 TEST_F(FormatConvertTest, StringPrecision) {
   // We cap at the precision.
   char c = 'a';
-  const char* p = &c;
+  const char *p = &c;
   UntypedFormatSpecImpl format("%.1s");
   EXPECT_EQ("a", FormatPack(format, {FormatArgImpl(p)}));
 
@@ -173,8 +167,8 @@ TEST_F(FormatConvertTest, Pointer) {
   using VoidF = void (*)();
   VoidF fp = [] {}, fnil = nullptr;
   volatile char vc;
-  volatile char* vcp = &vc;
-  volatile char* vcnil = nullptr;
+  volatile char *vcp = &vc;
+  volatile char *vcnil = nullptr;
   const FormatArgImpl args[] = {
       FormatArgImpl(xp),   FormatArgImpl(cp),  FormatArgImpl(inil),
       FormatArgImpl(cnil), FormatArgImpl(mcp), FormatArgImpl(fp),
@@ -233,7 +227,7 @@ TEST_F(FormatConvertTest, Enum) {
 }
 
 template <typename T>
-class TypedFormatConvertTest : public FormatConvertTest { };
+class TypedFormatConvertTest : public FormatConvertTest {};
 
 TYPED_TEST_SUITE_P(TypedFormatConvertTest);
 
@@ -243,8 +237,7 @@ std::vector<std::string> AllFlagCombinations() {
   for (size_t fsi = 0; fsi < (1ull << ArraySize(kFlags)); ++fsi) {
     std::string flag_set;
     for (size_t fi = 0; fi < ArraySize(kFlags); ++fi)
-      if (fsi & (1ull << fi))
-        flag_set += kFlags[fi];
+      if (fsi & (1ull << fi)) flag_set += kFlags[fi];
     result.push_back(flag_set);
   }
   return result;
@@ -341,13 +334,17 @@ TYPED_TEST_P(TypedFormatConvertTest, Char) {
   using remove_volatile_t = typename std::remove_volatile<T>::type;
   static const T kMin = std::numeric_limits<remove_volatile_t>::min();
   static const T kMax = std::numeric_limits<remove_volatile_t>::max();
-  T kVals[] = {
-    remove_volatile_t(1), remove_volatile_t(2), remove_volatile_t(10),
-    remove_volatile_t(-1), remove_volatile_t(-2), remove_volatile_t(-10),
-    remove_volatile_t(0),
-    kMin + remove_volatile_t(1), kMin,
-    kMax - remove_volatile_t(1), kMax
-  };
+  T kVals[] = {remove_volatile_t(1),
+               remove_volatile_t(2),
+               remove_volatile_t(10),
+               remove_volatile_t(-1),
+               remove_volatile_t(-2),
+               remove_volatile_t(-10),
+               remove_volatile_t(0),
+               kMin + remove_volatile_t(1),
+               kMin,
+               kMax - remove_volatile_t(1),
+               kMax};
   for (const T &c : kVals) {
     const FormatArgImpl args[] = {FormatArgImpl(c)};
     UntypedFormatSpecImpl format("%c");
@@ -357,12 +354,9 @@ TYPED_TEST_P(TypedFormatConvertTest, Char) {
 
 REGISTER_TYPED_TEST_CASE_P(TypedFormatConvertTest, AllIntsWithFlags, Char);
 
-typedef ::testing::Types<
-    int, unsigned, volatile int,
-    short, unsigned short,
-    long, unsigned long,
-    long long, unsigned long long,
-    signed char, unsigned char, char>
+typedef ::testing::Types<int, unsigned, volatile int, short, unsigned short,
+                         long, unsigned long, long long, unsigned long long,
+                         signed char, unsigned char, char>
     AllIntTypes;
 INSTANTIATE_TYPED_TEST_CASE_P(TypedFormatConvertTestWithAllIntTypes,
                               TypedFormatConvertTest, AllIntTypes);
@@ -373,8 +367,8 @@ TEST_F(FormatConvertTest, Uint128) {
   const FormatArgImpl args[] = {FormatArgImpl(v), FormatArgImpl(max)};
 
   struct Case {
-    const char* format;
-    const char* expected;
+    const char *format;
+    const char *expected;
   } cases[] = {
       {"%1$d", "2595989796776606496405"},
       {"%1$30d", "        2595989796776606496405"},
@@ -497,8 +491,7 @@ TEST_F(FormatConvertTest, LongDouble) {
         // We use ASSERT_EQ here because failures are usually correlated and a
         // bug would print way too many failed expectations causing the test to
         // time out.
-        ASSERT_EQ(StrPrint(fmt_str.c_str(), d),
-                  FormatPack(format, {&arg, 1}))
+        ASSERT_EQ(StrPrint(fmt_str.c_str(), d), FormatPack(format, {&arg, 1}))
             << fmt_str << " " << StrPrint("%.18Lg", d) << " "
             << StrPrint("%.999Lf", d);
       }
@@ -509,10 +502,8 @@ TEST_F(FormatConvertTest, LongDouble) {
 TEST_F(FormatConvertTest, IntAsFloat) {
   const int kMin = std::numeric_limits<int>::min();
   const int kMax = std::numeric_limits<int>::max();
-  const int ia[] = {
-    1, 2, 3, 123,
-    -1, -2, -3, -123,
-    0, kMax - 1, kMax, kMin + 1, kMin };
+  const int ia[] = {1,    2, 3,        123,  -1,       -2,  -3,
+                    -123, 0, kMax - 1, kMax, kMin + 1, kMin};
   for (const int fx : ia) {
     SCOPED_TRACE(fx);
     const FormatArgImpl args[] = {FormatArgImpl(fx)};
@@ -523,11 +514,11 @@ TEST_F(FormatConvertTest, IntAsFloat) {
     };
     const double dx = static_cast<double>(fx);
     const Expectation kExpect[] = {
-      { __LINE__, StrPrint("%f", dx), "%f" },
-      { __LINE__, StrPrint("%12f", dx), "%12f" },
-      { __LINE__, StrPrint("%.12f", dx), "%.12f" },
-      { __LINE__, StrPrint("%12a", dx), "%12a" },
-      { __LINE__, StrPrint("%.12a", dx), "%.12a" },
+        {__LINE__, StrPrint("%f", dx), "%f"},
+        {__LINE__, StrPrint("%12f", dx), "%12f"},
+        {__LINE__, StrPrint("%.12f", dx), "%.12f"},
+        {__LINE__, StrPrint("%12a", dx), "%12a"},
+        {__LINE__, StrPrint("%.12a", dx), "%.12a"},
     };
     for (const Expectation &e : kExpect) {
       SCOPED_TRACE(e.line);
@@ -539,7 +530,7 @@ TEST_F(FormatConvertTest, IntAsFloat) {
 }
 
 template <typename T>
-bool FormatFails(const char* test_format, T value) {
+bool FormatFails(const char *test_format, T value) {
   std::string format_string = std::string("<<") + test_format + ">>";
   UntypedFormatSpecImpl format(format_string);
 

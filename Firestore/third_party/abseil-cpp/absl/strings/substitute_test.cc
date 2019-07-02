@@ -16,8 +16,8 @@
 
 #include <cstdint>
 
-#include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -69,7 +69,7 @@ TEST(SubstituteTest, Substitute) {
   // Volatile Pointer.
   // Like C++ streamed I/O, such pointers implicitly become bool
   volatile int vol = 237;
-  volatile int *volatile volptr = &vol;
+  volatile int* volatile volptr = &vol;
   str = absl::Substitute("$0", volptr);
   EXPECT_EQ("true", str);
 
@@ -177,7 +177,8 @@ TEST(SubstituteTest, SubstituteAndAppend) {
 TEST(SubstituteDeathTest, SubstituteDeath) {
   EXPECT_DEBUG_DEATH(
       static_cast<void>(absl::Substitute(absl::string_view("-$2"), "a", "b")),
-      "Invalid strings::Substitute\\(\\) format std::string: asked for \"\\$2\", "
+      "Invalid strings::Substitute\\(\\) format std::string: asked for "
+      "\"\\$2\", "
       "but only 2 args were given.");
   EXPECT_DEBUG_DEATH(
       static_cast<void>(absl::Substitute("-$z-")),

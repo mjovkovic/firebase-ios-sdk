@@ -16,9 +16,9 @@
 #define ABSL_CONTAINER_INTERNAL_UNORDERED_SET_MEMBERS_TEST_H_
 
 #include <type_traits>
+#include "absl/meta/type_traits.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/meta/type_traits.h"
 
 namespace absl {
 namespace container_internal {

@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  * FSTTreeSortedDictionary is a tree-based implementation of FSTImmutableSortedDictionary.
  * You should not use this class directly. You should use FSTImmutableSortedDictionary.
  */
-@interface FSTTreeSortedDictionary <KeyType, ValueType> :
-    FSTImmutableSortedDictionary<KeyType, ValueType>
+@interface FSTTreeSortedDictionary<KeyType, ValueType>
+    : FSTImmutableSortedDictionary <KeyType, ValueType>
 
 @property(nonatomic, copy, readonly) NSComparator comparator;
 @property(nonatomic, strong, readonly) id<FSTLLRBNode> root;

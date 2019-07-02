@@ -20,8 +20,8 @@
 #include <random>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace {
@@ -53,7 +53,7 @@ const uint32_t k32ValueBE{0x67452301};
 const uint16_t k16ValueBE{0x2301};
 #endif
 
-template<typename T>
+template <typename T>
 std::vector<T> GenerateAllValuesForType() {
   std::vector<T> result;
   T next = std::numeric_limits<T>::min();
@@ -66,7 +66,7 @@ std::vector<T> GenerateAllValuesForType() {
   }
 }
 
-template<typename T>
+template <typename T>
 std::vector<T> GenerateRandomIntegers(size_t numValuesToTest) {
   std::vector<T> result;
   std::mt19937_64 rng(kRandomSeed);
@@ -77,8 +77,7 @@ std::vector<T> GenerateRandomIntegers(size_t numValuesToTest) {
 }
 
 void ManualByteSwap(char* bytes, int length) {
-  if (length == 1)
-    return;
+  if (length == 1) return;
 
   EXPECT_EQ(0, length % 2);
   for (int i = 0; i < length / 2; ++i) {
@@ -88,14 +87,15 @@ void ManualByteSwap(char* bytes, int length) {
   }
 }
 
-template<typename T>
+template <typename T>
 inline T UnalignedLoad(const char* p) {
   static_assert(
       sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8,
       "Unexpected type size");
 
   switch (sizeof(T)) {
-    case 1: return *reinterpret_cast<const T*>(p);
+    case 1:
+      return *reinterpret_cast<const T*>(p);
     case 2:
       return ABSL_INTERNAL_UNALIGNED_LOAD16(p);
     case 4:
@@ -127,7 +127,7 @@ static void GBSwapHelper(const std::vector<T>& host_values_to_test,
     ASSERT_EQ(0, memcmp(actual_value, expected_value, sizeof(host_value)))
         << "Swap output for 0x" << std::hex << host_value << " does not match. "
         << "Expected: 0x" << UnalignedLoad<T>(expected_value) << "; "
-        << "actual: 0x" <<  UnalignedLoad<T>(actual_value);
+        << "actual: 0x" << UnalignedLoad<T>(actual_value);
   }
 }
 

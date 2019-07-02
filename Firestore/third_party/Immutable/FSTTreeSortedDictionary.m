@@ -46,12 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (FSTTreeSortedDictionary *)dictionaryBySettingObject:(id)aValue forKey:(id)aKey {
   return [[FSTTreeSortedDictionary alloc]
       initWithComparator:self.comparator
-                withRoot:[[self.root insertKey:aKey forValue:aValue withComparator:self.comparator]
-                              copyWith:nil
-                             withValue:nil
-                             withColor:FSTLLRBColorBlack
-                              withLeft:nil
-                             withRight:nil]];
+                withRoot:[[self.root insertKey:aKey forValue:aValue
+                                withComparator:self.comparator] copyWith:nil
+                                                               withValue:nil
+                                                               withColor:FSTLLRBColorBlack
+                                                                withLeft:nil
+                                                               withRight:nil]];
 }
 
 - (FSTTreeSortedDictionary *)dictionaryByRemovingObjectForKey:(id)aKey {
@@ -62,12 +62,12 @@ NS_ASSUME_NONNULL_BEGIN
   } else {
     return [[FSTTreeSortedDictionary alloc]
         initWithComparator:self.comparator
-                  withRoot:[[self.root remove:aKey withComparator:self.comparator]
-                                copyWith:nil
-                               withValue:nil
-                               withColor:FSTLLRBColorBlack
-                                withLeft:nil
-                               withRight:nil]];
+                  withRoot:[[self.root remove:aKey
+                               withComparator:self.comparator] copyWith:nil
+                                                              withValue:nil
+                                                              withColor:FSTLLRBColorBlack
+                                                               withLeft:nil
+                                                              withRight:nil]];
   }
 }
 
@@ -329,9 +329,8 @@ void FreeBase12List(Base12List *list) {
     if (idx > 0) {
       if (comparator(sortedKeyList[idx - 1], obj) != NSOrderedAscending) {
         [NSException raise:NSInvalidArgumentException
-                    format:
-                        @"Can't create FSTImmutableSortedDictionary "
-                        @"with keys with same ordering!"];
+                    format:@"Can't create FSTImmutableSortedDictionary "
+                           @"with keys with same ordering!"];
       }
     }
   }];

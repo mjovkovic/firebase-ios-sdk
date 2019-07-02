@@ -19,9 +19,9 @@
 #include <cstring>
 #include <string>
 
-#include "gtest/gtest.h"
 #include "absl/base/macros.h"
 #include "absl/base/port.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -203,8 +203,8 @@ TEST(AsciiStrTo, Lower) {
   EXPECT_EQ("mnopqr", absl::AsciiStrToLower(sp));
 
   char mutable_buf[] = "Mutable";
-  std::transform(mutable_buf, mutable_buf + strlen(mutable_buf),
-                 mutable_buf, absl::ascii_tolower);
+  std::transform(mutable_buf, mutable_buf + strlen(mutable_buf), mutable_buf,
+                 absl::ascii_tolower);
   EXPECT_STREQ("mutable", mutable_buf);
 }
 
@@ -219,8 +219,8 @@ TEST(AsciiStrTo, Upper) {
   EXPECT_EQ("MNOPQR", absl::AsciiStrToUpper(sp));
 
   char mutable_buf[] = "Mutable";
-  std::transform(mutable_buf, mutable_buf + strlen(mutable_buf),
-                 mutable_buf, absl::ascii_toupper);
+  std::transform(mutable_buf, mutable_buf + strlen(mutable_buf), mutable_buf,
+                 absl::ascii_toupper);
   EXPECT_STREQ("MUTABLE", mutable_buf);
 }
 

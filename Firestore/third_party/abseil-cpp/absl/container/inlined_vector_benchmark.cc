@@ -17,9 +17,9 @@
 #include <string>
 #include <vector>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/str_cat.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 
@@ -77,9 +77,9 @@ int GetNonShortStringOptimizationSize() {
       return i;
     }
   }
-  ABSL_RAW_LOG(
-      FATAL,
-      "Failed to find a std::string larger than the short std::string optimization");
+  ABSL_RAW_LOG(FATAL,
+               "Failed to find a std::string larger than the short std::string "
+               "optimization");
   return -1;
 }
 

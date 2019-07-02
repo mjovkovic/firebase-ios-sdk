@@ -54,7 +54,7 @@ class CountingAllocator : public std::allocator<T> {
     *bytes_used_ -= n * sizeof(T);
   }
 
-  template<typename U>
+  template <typename U>
   class rebind {
    public:
     using other = CountingAllocator<U>;

@@ -44,12 +44,12 @@ namespace {
 
 #if __WORDSIZE == 32
 const int kElfClass = ELFCLASS32;
-int ElfBind(const ElfW(Sym) *symbol) { return ELF32_ST_BIND(symbol->st_info); }
-int ElfType(const ElfW(Sym) *symbol) { return ELF32_ST_TYPE(symbol->st_info); }
+int ElfBind(const ElfW(Sym) * symbol) { return ELF32_ST_BIND(symbol->st_info); }
+int ElfType(const ElfW(Sym) * symbol) { return ELF32_ST_TYPE(symbol->st_info); }
 #elif __WORDSIZE == 64
 const int kElfClass = ELFCLASS64;
-int ElfBind(const ElfW(Sym) *symbol) { return ELF64_ST_BIND(symbol->st_info); }
-int ElfType(const ElfW(Sym) *symbol) { return ELF64_ST_TYPE(symbol->st_info); }
+int ElfBind(const ElfW(Sym) * symbol) { return ELF64_ST_BIND(symbol->st_info); }
+int ElfType(const ElfW(Sym) * symbol) { return ELF64_ST_TYPE(symbol->st_info); }
 #else
 const int kElfClass = -1;
 int ElfBind(const ElfW(Sym) *) {
@@ -68,9 +68,8 @@ int ElfType(const ElfW(Sym) *) {
 template <typename T>
 const T *GetTableElement(const ElfW(Ehdr) * ehdr, ElfW(Off) table_offset,
                          ElfW(Word) element_size, size_t index) {
-  return reinterpret_cast<const T*>(reinterpret_cast<const char *>(ehdr)
-                                    + table_offset
-                                    + index * element_size);
+  return reinterpret_cast<const T *>(reinterpret_cast<const char *>(ehdr) +
+                                     table_offset + index * element_size);
 }
 
 }  // namespace
@@ -92,21 +91,19 @@ int ElfMemImage::GetNumSymbols() const {
   return hash_[1];
 }
 
-const ElfW(Sym) *ElfMemImage::GetDynsym(int index) const {
+const ElfW(Sym) * ElfMemImage::GetDynsym(int index) const {
   ABSL_RAW_CHECK(index < GetNumSymbols(), "index out of range");
   return dynsym_ + index;
 }
 
-const ElfW(Versym) *ElfMemImage::GetVersym(int index) const {
+const ElfW(Versym) * ElfMemImage::GetVersym(int index) const {
   ABSL_RAW_CHECK(index < GetNumSymbols(), "index out of range");
   return versym_ + index;
 }
 
-const ElfW(Phdr) *ElfMemImage::GetPhdr(int index) const {
+const ElfW(Phdr) * ElfMemImage::GetPhdr(int index) const {
   ABSL_RAW_CHECK(index < ehdr_->e_phnum, "index out of range");
-  return GetTableElement<ElfW(Phdr)>(ehdr_,
-                                     ehdr_->e_phoff,
-                                     ehdr_->e_phentsize,
+  return GetTableElement<ElfW(Phdr)>(ehdr_, ehdr_->e_phoff, ehdr_->e_phentsize,
                                      index);
 }
 
@@ -115,7 +112,7 @@ const char *ElfMemImage::GetDynstr(ElfW(Word) offset) const {
   return dynstr_ + offset;
 }
 
-const void *ElfMemImage::GetSymAddr(const ElfW(Sym) *sym) const {
+const void *ElfMemImage::GetSymAddr(const ElfW(Sym) * sym) const {
   if (sym->st_shndx == SHN_UNDEF || sym->st_shndx >= SHN_LORESERVE) {
     // Symbol corresponds to "special" (e.g. SHN_ABS) section.
     return reinterpret_cast<const void *>(sym->st_value);
@@ -124,23 +121,22 @@ const void *ElfMemImage::GetSymAddr(const ElfW(Sym) *sym) const {
   return GetTableElement<char>(ehdr_, 0, 1, sym->st_value - link_base_);
 }
 
-const ElfW(Verdef) *ElfMemImage::GetVerdef(int index) const {
+const ElfW(Verdef) * ElfMemImage::GetVerdef(int index) const {
   ABSL_RAW_CHECK(0 <= index && static_cast<size_t>(index) <= verdefnum_,
                  "index out of range");
   const ElfW(Verdef) *version_definition = verdef_;
   while (version_definition->vd_ndx < index && version_definition->vd_next) {
     const char *const version_definition_as_char =
         reinterpret_cast<const char *>(version_definition);
-    version_definition =
-        reinterpret_cast<const ElfW(Verdef) *>(version_definition_as_char +
-                                               version_definition->vd_next);
+    version_definition = reinterpret_cast<const ElfW(Verdef) *>(
+        version_definition_as_char + version_definition->vd_next);
   }
   return version_definition->vd_ndx == index ? version_definition : nullptr;
 }
 
-const ElfW(Verdaux) *ElfMemImage::GetVerdefAux(
-    const ElfW(Verdef) *verdef) const {
-  return reinterpret_cast<const ElfW(Verdaux) *>(verdef+1);
+const ElfW(Verdaux) * ElfMemImage::GetVerdefAux(const ElfW(Verdef) *
+                                                verdef) const {
+  return reinterpret_cast<const ElfW(Verdaux) *>(verdef + 1);
 }
 
 const char *ElfMemImage::GetVerstr(ElfW(Word) offset) const {
@@ -149,13 +145,13 @@ const char *ElfMemImage::GetVerstr(ElfW(Word) offset) const {
 }
 
 void ElfMemImage::Init(const void *base) {
-  ehdr_      = nullptr;
-  dynsym_    = nullptr;
-  dynstr_    = nullptr;
-  versym_    = nullptr;
-  verdef_    = nullptr;
-  hash_      = nullptr;
-  strsize_   = 0;
+  ehdr_ = nullptr;
+  dynsym_ = nullptr;
+  dynstr_ = nullptr;
+  versym_ = nullptr;
+  verdef_ = nullptr;
+  hash_ = nullptr;
+  strsize_ = 0;
   verdefnum_ = 0;
   link_base_ = ~0L;  // Sentinel: PT_LOAD .p_vaddr can't possibly be this.
   if (!base) {
@@ -216,9 +212,8 @@ void ElfMemImage::Init(const void *base) {
   }
   ptrdiff_t relocation =
       base_as_char - reinterpret_cast<const char *>(link_base_);
-  ElfW(Dyn) *dynamic_entry =
-      reinterpret_cast<ElfW(Dyn) *>(dynamic_program_header->p_vaddr +
-                                    relocation);
+  ElfW(Dyn) *dynamic_entry = reinterpret_cast<ElfW(Dyn) *>(
+      dynamic_program_header->p_vaddr + relocation);
   for (; dynamic_entry->d_tag != DT_NULL; ++dynamic_entry) {
     const ElfW(Xword) value = dynamic_entry->d_un.d_val + relocation;
     switch (dynamic_entry->d_tag) {
@@ -248,8 +243,8 @@ void ElfMemImage::Init(const void *base) {
         break;
     }
   }
-  if (!hash_ || !dynsym_ || !dynstr_ || !versym_ ||
-      !verdef_ || !verdefnum_ || !strsize_) {
+  if (!hash_ || !dynsym_ || !dynstr_ || !versym_ || !verdef_ || !verdefnum_ ||
+      !strsize_) {
     assert(false);  // invalid VDSO
     // Mark this image as not present. Can not recur infinitely.
     Init(nullptr);
@@ -257,11 +252,9 @@ void ElfMemImage::Init(const void *base) {
   }
 }
 
-bool ElfMemImage::LookupSymbol(const char *name,
-                               const char *version,
-                               int type,
+bool ElfMemImage::LookupSymbol(const char *name, const char *version, int type,
                                SymbolInfo *info_out) const {
-  for (const SymbolInfo& info : *this) {
+  for (const SymbolInfo &info : *this) {
     if (strcmp(info.name, name) == 0 && strcmp(info.version, version) == 0 &&
         ElfType(info.symbol) == type) {
       if (info_out) {
@@ -275,7 +268,7 @@ bool ElfMemImage::LookupSymbol(const char *name,
 
 bool ElfMemImage::LookupSymbolByAddress(const void *address,
                                         SymbolInfo *info_out) const {
-  for (const SymbolInfo& info : *this) {
+  for (const SymbolInfo &info : *this) {
     const char *const symbol_start =
         reinterpret_cast<const char *>(info.address);
     const char *const symbol_end = symbol_start + info.symbol->st_size;
@@ -300,14 +293,13 @@ bool ElfMemImage::LookupSymbolByAddress(const void *address,
 }
 
 ElfMemImage::SymbolIterator::SymbolIterator(const void *const image, int index)
-    : index_(index), image_(image) {
-}
+    : index_(index), image_(image) {}
 
 const ElfMemImage::SymbolInfo *ElfMemImage::SymbolIterator::operator->() const {
   return &info_;
 }
 
-const ElfMemImage::SymbolInfo& ElfMemImage::SymbolIterator::operator*() const {
+const ElfMemImage::SymbolInfo &ElfMemImage::SymbolIterator::operator*() const {
   return info_;
 }
 
@@ -345,7 +337,7 @@ void ElfMemImage::SymbolIterator::Update(int increment) {
     index_ = image->GetNumSymbols();
     return;
   }
-  const ElfW(Sym)    *symbol = image->GetDynsym(index_);
+  const ElfW(Sym) *symbol = image->GetDynsym(index_);
   const ElfW(Versym) *version_symbol = image->GetVersym(index_);
   ABSL_RAW_CHECK(symbol && version_symbol, "");
   const char *const symbol_name = image->GetDynstr(symbol->st_name);
@@ -368,10 +360,10 @@ void ElfMemImage::SymbolIterator::Update(int increment) {
     const ElfW(Verdaux) *version_aux = image->GetVerdefAux(version_definition);
     version_name = image->GetVerstr(version_aux->vda_name);
   }
-  info_.name    = symbol_name;
+  info_.name = symbol_name;
   info_.version = version_name;
   info_.address = image->GetSymAddr(symbol);
-  info_.symbol  = symbol;
+  info_.symbol = symbol;
 }
 
 }  // namespace debugging_internal

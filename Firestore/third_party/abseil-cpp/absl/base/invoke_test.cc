@@ -19,10 +19,10 @@
 #include <string>
 #include <utility>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace base_internal {
@@ -30,13 +30,9 @@ namespace {
 
 int Function(int a, int b) { return a - b; }
 
-int Sink(std::unique_ptr<int> p) {
-  return *p;
-}
+int Sink(std::unique_ptr<int> p) { return *p; }
 
-std::unique_ptr<int> Factory(int n) {
-  return make_unique<int>(n);
-}
+std::unique_ptr<int> Factory(int n) { return make_unique<int>(n); }
 
 void NoOp() {}
 
@@ -106,13 +102,9 @@ TEST(InvokeTest, NonCopyableResult) {
   EXPECT_THAT(Invoke(Factory, 42), ::testing::Pointee(42));
 }
 
-TEST(InvokeTest, VoidResult) {
-  Invoke(NoOp);
-}
+TEST(InvokeTest, VoidResult) { Invoke(NoOp); }
 
-TEST(InvokeTest, ConstFunctor) {
-  EXPECT_EQ(1, Invoke(ConstFunctor(), 3, 2));
-}
+TEST(InvokeTest, ConstFunctor) { EXPECT_EQ(1, Invoke(ConstFunctor(), 3, 2)); }
 
 TEST(InvokeTest, MutableFunctor) {
   MutableFunctor f;

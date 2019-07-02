@@ -18,9 +18,9 @@
 #include <tuple>
 #include <utility>
 
+#include "absl/strings/string_view.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/strings/string_view.h"
 
 namespace absl {
 namespace container_internal {
@@ -176,8 +176,7 @@ TEST(DecomposePair, NotDecomposable) {
     ADD_FAILURE() << "Must not be called";
     return 'A';
   };
-  EXPECT_STREQ("not decomposable",
-               TryDecomposePair(f));
+  EXPECT_STREQ("not decomposable", TryDecomposePair(f));
   EXPECT_STREQ("not decomposable",
                TryDecomposePair(f, std::piecewise_construct, std::make_tuple(),
                                 std::make_tuple(0.5)));

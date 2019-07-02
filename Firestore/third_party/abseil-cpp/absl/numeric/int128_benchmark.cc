@@ -19,8 +19,8 @@
 #include <random>
 #include <vector>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/config.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 
@@ -185,7 +185,7 @@ void BM_DivideIntrinsic128SmallDivisor(benchmark::State& state) {
 BENCHMARK(BM_DivideIntrinsic128SmallDivisor);
 
 std::vector<std::pair<unsigned __int128, unsigned __int128>>
-      GetRandomIntrinsic128Sample() {
+GetRandomIntrinsic128Sample() {
   std::vector<std::pair<unsigned __int128, unsigned __int128>> values;
   std::mt19937 random = MakeRandomEngine();
   UniformIntDistribution128 uniform_uint128;

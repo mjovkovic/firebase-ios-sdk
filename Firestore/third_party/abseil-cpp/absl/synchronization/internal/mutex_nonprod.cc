@@ -274,39 +274,39 @@ bool CondVar::WaitWithTimeout(Mutex* mu, absl::Duration timeout) {
 void CondVar::EnableDebugLog(const char*) {}
 
 #ifdef THREAD_SANITIZER
-extern "C" void __tsan_read1(void *addr);
+extern "C" void __tsan_read1(void* addr);
 #else
 #define __tsan_read1(addr)  // do nothing if TSan not enabled
 #endif
 
 // A function that just returns its argument, dereferenced
-static bool Dereference(void *arg) {
+static bool Dereference(void* arg) {
   // ThreadSanitizer does not instrument this file for memory accesses.
   // This function dereferences a user variable that can participate
   // in a data race, so we need to manually tell TSan about this memory access.
   __tsan_read1(arg);
-  return *(static_cast<bool *>(arg));
+  return *(static_cast<bool*>(arg));
 }
 
-Condition::Condition() {}   // null constructor, used for kTrue only
+Condition::Condition() {}  // null constructor, used for kTrue only
 const Condition Condition::kTrue;
 
-Condition::Condition(bool (*func)(void *), void *arg)
+Condition::Condition(bool (*func)(void*), void* arg)
     : eval_(&CallVoidPtrFunction),
       function_(func),
       method_(nullptr),
       arg_(arg) {}
 
-bool Condition::CallVoidPtrFunction(const Condition *c) {
+bool Condition::CallVoidPtrFunction(const Condition* c) {
   return (*c->function_)(c->arg_);
 }
 
-Condition::Condition(const bool *cond)
+Condition::Condition(const bool* cond)
     : eval_(CallVoidPtrFunction),
       function_(Dereference),
       method_(nullptr),
       // const_cast is safe since Dereference does not modify arg
-      arg_(const_cast<bool *>(cond)) {}
+      arg_(const_cast<bool*>(cond)) {}
 
 bool Condition::Eval() const {
   // eval_ == null for kTrue

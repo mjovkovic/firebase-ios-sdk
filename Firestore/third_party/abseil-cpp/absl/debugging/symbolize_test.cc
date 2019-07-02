@@ -23,8 +23,6 @@
 #include <iostream>
 #include <memory>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/base/casts.h"
 #include "absl/base/internal/per_thread_tls.h"
@@ -32,6 +30,8 @@
 #include "absl/base/optimization.h"
 #include "absl/debugging/internal/stack_consumption.h"
 #include "absl/memory/memory.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 using testing::Contains;
 
@@ -56,21 +56,13 @@ int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.unlikely) unlikely_func() {
   return 0;
 }
 
-int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.hot) hot_func() {
-  return 0;
-}
+int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.hot) hot_func() { return 0; }
 
-int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.startup) startup_func() {
-  return 0;
-}
+int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.startup) startup_func() { return 0; }
 
-int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.exit) exit_func() {
-  return 0;
-}
+int ABSL_ATTRIBUTE_SECTION_VARIABLE(.text.exit) exit_func() { return 0; }
 
-int /*ABSL_ATTRIBUTE_SECTION_VARIABLE(.text)*/ regular_func() {
-  return 0;
-}
+int /*ABSL_ATTRIBUTE_SECTION_VARIABLE(.text)*/ regular_func() { return 0; }
 
 // Thread-local data may confuse the symbolizer, ensure that it does not.
 // Variable sizes and order are important.
@@ -88,7 +80,7 @@ static volatile bool volatile_bool = false;
 // Force the binary to be large enough that a THP .text remap will succeed.
 static constexpr size_t kHpageSize = 1 << 21;
 const char kHpageTextPadding[kHpageSize * 4] ABSL_ATTRIBUTE_SECTION_VARIABLE(
-    .text) = "";
+        .text) = "";
 
 static char try_symbolize_buffer[4096];
 
@@ -236,10 +228,8 @@ TEST(Symbolize, SymbolizeWithDemanglingStackConsumption) {
 const size_t kPageSize = 64 << 10;
 // We place a read-only symbols into the .text section and verify that we can
 // symbolize them and other symbols after remapping them.
-const char kPadding0[kPageSize * 4] ABSL_ATTRIBUTE_SECTION_VARIABLE(.text) =
-    "";
-const char kPadding1[kPageSize * 4] ABSL_ATTRIBUTE_SECTION_VARIABLE(.text) =
-    "";
+const char kPadding0[kPageSize * 4] ABSL_ATTRIBUTE_SECTION_VARIABLE(.text) = "";
+const char kPadding1[kPageSize * 4] ABSL_ATTRIBUTE_SECTION_VARIABLE(.text) = "";
 
 static int FilterElfHeader(struct dl_phdr_info *info, size_t size, void *data) {
   for (int i = 0; i < info->dlpi_phnum; i++) {
@@ -393,9 +383,9 @@ extern "C" {
 inline void *ABSL_ATTRIBUTE_ALWAYS_INLINE inline_func() {
   void *pc = nullptr;
 #if defined(__i386__)
-  __asm__ __volatile__("call 1f;\n 1: pop %[PC]" : [ PC ] "=r"(pc));
+  __asm__ __volatile__("call 1f;\n 1: pop %[PC]" : [PC] "=r"(pc));
 #elif defined(__x86_64__)
-  __asm__ __volatile__("leaq 0(%%rip),%[PC];\n" : [ PC ] "=r"(pc));
+  __asm__ __volatile__("leaq 0(%%rip),%[PC];\n" : [PC] "=r"(pc));
 #endif
   return pc;
 }
@@ -403,9 +393,9 @@ inline void *ABSL_ATTRIBUTE_ALWAYS_INLINE inline_func() {
 void *ABSL_ATTRIBUTE_NOINLINE non_inline_func() {
   void *pc = nullptr;
 #if defined(__i386__)
-  __asm__ __volatile__("call 1f;\n 1: pop %[PC]" : [ PC ] "=r"(pc));
+  __asm__ __volatile__("call 1f;\n 1: pop %[PC]" : [PC] "=r"(pc));
 #elif defined(__x86_64__)
-  __asm__ __volatile__("leaq 0(%%rip),%[PC];\n" : [ PC ] "=r"(pc));
+  __asm__ __volatile__("leaq 0(%%rip),%[PC];\n" : [PC] "=r"(pc));
 #endif
   return pc;
 }
@@ -453,7 +443,7 @@ TEST(Symbolize, Basics) {
 
   // The name of an internal linkage symbol is not specified; allow either a
   // mangled or an unmangled name here.
-  const char* static_func_symbol = TrySymbolize((void *)(&static_func));
+  const char *static_func_symbol = TrySymbolize((void *)(&static_func));
   ASSERT_TRUE(static_func_symbol != nullptr);
   EXPECT_TRUE(strstr(static_func_symbol, "static_func") != nullptr);
 
@@ -480,7 +470,7 @@ TEST(Symbolize, Truncation) {
 }
 
 TEST(Symbolize, SymbolizeWithDemangling) {
-  const char* result = TrySymbolize((void *)(&Foo::func));
+  const char *result = TrySymbolize((void *)(&Foo::func));
   ASSERT_TRUE(result != nullptr);
   EXPECT_TRUE(strstr(result, "Foo::func") != nullptr) << result;
 }

@@ -157,8 +157,7 @@ std::string Summarize(UntypedFormatSpecImpl format,
 bool BindWithPack(const UnboundConversion* props,
                   absl::Span<const FormatArgImpl> pack, BoundConversion* bound);
 
-bool FormatUntyped(FormatRawSinkImpl raw_sink,
-                   UntypedFormatSpecImpl format,
+bool FormatUntyped(FormatRawSinkImpl raw_sink, UntypedFormatSpecImpl format,
                    absl::Span<const FormatArgImpl> args);
 
 std::string& AppendPack(std::string* out, UntypedFormatSpecImpl format,
@@ -181,7 +180,7 @@ int SnprintF(char* output, size_t size, UntypedFormatSpecImpl format,
 template <typename T>
 class StreamedWrapper {
  public:
-  explicit StreamedWrapper(const T& v) : v_(v) { }
+  explicit StreamedWrapper(const T& v) : v_(v) {}
 
  private:
   template <typename S>

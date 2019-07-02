@@ -45,15 +45,15 @@
 #if defined(ABSL_STACKTRACE_INL_HEADER)
 #include ABSL_STACKTRACE_INL_HEADER
 #else
-# error Cannot calculate stack trace: will need to write for your environment
+#error Cannot calculate stack trace: will need to write for your environment
 
-# include "absl/debugging/internal/stacktrace_aarch64-inl.inc"
-# include "absl/debugging/internal/stacktrace_arm-inl.inc"
-# include "absl/debugging/internal/stacktrace_generic-inl.inc"
-# include "absl/debugging/internal/stacktrace_powerpc-inl.inc"
-# include "absl/debugging/internal/stacktrace_unimplemented-inl.inc"
-# include "absl/debugging/internal/stacktrace_win32-inl.inc"
-# include "absl/debugging/internal/stacktrace_x86-inl.inc"
+#include "absl/debugging/internal/stacktrace_aarch64-inl.inc"
+#include "absl/debugging/internal/stacktrace_arm-inl.inc"
+#include "absl/debugging/internal/stacktrace_generic-inl.inc"
+#include "absl/debugging/internal/stacktrace_powerpc-inl.inc"
+#include "absl/debugging/internal/stacktrace_unimplemented-inl.inc"
+#include "absl/debugging/internal/stacktrace_win32-inl.inc"
+#include "absl/debugging/internal/stacktrace_x86-inl.inc"
 #endif
 
 namespace absl {
@@ -72,8 +72,8 @@ ABSL_ATTRIBUTE_ALWAYS_INLINE inline int Unwind(void** result, int* sizes,
   if (g != nullptr) f = g;
 
   // Add 1 to skip count for the unwinder function itself
-  int size = (*f)(result, sizes, max_depth, skip_count + 1, uc,
-                  min_dropped_frames);
+  int size =
+      (*f)(result, sizes, max_depth, skip_count + 1, uc, min_dropped_frames);
   // To disable tail call to (*f)(...)
   ABSL_BLOCK_TAIL_CALL_OPTIMIZATION();
   return size;
@@ -131,7 +131,8 @@ int DefaultStackUnwinder(void** pcs, int* sizes, int depth, int skip,
   }
   volatile int x = 0;
   int n = (*f)(pcs, sizes, depth, skip, uc, min_dropped_frames);
-  x = 1; (void) x;  // To disable tail call to (*f)(...)
+  x = 1;
+  (void)x;  // To disable tail call to (*f)(...)
   return n;
 }
 

@@ -23,17 +23,16 @@
 #include <unordered_set>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/synchronization/barrier.h"
 #include "absl/synchronization/mutex.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace base_internal {
 namespace {
 
 TEST(SysinfoTest, NumCPUs) {
-  EXPECT_NE(NumCPUs(), 0)
-      << "NumCPUs() should not have the default value of 0";
+  EXPECT_NE(NumCPUs(), 0) << "NumCPUs() should not have the default value of 0";
 }
 
 TEST(SysinfoTest, NominalCPUFrequency) {

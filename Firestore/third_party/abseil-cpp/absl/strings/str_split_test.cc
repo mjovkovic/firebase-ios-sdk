@@ -25,11 +25,11 @@
 #include <unordered_set>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/dynamic_annotations.h"  // for RunningOnValgrind
 #include "absl/base/macros.h"
 #include "absl/strings/numbers.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -131,8 +131,8 @@ TEST(Split, APIExamples) {
     // Splits std::string data with embedded NUL characters, using NUL as the
     // delimiter. A simple delimiter of "\0" doesn't work because strlen() will
     // say that's the empty std::string when constructing the absl::string_view
-    // delimiter. Instead, a non-empty std::string containing NUL can be used as the
-    // delimiter.
+    // delimiter. Instead, a non-empty std::string containing NUL can be used as
+    // the delimiter.
     std::string embedded_nulls("a\0b\0c", 5);
     std::string null_delim("\0", 1);
     std::vector<std::string> v = absl::StrSplit(embedded_nulls, null_delim);
@@ -814,11 +814,12 @@ TEST(Delimiter, ByString) {
   ByString comma_string(",");
   TestComma(comma_string);
 
-  // The first occurrence of empty std::string ("") in a std::string is at position 0.
-  // There is a test below that demonstrates this for absl::string_view::find().
-  // If the ByString delimiter returned position 0 for this, there would
-  // be an infinite loop in the SplitIterator code. To avoid this, empty std::string
-  // is a special case in that it always returns the item at position 1.
+  // The first occurrence of empty std::string ("") in a std::string is at
+  // position 0. There is a test below that demonstrates this for
+  // absl::string_view::find(). If the ByString delimiter returned position 0
+  // for this, there would be an infinite loop in the SplitIterator code. To
+  // avoid this, empty std::string is a special case in that it always returns
+  // the item at position 1.
   absl::string_view abc("abc");
   EXPECT_EQ(0, abc.find(""));  // "" is found at position 0
   ByString empty("");

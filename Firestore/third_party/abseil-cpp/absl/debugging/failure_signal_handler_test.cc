@@ -22,12 +22,12 @@
 #include <cstring>
 #include <fstream>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/debugging/stacktrace.h"
 #include "absl/debugging/symbolize.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
+#include "gtest/gtest.h"
 
 namespace {
 

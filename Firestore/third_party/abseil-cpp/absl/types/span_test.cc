@@ -22,8 +22,6 @@
 #include <type_traits>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/base/config.h"
 #include "absl/base/internal/exception_testing.h"
@@ -31,6 +29,8 @@
 #include "absl/container/inlined_vector.h"
 #include "absl/hash/hash_testing.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace {
 

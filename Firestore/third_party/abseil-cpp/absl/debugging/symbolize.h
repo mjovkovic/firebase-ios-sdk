@@ -69,7 +69,7 @@ namespace absl {
 //   absl::InitializeSymbolizer(argv[0]);
 //   // Now you can use the symbolizer
 // }
-void InitializeSymbolizer(const char* argv0);
+void InitializeSymbolizer(const char *argv0);
 
 // Symbolize()
 //

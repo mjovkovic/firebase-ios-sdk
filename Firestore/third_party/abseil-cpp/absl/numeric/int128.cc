@@ -155,7 +155,7 @@ uint128 operator/(uint128 lhs, uint128 rhs) {
 #if defined(ABSL_HAVE_INTRINSIC_INT128)
   return static_cast<unsigned __int128>(lhs) /
          static_cast<unsigned __int128>(rhs);
-#else  // ABSL_HAVE_INTRINSIC_INT128
+#else   // ABSL_HAVE_INTRINSIC_INT128
   uint128 quotient = 0;
   uint128 remainder = 0;
   DivModImpl(lhs, rhs, &quotient, &remainder);
@@ -166,7 +166,7 @@ uint128 operator%(uint128 lhs, uint128 rhs) {
 #if defined(ABSL_HAVE_INTRINSIC_INT128)
   return static_cast<unsigned __int128>(lhs) %
          static_cast<unsigned __int128>(rhs);
-#else  // ABSL_HAVE_INTRINSIC_INT128
+#else   // ABSL_HAVE_INTRINSIC_INT128
   uint128 quotient = 0;
   uint128 remainder = 0;
   DivModImpl(lhs, rhs, &quotient, &remainder);
@@ -189,7 +189,7 @@ std::string Uint128ToFormattedString(uint128 v, std::ios_base::fmtflags flags) {
       div = 01000000000000000000000;  // 8^21
       div_base_log = 21;
       break;
-    default:  // std::ios::dec
+    default:                        // std::ios::dec
       div = 10000000000000000000u;  // 10^19
       div_base_log = 19;
       break;

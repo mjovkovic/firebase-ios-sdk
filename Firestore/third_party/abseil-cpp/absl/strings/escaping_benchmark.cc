@@ -18,9 +18,9 @@
 #include <cstring>
 #include <random>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/internal/escaping_test_common.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 

@@ -28,11 +28,11 @@
 #include <type_traits>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/macros.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
+#include "gtest/gtest.h"
 
 namespace {
 

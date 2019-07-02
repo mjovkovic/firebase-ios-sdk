@@ -19,8 +19,8 @@
 
 #include <string.h>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace debugging_internal {

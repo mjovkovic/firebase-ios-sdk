@@ -17,8 +17,8 @@
 #include <cstring>
 #include <string>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/internal/raw_logging.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 
@@ -62,8 +62,8 @@ void SetUpStrings() {
       }
     }
     // big_string->resize(50);
-    // OK, we've set up the std::string, now let's set up expectations - first by
-    // just replacing "the" with "box"
+    // OK, we've set up the std::string, now let's set up expectations - first
+    // by just replacing "the" with "box"
     after_replacing_the = new std::string(*big_string);
     for (size_t pos = 0;
          (pos = after_replacing_the->find("the", pos)) != std::string::npos;) {

@@ -20,10 +20,10 @@
 #include <memory>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/container/fixed_array.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 #include "absl/strings/internal/escaping_test_common.h"
 
@@ -100,15 +100,12 @@ TEST(CEscape, BasicEscaping) {
       {"\\'full of \\\"sound\\\" and \\\"fury\\\"\\'",
        "'full of \"sound\" and \"fury\"'"},
       {"signi\\\\fying\\\\ nothing\\\\", "signi\\fying\\ nothing\\"},
-      {"\\010\\t\\n\\013\\014\\r", "\010\011\012\013\014\015"}
-  };
+      {"\\010\\t\\n\\013\\014\\r", "\010\011\012\013\014\015"}};
   epair hex_values[] = {
       {"ubik\\rubik\\nubik\\t", "ubik\rubik\nubik\t"},
-      {"I\\\'ve just seen a \\\"face\\\"",
-       "I've just seen a \"face\""},
+      {"I\\\'ve just seen a \\\"face\\\"", "I've just seen a \"face\""},
       {"hel\\\\ter\\\\skel\\\\ter\\\\", "hel\\ter\\skel\\ter\\"},
-      {"\\x08\\t\\n\\x0b\\x0c\\r", "\010\011\012\013\014\015"}
-  };
+      {"\\x08\\t\\n\\x0b\\x0c\\r", "\010\011\012\013\014\015"}};
   epair utf8_oct_values[] = {
       {"\xe8\xb0\xb7\xe6\xad\x8c\\r\xe8\xb0\xb7\xe6\xad\x8c\\nbaz\\t",
        "\xe8\xb0\xb7\xe6\xad\x8c\r\xe8\xb0\xb7\xe6\xad\x8c\nbaz\t"},
@@ -117,8 +114,7 @@ TEST(CEscape, BasicEscaping) {
       {"\xe3\x83\xa1\xe3\x83\xbc\xe3\x83\xab\\\\are\\\\Japanese\\\\chars\\\\",
        "\xe3\x83\xa1\xe3\x83\xbc\xe3\x83\xab\\are\\Japanese\\chars\\"},
       {"\xed\x81\xac\xeb\xa1\xac\\010\\t\\n\\013\\014\\r",
-       "\xed\x81\xac\xeb\xa1\xac\010\011\012\013\014\015"}
-  };
+       "\xed\x81\xac\xeb\xa1\xac\010\011\012\013\014\015"}};
   epair utf8_hex_values[] = {
       {"\x20\xe4\xbd\xa0\\t\xe5\xa5\xbd,\\r!\\n",
        "\x20\xe4\xbd\xa0\t\xe5\xa5\xbd,\r!\n"},
@@ -127,8 +123,7 @@ TEST(CEscape, BasicEscaping) {
       {"\\\\\xe6\x88\x91\\\\:\\\\\xe6\x9d\xa8\xe6\xac\xa2\\\\",
        "\\\xe6\x88\x91\\:\\\xe6\x9d\xa8\xe6\xac\xa2\\"},
       {"\xed\x81\xac\xeb\xa1\xac\\x08\\t\\n\\x0b\\x0c\\r",
-       "\xed\x81\xac\xeb\xa1\xac\010\011\012\013\014\015"}
-  };
+       "\xed\x81\xac\xeb\xa1\xac\010\011\012\013\014\015"}};
 
   for (const epair& val : oct_values) {
     std::string escaped = absl::CEscape(val.unescaped);
@@ -149,12 +144,11 @@ TEST(CEscape, BasicEscaping) {
 }
 
 TEST(Unescape, BasicFunction) {
-  epair tests[] =
-    {{"\\u0030", "0"},
-     {"\\u00A3", "\xC2\xA3"},
-     {"\\u22FD", "\xE2\x8B\xBD"},
-     {"\\U00010000", "\xF0\x90\x80\x80"},
-     {"\\U0010FFFD", "\xF4\x8F\xBF\xBD"}};
+  epair tests[] = {{"\\u0030", "0"},
+                   {"\\u00A3", "\xC2\xA3"},
+                   {"\\u22FD", "\xE2\x8B\xBD"},
+                   {"\\U00010000", "\xF0\x90\x80\x80"},
+                   {"\\U0010FFFD", "\xF4\x8F\xBF\xBD"}};
   for (const epair& val : tests) {
     std::string out;
     EXPECT_TRUE(absl::CUnescape(val.escaped, &out));
@@ -264,7 +258,6 @@ TEST_F(CUnescapeTest, UnescapesMultipleOctalNulls) {
                         7),
             result_string_);
 }
-
 
 TEST_F(CUnescapeTest, UnescapesMultipleHexNulls) {
   std::string original_string(kStringWithMultipleHexNulls);
@@ -604,9 +597,7 @@ void TestEscapeAndUnescape() {
   }
 }
 
-TEST(Base64, EscapeAndUnescape) {
-  TestEscapeAndUnescape<std::string>();
-}
+TEST(Base64, EscapeAndUnescape) { TestEscapeAndUnescape<std::string>(); }
 
 TEST(Base64, DISABLED_HugeData) {
   const size_t kSize = size_t(3) * 1000 * 1000 * 1000;
@@ -616,8 +607,8 @@ TEST(Base64, DISABLED_HugeData) {
   std::string escaped;
   absl::Base64Escape(huge, &escaped);
 
-  // Generates the std::string that should match a base64 encoded "xxx..." std::string.
-  // "xxx" in base64 is "eHh4".
+  // Generates the std::string that should match a base64 encoded "xxx..."
+  // std::string. "xxx" in base64 is "eHh4".
   std::string expected_encoding;
   expected_encoding.reserve(kSize / 3 * 4);
   for (size_t i = 0; i < kSize / 3; ++i) {

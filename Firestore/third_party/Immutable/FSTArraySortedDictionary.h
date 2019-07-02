@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
  * will automatically convert to a FSTTreeSortedDictionary after an insert call above a certain
  * threshold.
  */
-@interface FSTArraySortedDictionary <KeyType, ValueType> :
-    FSTImmutableSortedDictionary<KeyType, ValueType>
+@interface FSTArraySortedDictionary<KeyType, ValueType>
+    : FSTImmutableSortedDictionary <KeyType, ValueType>
 
-+ (FSTArraySortedDictionary<KeyType, ValueType> *)
-    dictionaryWithDictionary:(NSDictionary<KeyType, ValueType> *)dictionary
-                  comparator:(NSComparator)comparator;
++ (FSTArraySortedDictionary<KeyType, ValueType> *)dictionaryWithDictionary:
+                                                      (NSDictionary<KeyType, ValueType> *)dictionary
+                                                                comparator:(NSComparator)comparator;
 
 - (id)init __attribute__((unavailable("Use initWithComparator:keys:values: instead.")));
 

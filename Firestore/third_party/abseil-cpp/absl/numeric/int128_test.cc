@@ -21,15 +21,15 @@
 #include <utility>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/cycleclock.h"
 #include "absl/hash/hash_testing.h"
 #include "absl/meta/type_traits.h"
+#include "gtest/gtest.h"
 
 #if defined(_MSC_VER) && _MSC_VER == 1900
 // Disable "unary minus operator applied to unsigned type" warnings in Microsoft
 // Visual C++ 14 (2015).
-#pragma warning(disable:4146)
+#pragma warning(disable : 4146)
 #endif
 
 namespace {
@@ -260,8 +260,8 @@ TEST(Uint128, ConversionTests) {
   EXPECT_EQ(from_precise_double, from_precise_ints);
   EXPECT_DOUBLE_EQ(static_cast<double>(from_precise_ints), precise_double);
 
-  double approx_double = 0xffffeeeeddddcccc * std::pow(2.0, 64.0) +
-                         0xbbbbaaaa99998888;
+  double approx_double =
+      0xffffeeeeddddcccc * std::pow(2.0, 64.0) + 0xbbbbaaaa99998888;
   absl::uint128 from_approx_double(approx_double);
   EXPECT_DOUBLE_EQ(static_cast<double>(from_approx_double), approx_double);
 
@@ -329,7 +329,7 @@ TEST(Uint128, Multiply) {
   c = a * b;
   EXPECT_EQ(absl::MakeUint128(0x530EDA741C71D4C3, 0xBF25975319080000), c);
   EXPECT_EQ(0, c - b * a);
-  EXPECT_EQ(a*a - b*b, (a+b) * (a-b));
+  EXPECT_EQ(a * a - b * b, (a + b) * (a - b));
 
   // Verified with dc.
   a = absl::MakeUint128(0x0123456789abcdef, 0xfedcba9876543210);
@@ -337,7 +337,7 @@ TEST(Uint128, Multiply) {
   c = a * b;
   EXPECT_EQ(absl::MakeUint128(0x97a87f4f261ba3f2, 0x342d0bbf48948200), c);
   EXPECT_EQ(0, c - b * a);
-  EXPECT_EQ(a*a - b*b, (a+b) * (a-b));
+  EXPECT_EQ(a * a - b * b, (a + b) * (a - b));
 }
 
 TEST(Uint128, AliasTests) {

@@ -156,7 +156,7 @@ bool ParseFormatString(string_view src, Consumer consumer) {
       p = ConsumeUnboundConversion(percent + 1, end, &conv, &next_arg);
       if (ABSL_PREDICT_FALSE(p == nullptr)) return false;
       if (ABSL_PREDICT_FALSE(!consumer.ConvertOne(
-          conv, string_view(percent + 1, p - (percent + 1))))) {
+              conv, string_view(percent + 1, p - (percent + 1))))) {
         return false;
       }
     } else {
@@ -240,7 +240,6 @@ class ParsedFormatBase {
   std::unique_ptr<char[]> data_;
   std::vector<ConversionItem> items_;
 };
-
 
 // A value type representing a preparsed format.  These can be created, copied
 // around, and reused to speed up formatting loops.

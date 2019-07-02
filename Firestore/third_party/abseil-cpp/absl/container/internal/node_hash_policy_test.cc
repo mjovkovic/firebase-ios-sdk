@@ -16,9 +16,9 @@
 
 #include <memory>
 
+#include "absl/container/internal/hash_policy_traits.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/container/internal/hash_policy_traits.h"
 
 namespace absl {
 namespace container_internal {

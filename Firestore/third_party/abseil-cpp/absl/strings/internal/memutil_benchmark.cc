@@ -17,8 +17,8 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include "benchmark/benchmark.h"
 #include "absl/strings/ascii.h"
+#include "benchmark/benchmark.h"
 
 // We fill the haystack with aaaaaaaaaaaaaaaaaa...aaaab.
 // That gives us:

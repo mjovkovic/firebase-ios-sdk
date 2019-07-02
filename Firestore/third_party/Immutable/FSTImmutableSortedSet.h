@@ -6,7 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
  * FSTImmutableSortedSet is a set. It is immutable, but has methods to create new sets that are
  * mutations of it, in an efficient way.
  */
-@interface FSTImmutableSortedSet <KeyType> : NSObject
+@interface FSTImmutableSortedSet<KeyType> : NSObject
 
 + (FSTImmutableSortedSet<KeyType> *)setWithComparator:(NSComparator)comparator;
 

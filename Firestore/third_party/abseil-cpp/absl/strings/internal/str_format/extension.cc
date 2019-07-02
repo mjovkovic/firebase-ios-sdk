@@ -37,7 +37,8 @@ namespace {
 }  // namespace
 
 const LengthMod::Spec LengthMod::kSpecs[] = {
-#define X_VAL(id) { LengthMod::id, #id, strlen(#id) }
+#define X_VAL(id) \
+  { LengthMod::id, #id, strlen(#id) }
 #define X_SEP ,
     ABSL_LENGTH_MODS_EXPAND_, {LengthMod::none, "", 0}
 #undef X_VAL
@@ -45,7 +46,8 @@ const LengthMod::Spec LengthMod::kSpecs[] = {
 };
 
 const ConversionChar::Spec ConversionChar::kSpecs[] = {
-#define X_VAL(id) { ConversionChar::id, #id[0] }
+#define X_VAL(id) \
+  { ConversionChar::id, #id[0] }
 #define X_SEP ,
     ABSL_CONVERSION_CHARS_EXPAND_(X_VAL, X_SEP),
     {ConversionChar::none, '\0'},
@@ -55,11 +57,11 @@ const ConversionChar::Spec ConversionChar::kSpecs[] = {
 
 std::string Flags::ToString() const {
   std::string s;
-  s.append(left     ? "-" : "");
+  s.append(left ? "-" : "");
   s.append(show_pos ? "+" : "");
   s.append(sign_col ? " " : "");
-  s.append(alt      ? "#" : "");
-  s.append(zero     ? "0" : "");
+  s.append(alt ? "#" : "");
+  s.append(zero ? "0" : "");
   return s;
 }
 

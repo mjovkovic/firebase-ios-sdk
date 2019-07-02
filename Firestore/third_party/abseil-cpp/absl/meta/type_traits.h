@@ -205,8 +205,8 @@ template <typename... Ts>
 struct disjunction;
 
 template <typename T, typename... Ts>
-struct disjunction<T, Ts...> :
-      std::conditional<T::value, T, disjunction<Ts...>>::type {};
+struct disjunction<T, Ts...>
+    : std::conditional<T::value, T, disjunction<Ts...>>::type {};
 
 template <typename T>
 struct disjunction<T> : T {};
@@ -241,7 +241,7 @@ struct negation : std::integral_constant<bool, !T::value> {};
 template <typename T>
 struct is_trivially_destructible
     : std::integral_constant<bool, __has_trivial_destructor(T) &&
-                                   std::is_destructible<T>::value> {
+                                       std::is_destructible<T>::value> {
 #ifdef ABSL_HAVE_STD_IS_TRIVIALLY_DESTRUCTIBLE
  private:
   static constexpr bool compliant = std::is_trivially_destructible<T>::value ==
@@ -289,9 +289,10 @@ struct is_trivially_destructible
 // Nontrivially destructible types will cause the expression to be nontrivial.
 template <typename T>
 struct is_trivially_default_constructible
-    : std::integral_constant<bool, __has_trivial_constructor(T) &&
-                                   std::is_default_constructible<T>::value &&
-                                   is_trivially_destructible<T>::value> {
+    : std::integral_constant<bool,
+                             __has_trivial_constructor(T) &&
+                                 std::is_default_constructible<T>::value &&
+                                 is_trivially_destructible<T>::value> {
 #ifdef ABSL_HAVE_STD_IS_TRIVIALLY_CONSTRUCTIBLE
  private:
   static constexpr bool compliant =
@@ -321,11 +322,10 @@ struct is_trivially_default_constructible
 // expression to be nontrivial.
 template <typename T>
 struct is_trivially_move_constructible
-    : std::conditional<
-          std::is_object<T>::value && !std::is_array<T>::value,
-          std::is_move_constructible<
-              type_traits_internal::SingleMemberUnion<T>>,
-          std::is_reference<T>>::type::type {
+    : std::conditional<std::is_object<T>::value && !std::is_array<T>::value,
+                       std::is_move_constructible<
+                           type_traits_internal::SingleMemberUnion<T>>,
+                       std::is_reference<T>>::type::type {
 #ifdef ABSL_HAVE_STD_IS_TRIVIALLY_CONSTRUCTIBLE
  private:
   static constexpr bool compliant =
@@ -355,11 +355,10 @@ struct is_trivially_move_constructible
 // expression to be nontrivial.
 template <typename T>
 struct is_trivially_copy_constructible
-    : std::conditional<
-          std::is_object<T>::value && !std::is_array<T>::value,
-          std::is_copy_constructible<
-              type_traits_internal::SingleMemberUnion<T>>,
-          std::is_lvalue_reference<T>>::type::type {
+    : std::conditional<std::is_object<T>::value && !std::is_array<T>::value,
+                       std::is_copy_constructible<
+                           type_traits_internal::SingleMemberUnion<T>>,
+                       std::is_lvalue_reference<T>>::type::type {
 #ifdef ABSL_HAVE_STD_IS_TRIVIALLY_CONSTRUCTIBLE
  private:
   static constexpr bool compliant =
@@ -688,8 +687,8 @@ namespace type_traits_internal {
 // Make the swap-related traits/function accessible from this namespace.
 using swap_internal::IsNothrowSwappable;
 using swap_internal::IsSwappable;
-using swap_internal::Swap;
 using swap_internal::StdSwapIsUnconstrained;
+using swap_internal::Swap;
 
 }  // namespace type_traits_internal
 }  // namespace absl

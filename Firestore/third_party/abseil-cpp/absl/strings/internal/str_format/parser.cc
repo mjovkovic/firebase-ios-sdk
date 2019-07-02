@@ -55,7 +55,7 @@ ABSL_CONST_INIT const ConvTag kTags[256] = {
 
 namespace {
 
-bool CheckFastPathSetting(const UnboundConversion& conv) {
+bool CheckFastPathSetting(const UnboundConversion &conv) {
   bool should_be_basic = !conv.flags.left &&      //
                          !conv.flags.show_pos &&  //
                          !conv.flags.sign_col &&  //
@@ -77,7 +77,7 @@ bool CheckFastPathSetting(const UnboundConversion& conv) {
 template <bool is_positional>
 const char *ConsumeConversion(const char *pos, const char *const end,
                               UnboundConversion *conv, int *next_arg) {
-  const char* const original_pos = pos;
+  const char *const original_pos = pos;
   char c;
   // Read the next char into `c` and update `pos`. Returns false if there are
   // no more chars to read.
@@ -148,7 +148,7 @@ const char *ConsumeConversion(const char *pos, const char *const end,
       }
       ABSL_FORMAT_PARSER_INTERNAL_GET_CHAR();
     }
-flags_done:
+  flags_done:
 
     if (c <= '9') {
       if (c >= '0') {
@@ -265,7 +265,7 @@ struct ParsedFormatBase::ParsedFormatConsumer {
   }
 
   ParsedFormatBase *parsed;
-  char* data_pos;
+  char *data_pos;
 };
 
 ParsedFormatBase::ParsedFormatBase(string_view format, bool allow_ignored,
@@ -279,11 +279,11 @@ bool ParsedFormatBase::MatchesConversions(
     bool allow_ignored, std::initializer_list<Conv> convs) const {
   std::unordered_set<int> used;
   auto add_if_valid_conv = [&](int pos, char c) {
-      if (static_cast<size_t>(pos) > convs.size() ||
-          !Contains(convs.begin()[pos - 1], c))
-        return false;
-      used.insert(pos);
-      return true;
+    if (static_cast<size_t>(pos) > convs.size() ||
+        !Contains(convs.begin()[pos - 1], c))
+      return false;
+    used.insert(pos);
+    return true;
   };
   for (const ConversionItem &item : items_) {
     if (!item.is_conversion) continue;

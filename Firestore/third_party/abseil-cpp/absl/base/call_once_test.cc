@@ -17,11 +17,11 @@
 #include <thread>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/base/const_init.h"
 #include "absl/base/thread_annotations.h"
 #include "absl/synchronization/mutex.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace {
@@ -72,7 +72,6 @@ TEST(CallOnceTest, ExecutionCount) {
   for (int i = 0; i < 10; ++i) {
     threads.emplace_back(ThreadBody);
   }
-
 
   // Wait until all ten threads have started, and WaitAndIncrement has been
   // invoked.

@@ -319,8 +319,9 @@ bool ParseInfinityOrNan(const char* begin, const char* end,
       }
       out->type = strings_internal::FloatType::kNan;
       out->end = begin + 3;
-      // NaN is allowed to be followed by a parenthesized std::string, consisting of
-      // only the characters [a-zA-Z0-9_].  Match that if it's present.
+      // NaN is allowed to be followed by a parenthesized std::string,
+      // consisting of only the characters [a-zA-Z0-9_].  Match that if it's
+      // present.
       begin += 3;
       if (begin < end && *begin == '(') {
         const char* nan_begin = begin + 1;

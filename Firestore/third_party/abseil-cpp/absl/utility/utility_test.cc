@@ -20,11 +20,11 @@
 #include <type_traits>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/attributes.h"
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -35,10 +35,10 @@ namespace {
 // Both the unused variables and the name length warnings are due to calls
 // to absl::make_index_sequence with very large values, creating very long type
 // names. The resulting warnings are so long they make build output unreadable.
-#pragma warning( push )
-#pragma warning( disable : 4503 )  // decorated name length exceeded
-#pragma warning( disable : 4101 )  // unreferenced local variable
-#endif  // _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4503)  // decorated name length exceeded
+#pragma warning(disable : 4101)  // unreferenced local variable
+#endif                           // _MSC_VER
 
 using ::testing::ElementsAre;
 using ::testing::Pointee;
@@ -342,4 +342,3 @@ TEST(ExchangeTest, MoveOnly) {
 }
 
 }  // namespace
-

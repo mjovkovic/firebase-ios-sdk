@@ -20,9 +20,9 @@
 #include <utility>
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/base/macros.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace synchronization_internal {
@@ -40,7 +40,7 @@ using RandomEngine = std::mt19937_64;
 
 // Mapping from integer index to GraphId.
 typedef std::map<int, GraphId> IdMap;
-static GraphId Get(const IdMap& id, int num) {
+static GraphId Get(const IdMap &id, int num) {
   auto iter = id.find(num);
   return (iter == id.end()) ? InvalidGraphId() : iter->second;
 }
@@ -48,7 +48,7 @@ static GraphId Get(const IdMap& id, int num) {
 // Return whether "to" is reachable from "from".
 static bool IsReachable(Edges *edges, int from, int to,
                         std::unordered_set<int> *seen) {
-  seen->insert(from);     // we are investigating "from"; don't do it again
+  seen->insert(from);  // we are investigating "from"; don't do it again
   if (from == to) return true;
   for (const auto &edge : *edges) {
     if (edge.from == from) {
@@ -165,15 +165,15 @@ static void CheckInvariants(const GraphCycles &gc) {
 
 // Returns the index of a randomly chosen node in *nodes.
 // Requires *nodes be non-empty.
-static int RandomNode(RandomEngine* rng, Nodes *nodes) {
-  std::uniform_int_distribution<int> uniform(0, nodes->size()-1);
+static int RandomNode(RandomEngine *rng, Nodes *nodes) {
+  std::uniform_int_distribution<int> uniform(0, nodes->size() - 1);
   return uniform(*rng);
 }
 
 // Returns the index of a randomly chosen edge in *edges.
 // Requires *edges be non-empty.
-static int RandomEdge(RandomEngine* rng, Edges *edges) {
-  std::uniform_int_distribution<int> uniform(0, edges->size()-1);
+static int RandomEdge(RandomEngine *rng, Edges *edges) {
+  std::uniform_int_distribution<int> uniform(0, edges->size() - 1);
   return uniform(*rng);
 }
 
@@ -184,16 +184,16 @@ static int EdgeIndex(Edges *edges, int from, int to) {
          ((*edges)[i].from != from || (*edges)[i].to != to)) {
     i++;
   }
-  return i == edges->size()? -1 : i;
+  return i == edges->size() ? -1 : i;
 }
 
 TEST(GraphCycles, RandomizedTest) {
   int next_node = 0;
   Nodes nodes;
-  Edges edges;   // from, to
+  Edges edges;  // from, to
   IdMap id;
   GraphCycles graph_cycles;
-  static const int kMaxNodes = 7;  // use <= 7 nodes to keep test short
+  static const int kMaxNodes = 7;     // use <= 7 nodes to keep test short
   static const int kDataOffset = 17;  // an offset to the node-specific data
   int n = 100000;
   int op = 0;
@@ -201,7 +201,7 @@ TEST(GraphCycles, RandomizedTest) {
   std::uniform_int_distribution<int> uniform(0, 5);
 
   auto ptr = [](intptr_t i) {
-    return reinterpret_cast<void*>(i + kDataOffset);
+    return reinterpret_cast<void *>(i + kDataOffset);
   };
 
   for (int iter = 0; iter != n; iter++) {
@@ -212,103 +212,103 @@ TEST(GraphCycles, RandomizedTest) {
     CheckTransitiveClosure(&nodes, &edges, id, &graph_cycles);
     op = uniform(rng);
     switch (op) {
-    case 0:     // Add a node
-      if (nodes.size() < kMaxNodes) {
-        int new_node = next_node++;
-        GraphId new_gnode = graph_cycles.GetId(ptr(new_node));
-        ASSERT_NE(new_gnode, InvalidGraphId());
-        id[new_node] = new_gnode;
-        ASSERT_EQ(ptr(new_node), graph_cycles.Ptr(new_gnode));
-        nodes.push_back(new_node);
-      }
-      break;
+      case 0:  // Add a node
+        if (nodes.size() < kMaxNodes) {
+          int new_node = next_node++;
+          GraphId new_gnode = graph_cycles.GetId(ptr(new_node));
+          ASSERT_NE(new_gnode, InvalidGraphId());
+          id[new_node] = new_gnode;
+          ASSERT_EQ(ptr(new_node), graph_cycles.Ptr(new_gnode));
+          nodes.push_back(new_node);
+        }
+        break;
 
-    case 1:    // Remove a node
-      if (nodes.size() > 0) {
-        int node_index = RandomNode(&rng, &nodes);
-        int node = nodes[node_index];
-        nodes[node_index] = nodes.back();
-        nodes.pop_back();
-        graph_cycles.RemoveNode(ptr(node));
-        ASSERT_EQ(graph_cycles.Ptr(Get(id, node)), nullptr);
-        id.erase(node);
-        int i = 0;
-        while (i != edges.size()) {
-          if (edges[i].from == node || edges[i].to == node) {
-            edges[i] = edges.back();
-            edges.pop_back();
-          } else {
-            i++;
+      case 1:  // Remove a node
+        if (nodes.size() > 0) {
+          int node_index = RandomNode(&rng, &nodes);
+          int node = nodes[node_index];
+          nodes[node_index] = nodes.back();
+          nodes.pop_back();
+          graph_cycles.RemoveNode(ptr(node));
+          ASSERT_EQ(graph_cycles.Ptr(Get(id, node)), nullptr);
+          id.erase(node);
+          int i = 0;
+          while (i != edges.size()) {
+            if (edges[i].from == node || edges[i].to == node) {
+              edges[i] = edges.back();
+              edges.pop_back();
+            } else {
+              i++;
+            }
           }
         }
-      }
-      break;
+        break;
 
-    case 2:   // Add an edge
-      if (nodes.size() > 0) {
-        int from = RandomNode(&rng, &nodes);
-        int to = RandomNode(&rng, &nodes);
-        if (EdgeIndex(&edges, nodes[from], nodes[to]) == -1) {
-          if (graph_cycles.InsertEdge(id[nodes[from]], id[nodes[to]])) {
-            Edge new_edge;
-            new_edge.from = nodes[from];
-            new_edge.to = nodes[to];
-            edges.push_back(new_edge);
-          } else {
-            std::unordered_set<int> seen;
-            ASSERT_TRUE(IsReachable(&edges, nodes[to], nodes[from], &seen))
-                << "Edge " << nodes[to] << "->" << nodes[from];
+      case 2:  // Add an edge
+        if (nodes.size() > 0) {
+          int from = RandomNode(&rng, &nodes);
+          int to = RandomNode(&rng, &nodes);
+          if (EdgeIndex(&edges, nodes[from], nodes[to]) == -1) {
+            if (graph_cycles.InsertEdge(id[nodes[from]], id[nodes[to]])) {
+              Edge new_edge;
+              new_edge.from = nodes[from];
+              new_edge.to = nodes[to];
+              edges.push_back(new_edge);
+            } else {
+              std::unordered_set<int> seen;
+              ASSERT_TRUE(IsReachable(&edges, nodes[to], nodes[from], &seen))
+                  << "Edge " << nodes[to] << "->" << nodes[from];
+            }
           }
         }
-      }
-      break;
+        break;
 
-    case 3:    // Remove an edge
-      if (edges.size() > 0) {
-        int i = RandomEdge(&rng, &edges);
-        int from = edges[i].from;
-        int to = edges[i].to;
-        ASSERT_EQ(i, EdgeIndex(&edges, from, to));
-        edges[i] = edges.back();
-        edges.pop_back();
-        ASSERT_EQ(-1, EdgeIndex(&edges, from, to));
-        graph_cycles.RemoveEdge(id[from], id[to]);
-      }
-      break;
+      case 3:  // Remove an edge
+        if (edges.size() > 0) {
+          int i = RandomEdge(&rng, &edges);
+          int from = edges[i].from;
+          int to = edges[i].to;
+          ASSERT_EQ(i, EdgeIndex(&edges, from, to));
+          edges[i] = edges.back();
+          edges.pop_back();
+          ASSERT_EQ(-1, EdgeIndex(&edges, from, to));
+          graph_cycles.RemoveEdge(id[from], id[to]);
+        }
+        break;
 
-    case 4:   // Check a path
-      if (nodes.size() > 0) {
-        int from = RandomNode(&rng, &nodes);
-        int to = RandomNode(&rng, &nodes);
-        GraphId path[2*kMaxNodes];
-        int path_len = graph_cycles.FindPath(id[nodes[from]], id[nodes[to]],
-                                             ABSL_ARRAYSIZE(path), path);
-        std::unordered_set<int> seen;
-        bool reachable = IsReachable(&edges, nodes[from], nodes[to], &seen);
-        bool gc_reachable =
-            graph_cycles.IsReachable(Get(id, nodes[from]), Get(id, nodes[to]));
-        ASSERT_EQ(path_len != 0, reachable);
-        ASSERT_EQ(path_len != 0, gc_reachable);
-        // In the following line, we add one because a node can appear
-        // twice, if the path is from that node to itself, perhaps via
-        // every other node.
-        ASSERT_LE(path_len, kMaxNodes + 1);
-        if (path_len != 0) {
-          ASSERT_EQ(id[nodes[from]], path[0]);
-          ASSERT_EQ(id[nodes[to]], path[path_len-1]);
-          for (int i = 1; i < path_len; i++) {
-            ASSERT_TRUE(graph_cycles.HasEdge(path[i-1], path[i]));
+      case 4:  // Check a path
+        if (nodes.size() > 0) {
+          int from = RandomNode(&rng, &nodes);
+          int to = RandomNode(&rng, &nodes);
+          GraphId path[2 * kMaxNodes];
+          int path_len = graph_cycles.FindPath(id[nodes[from]], id[nodes[to]],
+                                               ABSL_ARRAYSIZE(path), path);
+          std::unordered_set<int> seen;
+          bool reachable = IsReachable(&edges, nodes[from], nodes[to], &seen);
+          bool gc_reachable = graph_cycles.IsReachable(Get(id, nodes[from]),
+                                                       Get(id, nodes[to]));
+          ASSERT_EQ(path_len != 0, reachable);
+          ASSERT_EQ(path_len != 0, gc_reachable);
+          // In the following line, we add one because a node can appear
+          // twice, if the path is from that node to itself, perhaps via
+          // every other node.
+          ASSERT_LE(path_len, kMaxNodes + 1);
+          if (path_len != 0) {
+            ASSERT_EQ(id[nodes[from]], path[0]);
+            ASSERT_EQ(id[nodes[to]], path[path_len - 1]);
+            for (int i = 1; i < path_len; i++) {
+              ASSERT_TRUE(graph_cycles.HasEdge(path[i - 1], path[i]));
+            }
           }
         }
-      }
-      break;
+        break;
 
-    case 5:  // Check invariants
-      CheckInvariants(graph_cycles);
-      break;
+      case 5:  // Check invariants
+        CheckInvariants(graph_cycles);
+        break;
 
-    default:
-      ABSL_RAW_LOG(FATAL, "op %d", op);
+      default:
+        ABSL_RAW_LOG(FATAL, "op %d", op);
     }
 
     // Very rarely, test graph expansion by adding then removing many nodes.
@@ -355,11 +355,11 @@ class GraphCyclesTest : public ::testing::Test {
   IdMap id_;
   GraphCycles g_;
 
-  static void* Ptr(int i) {
-    return reinterpret_cast<void*>(static_cast<uintptr_t>(i));
+  static void *Ptr(int i) {
+    return reinterpret_cast<void *>(static_cast<uintptr_t>(i));
   }
 
-  static int Num(void* ptr) {
+  static int Num(void *ptr) {
     return static_cast<int>(reinterpret_cast<uintptr_t>(ptr));
   }
 
@@ -371,15 +371,13 @@ class GraphCyclesTest : public ::testing::Test {
     CheckInvariants(g_);
   }
 
-  bool AddEdge(int x, int y) {
-    return g_.InsertEdge(Get(id_, x), Get(id_, y));
-  }
+  bool AddEdge(int x, int y) { return g_.InsertEdge(Get(id_, x), Get(id_, y)); }
 
   void AddMultiples() {
     // For every node x > 0: add edge to 2*x, 3*x
     for (int x = 1; x < 25; x++) {
-      EXPECT_TRUE(AddEdge(x, 2*x)) << x;
-      EXPECT_TRUE(AddEdge(x, 3*x)) << x;
+      EXPECT_TRUE(AddEdge(x, 2 * x)) << x;
+      EXPECT_TRUE(AddEdge(x, 3 * x)) << x;
     }
     CheckInvariants(g_);
   }
@@ -448,11 +446,11 @@ TEST_F(GraphCyclesTest, ManyEdges) {
   const int N = 50;
   for (int i = 0; i < N; i++) {
     for (int j = 1; j < N; j++) {
-      ASSERT_TRUE(AddEdge(i, i+j));
+      ASSERT_TRUE(AddEdge(i, i + j));
     }
   }
   CheckInvariants(g_);
-  ASSERT_TRUE(AddEdge(2*N-1, 0));
+  ASSERT_TRUE(AddEdge(2 * N - 1, 0));
   CheckInvariants(g_);
   ASSERT_FALSE(AddEdge(10, 9));
   CheckInvariants(g_);

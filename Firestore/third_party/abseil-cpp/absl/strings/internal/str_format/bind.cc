@@ -68,8 +68,7 @@ inline bool ArgContext::Bind(const UnboundConversion* unbound,
     bound->set_width(width);
     bound->set_precision(precision);
     bound->set_flags(unbound->flags);
-    if (force_left)
-      bound->set_left(true);
+    if (force_left) bound->set_left(true);
   } else {
     bound->set_flags(unbound->flags);
     bound->set_width(-1);

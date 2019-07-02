@@ -94,28 +94,17 @@ static const AbbrevPair kOperatorList[] = {
 
 // List of builtin types from Itanium C++ ABI.
 static const AbbrevPair kBuiltinTypeList[] = {
-    {"v", "void", 0},
-    {"w", "wchar_t", 0},
-    {"b", "bool", 0},
-    {"c", "char", 0},
-    {"a", "signed char", 0},
-    {"h", "unsigned char", 0},
-    {"s", "short", 0},
-    {"t", "unsigned short", 0},
-    {"i", "int", 0},
-    {"j", "unsigned int", 0},
-    {"l", "long", 0},
-    {"m", "unsigned long", 0},
-    {"x", "long long", 0},
-    {"y", "unsigned long long", 0},
-    {"n", "__int128", 0},
-    {"o", "unsigned __int128", 0},
-    {"f", "float", 0},
-    {"d", "double", 0},
-    {"e", "long double", 0},
-    {"g", "__float128", 0},
-    {"z", "ellipsis", 0},
-    {nullptr, nullptr, 0},
+    {"v", "void", 0},        {"w", "wchar_t", 0},
+    {"b", "bool", 0},        {"c", "char", 0},
+    {"a", "signed char", 0}, {"h", "unsigned char", 0},
+    {"s", "short", 0},       {"t", "unsigned short", 0},
+    {"i", "int", 0},         {"j", "unsigned int", 0},
+    {"l", "long", 0},        {"m", "unsigned long", 0},
+    {"x", "long long", 0},   {"y", "unsigned long long", 0},
+    {"n", "__int128", 0},    {"o", "unsigned __int128", 0},
+    {"f", "float", 0},       {"d", "double", 0},
+    {"e", "long double", 0}, {"g", "__float128", 0},
+    {"z", "ellipsis", 0},    {nullptr, nullptr, 0},
 };
 
 // List of substitutions Itanium C++ ABI.
@@ -1067,7 +1056,8 @@ static bool ParseVOffset(State *state) {
 // <ctor-dtor-name> ::= C1 | C2 | C3
 //                  ::= D0 | D1 | D2
 // # GCC extensions: "unified" constructor/destructor.  See
-// # https://github.com/gcc-mirror/gcc/blob/7ad17b583c3643bd4557f29b8391ca7ef08391f5/gcc/cp/mangle.c#L1847
+// #
+// https://github.com/gcc-mirror/gcc/blob/7ad17b583c3643bd4557f29b8391ca7ef08391f5/gcc/cp/mangle.c#L1847
 //                  ::= C4 | D4
 static bool ParseCtorDtorName(State *state) {
   ComplexityGuard guard(state);

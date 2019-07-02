@@ -17,10 +17,10 @@
 #include <string>
 #include <utility>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/str_cat.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 using absl::chars_format;
 using absl::strings_internal::FloatType;

@@ -18,8 +18,8 @@
 #include <type_traits>
 #include <utility>
 
-#include "gtest/gtest.h"
 #include "absl/strings/string_view.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace container_internal {
@@ -251,7 +251,7 @@ TYPED_TEST_SUITE(StringLikeTest, StringTypesCartesianProduct);
 }  // namespace absl
 
 enum Hash : size_t {
-  kStd = 0x2,       // std::hash
+  kStd = 0x2,  // std::hash
 #ifdef _MSC_VER
   kExtension = kStd,  // In MSVC, std::hash == ::hash
 #else                 // _MSC_VER
@@ -286,9 +286,7 @@ size_t Hash(const T& v) {
   return hash_default_hash<T>()(v);
 }
 
-TEST(Delegate, HashDispatch) {
-  EXPECT_EQ(Hash(kStd), Hash(Hashable<kStd>()));
-}
+TEST(Delegate, HashDispatch) { EXPECT_EQ(Hash(kStd), Hash(Hashable<kStd>())); }
 
 }  // namespace
 }  // namespace container_internal

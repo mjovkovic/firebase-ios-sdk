@@ -86,7 +86,7 @@ class Vec {
   T* end() { return ptr_ + size_; }
   const T& operator[](uint32_t i) const { return ptr_[i]; }
   T& operator[](uint32_t i) { return ptr_[i]; }
-  const T& back() const { return ptr_[size_-1]; }
+  const T& back() const { return ptr_[size_ - 1]; }
   void pop_back() { size_--; }
 
   void push_back(const T& v) {
@@ -175,7 +175,7 @@ class NodeSet {
     }
     table_[i] = v;
     // Double when 75% full.
-    if (occupied_ >= table_.size() - table_.size()/4) Grow();
+    if (occupied_ >= table_.size() - table_.size() / 4) Grow();
     return true;
   }
 
@@ -190,7 +190,7 @@ class NodeSet {
   // Example:
   //    HASH_FOR_EACH(elem, node->out) { ... }
 #define HASH_FOR_EACH(elem, eset) \
-  for (int32_t elem, _cursor = 0; (eset).Next(&_cursor, &elem); )
+  for (int32_t elem, _cursor = 0; (eset).Next(&_cursor, &elem);)
   bool Next(int32_t* cursor, int32_t* elem) {
     while (static_cast<uint32_t>(*cursor) < table_.size()) {
       int32_t v = table_[*cursor];
@@ -206,7 +206,7 @@ class NodeSet {
  private:
   enum : int32_t { kEmpty = -1, kDel = -2 };
   Vec<int32_t> table_;
-  uint32_t occupied_;     // Count of non-empty slots (includes deleted slots)
+  uint32_t occupied_;  // Count of non-empty slots (includes deleted slots)
 
   static uint32_t Hash(uint32_t a) { return a * 41; }
 
@@ -274,16 +274,16 @@ inline uint32_t NodeVersion(GraphId id) {
 }
 
 struct Node {
-  int32_t rank;               // rank number assigned by Pearce-Kelly algorithm
-  uint32_t version;           // Current version number
-  int32_t next_hash;          // Next entry in hash table
-  bool visited;               // Temporary marker used by depth-first-search
-  uintptr_t masked_ptr;       // User-supplied pointer
-  NodeSet in;                 // List of immediate predecessor nodes in graph
-  NodeSet out;                // List of immediate successor nodes in graph
-  int priority;               // Priority of recorded stack trace.
-  int nstack;                 // Depth of recorded stack trace.
-  void* stack[40];            // stack[0,nstack-1] holds stack trace for node.
+  int32_t rank;          // rank number assigned by Pearce-Kelly algorithm
+  uint32_t version;      // Current version number
+  int32_t next_hash;     // Next entry in hash table
+  bool visited;          // Temporary marker used by depth-first-search
+  uintptr_t masked_ptr;  // User-supplied pointer
+  NodeSet in;            // List of immediate predecessor nodes in graph
+  NodeSet out;           // List of immediate successor nodes in graph
+  int priority;          // Priority of recorded stack trace.
+  int nstack;            // Depth of recorded stack trace.
+  void* stack[40];       // stack[0,nstack-1] holds stack trace for node.
 };
 
 // Hash table for pointer to node index lookups.
@@ -313,7 +313,7 @@ class PointerMap {
     // Advance through linked list while keeping track of the
     // predecessor slot that points to the current entry.
     auto masked = base_internal::HidePtr(ptr);
-    for (int32_t* slot = &table_[Hash(ptr)]; *slot != -1; ) {
+    for (int32_t* slot = &table_[Hash(ptr)]; *slot != -1;) {
       int32_t index = *slot;
       Node* n = (*nodes_)[index];
       if (n->masked_ptr == masked) {
@@ -438,12 +438,8 @@ void GraphCycles::RemoveNode(void* ptr) {
     return;
   }
   Node* x = rep_->nodes_[i];
-  HASH_FOR_EACH(y, x->out) {
-    rep_->nodes_[y]->in.erase(i);
-  }
-  HASH_FOR_EACH(y, x->in) {
-    rep_->nodes_[y]->out.erase(i);
-  }
+  HASH_FOR_EACH(y, x->out) { rep_->nodes_[y]->in.erase(i); }
+  HASH_FOR_EACH(y, x->in) { rep_->nodes_[y]->out.erase(i); }
   x->in.clear();
   x->out.clear();
   x->masked_ptr = base_internal::HidePtr<void>(nullptr);
@@ -457,8 +453,7 @@ void GraphCycles::RemoveNode(void* ptr) {
 
 void* GraphCycles::Ptr(GraphId id) {
   Node* n = FindNode(rep_, id);
-  return n == nullptr ? nullptr
-                      : base_internal::UnhidePtr<void>(n->masked_ptr);
+  return n == nullptr ? nullptr : base_internal::UnhidePtr<void>(n->masked_ptr);
 }
 
 bool GraphCycles::HasNode(GraphId node) {
@@ -485,8 +480,8 @@ static bool ForwardDFS(GraphCycles::Rep* r, int32_t n, int32_t upper_bound);
 static void BackwardDFS(GraphCycles::Rep* r, int32_t n, int32_t lower_bound);
 static void Reorder(GraphCycles::Rep* r);
 static void Sort(const Vec<Node*>&, Vec<int32_t>* delta);
-static void MoveToList(
-    GraphCycles::Rep* r, Vec<int32_t>* src, Vec<int32_t>* dst);
+static void MoveToList(GraphCycles::Rep* r, Vec<int32_t>* src,
+                       Vec<int32_t>* dst);
 
 bool GraphCycles::InsertEdge(GraphId idx, GraphId idy) {
   Rep* r = rep_;
@@ -588,9 +583,8 @@ static void Reorder(GraphCycles::Rep* r) {
 
   // Produce sorted list of all ranks that will be reassigned.
   r->merged_.resize(r->deltab_.size() + r->deltaf_.size());
-  std::merge(r->deltab_.begin(), r->deltab_.end(),
-             r->deltaf_.begin(), r->deltaf_.end(),
-             r->merged_.begin());
+  std::merge(r->deltab_.begin(), r->deltab_.end(), r->deltaf_.begin(),
+             r->deltaf_.end(), r->merged_.begin());
 
   // Assign the ranks in order to the collected list.
   for (uint32_t i = 0; i < r->list_.size(); i++) {
@@ -610,8 +604,8 @@ static void Sort(const Vec<Node*>& nodes, Vec<int32_t>* delta) {
   std::sort(delta->begin(), delta->end(), cmp);
 }
 
-static void MoveToList(
-    GraphCycles::Rep* r, Vec<int32_t>* src, Vec<int32_t>* dst) {
+static void MoveToList(GraphCycles::Rep* r, Vec<int32_t>* src,
+                       Vec<int32_t>* dst) {
   for (auto& v : *src) {
     int32_t w = v;
     v = r->nodes_[w]->rank;         // Replace v entry with its rank

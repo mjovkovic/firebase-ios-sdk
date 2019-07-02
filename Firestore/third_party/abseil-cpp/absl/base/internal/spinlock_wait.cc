@@ -62,10 +62,10 @@ int SpinLockSuggestedDelayNS(int loop) {
   // Weak pseudo-random number generator to get some spread between threads
   // when many are spinning.
   uint64_t r = delay_rand.load(std::memory_order_relaxed);
-  r = 0x5deece66dLL * r + 0xb;   // numbers from nrand48()
+  r = 0x5deece66dLL * r + 0xb;  // numbers from nrand48()
   delay_rand.store(r, std::memory_order_relaxed);
 
-  if (loop < 0 || loop > 32) {   // limit loop to 0..32
+  if (loop < 0 || loop > 32) {  // limit loop to 0..32
     loop = 32;
   }
   const int kMinDelay = 128 << 10;  // 128us

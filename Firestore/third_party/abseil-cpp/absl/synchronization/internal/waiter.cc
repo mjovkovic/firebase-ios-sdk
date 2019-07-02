@@ -87,8 +87,7 @@ static void MaybeBecomeIdle() {
 
 class Futex {
  public:
-  static int WaitUntil(std::atomic<int32_t> *v, int32_t val,
-                       KernelTimeout t) {
+  static int WaitUntil(std::atomic<int32_t> *v, int32_t val, KernelTimeout t) {
     int err = 0;
     if (t.has_timeout()) {
       // https://locklessinc.com/articles/futex_cheat_sheet/
@@ -96,10 +95,10 @@ class Futex {
       struct timespec abs_timeout = t.MakeAbsTimespec();
       // Atomically check that the futex value is still 0, and if it
       // is, sleep until abs_timeout or until woken by FUTEX_WAKE.
-      err = syscall(
-          SYS_futex, reinterpret_cast<int32_t *>(v),
-          FUTEX_WAIT_BITSET | FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME, val,
-          &abs_timeout, nullptr, FUTEX_BITSET_MATCH_ANY);
+      err =
+          syscall(SYS_futex, reinterpret_cast<int32_t *>(v),
+                  FUTEX_WAIT_BITSET | FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME,
+                  val, &abs_timeout, nullptr, FUTEX_BITSET_MATCH_ANY);
     } else {
       // Atomically check that the futex value is still 0, and if it
       // is, sleep until woken by FUTEX_WAKE.
@@ -122,9 +121,7 @@ class Futex {
   }
 };
 
-void Waiter::Init() {
-  futex_.store(0, std::memory_order_relaxed);
-}
+void Waiter::Init() { futex_.store(0, std::memory_order_relaxed); }
 
 bool Waiter::Wait(KernelTimeout t) {
   // Loop until we can atomically decrement futex from a positive
@@ -132,8 +129,7 @@ bool Waiter::Wait(KernelTimeout t) {
   while (true) {
     int32_t x = futex_.load(std::memory_order_relaxed);
     if (x != 0) {
-      if (!futex_.compare_exchange_weak(x, x - 1,
-                                        std::memory_order_acquire,
+      if (!futex_.compare_exchange_weak(x, x - 1, std::memory_order_acquire,
                                         std::memory_order_relaxed)) {
         continue;  // Raced with someone, retry.
       }
@@ -222,9 +218,8 @@ bool Waiter::Wait(KernelTimeout t) {
   while (true) {
     int x = wakeup_count_.load(std::memory_order_relaxed);
     if (x != 0) {
-      if (!wakeup_count_.compare_exchange_weak(x, x - 1,
-                                               std::memory_order_acquire,
-                                               std::memory_order_relaxed)) {
+      if (!wakeup_count_.compare_exchange_weak(
+              x, x - 1, std::memory_order_acquire, std::memory_order_relaxed)) {
         continue;  // Raced with someone, retry.
       }
       // Successfully consumed a wakeup, we're done.
@@ -291,8 +286,7 @@ bool Waiter::Wait(KernelTimeout t) {
   while (true) {
     int x = wakeups_.load(std::memory_order_relaxed);
     if (x != 0) {
-      if (!wakeups_.compare_exchange_weak(x, x - 1,
-                                          std::memory_order_acquire,
+      if (!wakeups_.compare_exchange_weak(x, x - 1, std::memory_order_acquire,
                                           std::memory_order_relaxed)) {
         continue;  // Raced with someone, retry.
       }
@@ -342,9 +336,8 @@ class Waiter::WinHelper {
 
   static_assert(sizeof(SRWLOCK) == sizeof(Waiter::SRWLockStorage),
                 "SRWLockStorage does not have the same size as SRWLOCK");
-  static_assert(
-      alignof(SRWLOCK) == alignof(Waiter::SRWLockStorage),
-      "SRWLockStorage does not have the same alignment as SRWLOCK");
+  static_assert(alignof(SRWLOCK) == alignof(Waiter::SRWLockStorage),
+                "SRWLockStorage does not have the same alignment as SRWLOCK");
 
   static_assert(sizeof(CONDITION_VARIABLE) ==
                     sizeof(Waiter::ConditionVariableStorage),
@@ -369,19 +362,15 @@ class Waiter::WinHelper {
 
 class LockHolder {
  public:
-  explicit LockHolder(SRWLOCK* mu) : mu_(mu) {
-    AcquireSRWLockExclusive(mu_);
-  }
+  explicit LockHolder(SRWLOCK *mu) : mu_(mu) { AcquireSRWLockExclusive(mu_); }
 
-  LockHolder(const LockHolder&) = delete;
-  LockHolder& operator=(const LockHolder&) = delete;
+  LockHolder(const LockHolder &) = delete;
+  LockHolder &operator=(const LockHolder &) = delete;
 
-  ~LockHolder() {
-    ReleaseSRWLockExclusive(mu_);
-  }
+  ~LockHolder() { ReleaseSRWLockExclusive(mu_); }
 
  private:
-  SRWLOCK* mu_;
+  SRWLOCK *mu_;
 };
 
 void Waiter::Init() {
@@ -404,9 +393,8 @@ bool Waiter::Wait(KernelTimeout t) {
   while (true) {
     int x = wakeup_count_.load(std::memory_order_relaxed);
     if (x != 0) {
-      if (!wakeup_count_.compare_exchange_weak(x, x - 1,
-                                               std::memory_order_acquire,
-                                               std::memory_order_relaxed)) {
+      if (!wakeup_count_.compare_exchange_weak(
+              x, x - 1, std::memory_order_acquire, std::memory_order_relaxed)) {
         continue;  // Raced with someone, retry.
       }
       // Successfully consumed a wakeup, we're done.

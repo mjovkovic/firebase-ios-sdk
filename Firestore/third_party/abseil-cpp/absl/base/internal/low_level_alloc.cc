@@ -47,7 +47,7 @@
 #include <atomic>
 #include <cerrno>
 #include <cstddef>
-#include <new>                   // for placement-new
+#include <new>  // for placement-new
 
 #include "absl/base/dynamic_annotations.h"
 #include "absl/base/internal/raw_logging.h"
@@ -121,7 +121,7 @@ static int IntLog2(size_t size, size_t base) {
 static int Random(uint32_t *state) {
   uint32_t r = *state;
   int result = 1;
-  while ((((r = r*1103515245 + 12345) >> 30) & 1) == 0) {
+  while ((((r = r * 1103515245 + 12345) >> 30) & 1) == 0) {
     result++;
   }
   *state = r;
@@ -143,7 +143,7 @@ static int LLA_SkiplistLevels(size_t size, size_t base, uint32_t *random) {
   size_t max_fit = (size - offsetof(AllocList, next)) / sizeof(AllocList *);
   int level = IntLog2(size, base) + (random != nullptr ? Random(random) : 1);
   if (static_cast<size_t>(level) > max_fit) level = static_cast<int>(max_fit);
-  if (level > kMaxLevel-1) level = kMaxLevel - 1;
+  if (level > kMaxLevel - 1) level = kMaxLevel - 1;
   ABSL_RAW_CHECK(level >= 1, "block not big enough for even one level");
   return level;
 }
@@ -152,8 +152,8 @@ static int LLA_SkiplistLevels(size_t size, size_t base, uint32_t *random) {
 // For 0 <= i < head->levels, set prev[i] to "no_greater", where no_greater
 // points to the last element at level i in the AllocList less than *e, or is
 // head if no such element exists.
-static AllocList *LLA_SkiplistSearch(AllocList *head,
-                                     AllocList *e, AllocList **prev) {
+static AllocList *LLA_SkiplistSearch(AllocList *head, AllocList *e,
+                                     AllocList **prev) {
   AllocList *p = head;
   for (int level = head->levels - 1; level >= 0; level--) {
     for (AllocList *n; (n = p->next[level]) != nullptr && n < e; p = n) {
@@ -189,7 +189,7 @@ static void LLA_SkiplistDelete(AllocList *head, AllocList *e,
     prev[i]->next[i] = e->next[i];
   }
   while (head->levels > 0 && head->next[head->levels - 1] == nullptr) {
-    head->levels--;   // reduce head->levels if level unused
+    head->levels--;  // reduce head->levels if level unused
   }
 }
 
@@ -247,9 +247,9 @@ void CreateGlobalArenas() {
 
 // Returns a global arena that does not call into hooks.  Used by NewArena()
 // when kCallMallocHook is not set.
-LowLevelAlloc::Arena* UnhookedArena() {
+LowLevelAlloc::Arena *UnhookedArena() {
   base_internal::LowLevelCallOnce(&create_globals_once, CreateGlobalArenas);
-  return reinterpret_cast<LowLevelAlloc::Arena*>(&unhooked_arena_storage);
+  return reinterpret_cast<LowLevelAlloc::Arena *>(&unhooked_arena_storage);
 }
 
 #ifndef ABSL_LOW_LEVEL_ALLOC_ASYNC_SIGNAL_SAFE_MISSING
@@ -267,7 +267,7 @@ LowLevelAlloc::Arena *UnhookedAsyncSigSafeArena() {
 // Returns the default arena, as used by LowLevelAlloc::Alloc() and friends.
 LowLevelAlloc::Arena *LowLevelAlloc::DefaultArena() {
   base_internal::LowLevelCallOnce(&create_globals_once, CreateGlobalArenas);
-  return reinterpret_cast<LowLevelAlloc::Arena*>(&default_arena_storage);
+  return reinterpret_cast<LowLevelAlloc::Arena *>(&default_arena_storage);
 }
 
 // magic numbers to identify allocated and unallocated blocks
@@ -351,8 +351,7 @@ LowLevelAlloc::Arena::Arena(uint32_t flags_value)
       min_size(2 * roundup),
       random(0) {
   freelist.header.size = 0;
-  freelist.header.magic =
-      Magic(kMagicUnallocated, &freelist.header);
+  freelist.header.magic = Magic(kMagicUnallocated, &freelist.header);
   freelist.header.arena = this;
   freelist.levels = 0;
   memset(freelist.next, 0, sizeof(freelist.next));
@@ -370,7 +369,7 @@ LowLevelAlloc::Arena *LowLevelAlloc::NewArena(int32_t flags) {
     meta_data_arena = UnhookedArena();
   }
   Arena *result =
-    new (AllocWithArena(sizeof (*result), meta_data_arena)) Arena(flags);
+      new (AllocWithArena(sizeof(*result), meta_data_arena)) Arena(flags);
   return result;
 }
 
@@ -475,8 +474,8 @@ static void Coalesce(AllocList *a) {
     AllocList *prev[kMaxLevel];
     LLA_SkiplistDelete(&arena->freelist, n, prev);
     LLA_SkiplistDelete(&arena->freelist, a, prev);
-    a->levels = LLA_SkiplistLevels(a->header.size, arena->min_size,
-                                   &arena->random);
+    a->levels =
+        LLA_SkiplistLevels(a->header.size, arena->min_size, &arena->random);
     LLA_SkiplistInsert(&arena->freelist, a, prev);
   }
 }
@@ -484,27 +483,27 @@ static void Coalesce(AllocList *a) {
 // Adds block at location "v" to the free list
 // L >= arena->mu
 static void AddToFreelist(void *v, LowLevelAlloc::Arena *arena) {
-  AllocList *f = reinterpret_cast<AllocList *>(
-                        reinterpret_cast<char *>(v) - sizeof (f->header));
+  AllocList *f = reinterpret_cast<AllocList *>(reinterpret_cast<char *>(v) -
+                                               sizeof(f->header));
   ABSL_RAW_CHECK(f->header.magic == Magic(kMagicAllocated, &f->header),
                  "bad magic number in AddToFreelist()");
   ABSL_RAW_CHECK(f->header.arena == arena,
                  "bad arena pointer in AddToFreelist()");
-  f->levels = LLA_SkiplistLevels(f->header.size, arena->min_size,
-                                 &arena->random);
+  f->levels =
+      LLA_SkiplistLevels(f->header.size, arena->min_size, &arena->random);
   AllocList *prev[kMaxLevel];
   LLA_SkiplistInsert(&arena->freelist, f, prev);
   f->header.magic = Magic(kMagicUnallocated, &f->header);
-  Coalesce(f);                  // maybe coalesce with successor
-  Coalesce(prev[0]);            // maybe coalesce with predecessor
+  Coalesce(f);        // maybe coalesce with successor
+  Coalesce(prev[0]);  // maybe coalesce with predecessor
 }
 
 // Frees storage allocated by LowLevelAlloc::Alloc().
 // L < arena->mu
 void LowLevelAlloc::Free(void *v) {
   if (v != nullptr) {
-    AllocList *f = reinterpret_cast<AllocList *>(
-                        reinterpret_cast<char *>(v) - sizeof (f->header));
+    AllocList *f = reinterpret_cast<AllocList *>(reinterpret_cast<char *>(v) -
+                                                 sizeof(f->header));
     ABSL_RAW_CHECK(f->header.magic == Magic(kMagicAllocated, &f->header),
                    "bad magic number in Free()");
     LowLevelAlloc::Arena *arena = f->header.arena;
@@ -521,21 +520,21 @@ void LowLevelAlloc::Free(void *v) {
 static void *DoAllocWithArena(size_t request, LowLevelAlloc::Arena *arena) {
   void *result = nullptr;
   if (request != 0) {
-    AllocList *s;       // will point to region that satisfies request
+    AllocList *s;  // will point to region that satisfies request
     ArenaLock section(arena);
     // round up with header
-    size_t req_rnd = RoundUp(CheckedAdd(request, sizeof (s->header)),
-                             arena->roundup);
-    for (;;) {      // loop until we find a suitable region
+    size_t req_rnd =
+        RoundUp(CheckedAdd(request, sizeof(s->header)), arena->roundup);
+    for (;;) {  // loop until we find a suitable region
       // find the minimum levels that a block of this size must have
       int i = LLA_SkiplistLevels(req_rnd, arena->min_size, nullptr) - 1;
-      if (i < arena->freelist.levels) {   // potential blocks exist
+      if (i < arena->freelist.levels) {        // potential blocks exist
         AllocList *before = &arena->freelist;  // predecessor of s
         while ((s = Next(i, before, arena)) != nullptr &&
                s->header.size < req_rnd) {
           before = s;
         }
-        if (s != nullptr) {       // we found a region
+        if (s != nullptr) {  // we found a region
           break;
         }
       }
@@ -547,14 +546,15 @@ static void *DoAllocWithArena(size_t request, LowLevelAlloc::Arena *arena) {
       size_t new_pages_size = RoundUp(req_rnd, arena->pagesize * 16);
       void *new_pages;
 #ifdef _WIN32
-      new_pages = VirtualAlloc(0, new_pages_size,
-                               MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+      new_pages = VirtualAlloc(0, new_pages_size, MEM_RESERVE | MEM_COMMIT,
+                               PAGE_READWRITE);
       ABSL_RAW_CHECK(new_pages != nullptr, "VirtualAlloc failed");
 #else
 #ifndef ABSL_LOW_LEVEL_ALLOC_ASYNC_SIGNAL_SAFE_MISSING
       if ((arena->flags & LowLevelAlloc::kAsyncSignalSafe) != 0) {
-        new_pages = base_internal::DirectMmap(nullptr, new_pages_size,
-            PROT_WRITE|PROT_READ, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+        new_pages = base_internal::DirectMmap(
+            nullptr, new_pages_size, PROT_WRITE | PROT_READ,
+            MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
       } else {
         new_pages = mmap(nullptr, new_pages_size, PROT_WRITE | PROT_READ,
                          MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
@@ -577,12 +577,12 @@ static void *DoAllocWithArena(size_t request, LowLevelAlloc::Arena *arena) {
       AddToFreelist(&s->levels, arena);  // insert new region into free list
     }
     AllocList *prev[kMaxLevel];
-    LLA_SkiplistDelete(&arena->freelist, s, prev);    // remove from free list
+    LLA_SkiplistDelete(&arena->freelist, s, prev);  // remove from free list
     // s points to the first free region that's big enough
     if (CheckedAdd(req_rnd, arena->min_size) <= s->header.size) {
       // big enough to split
-      AllocList *n = reinterpret_cast<AllocList *>
-                        (req_rnd + reinterpret_cast<char *>(s));
+      AllocList *n =
+          reinterpret_cast<AllocList *>(req_rnd + reinterpret_cast<char *>(s));
       n->header.size = s->header.size - req_rnd;
       n->header.magic = Magic(kMagicAllocated, &n->header);
       n->header.arena = arena;

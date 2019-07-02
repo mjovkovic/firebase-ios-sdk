@@ -14,10 +14,10 @@
 
 #include "absl/strings/ascii.h"
 
-#include <cctype>
-#include <string>
 #include <array>
+#include <cctype>
 #include <random>
+#include <string>
 
 #include "benchmark/benchmark.h"
 

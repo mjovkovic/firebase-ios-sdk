@@ -4,16 +4,16 @@
 #include <cstdio>
 #include <string>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/strings/str_format.h"
 #include "absl/strings/string_view.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace {
 using str_format_internal::FormatArgImpl;
 
-class FormatEntryPointTest : public ::testing::Test { };
+class FormatEntryPointTest : public ::testing::Test {};
 
 TEST_F(FormatEntryPointTest, Format) {
   std::string sink;
@@ -85,7 +85,6 @@ TEST_F(FormatEntryPointTest, AppendFormatFail) {
                 &s, str_format_internal::UntypedFormatSpecImpl::Extract(format),
                 {&arg, 1}));
 }
-
 
 TEST_F(FormatEntryPointTest, ManyArgs) {
   EXPECT_EQ("24", StrFormat("%24$d", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
@@ -216,10 +215,8 @@ TEST_F(FormatEntryPointTest, FloatPrecisionArg) {
 }
 namespace streamed_test {
 struct X {};
-std::ostream& operator<<(std::ostream& os, const X&) {
-  return os << "X";
-}
-}  // streamed_test
+std::ostream& operator<<(std::ostream& os, const X&) { return os << "X"; }
+}  // namespace streamed_test
 
 TEST_F(FormatEntryPointTest, FormatStreamed) {
   EXPECT_EQ("123", StrFormat("%s", FormatStreamed(123)));

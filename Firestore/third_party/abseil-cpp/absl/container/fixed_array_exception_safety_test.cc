@@ -16,8 +16,8 @@
 
 #include "absl/container/fixed_array.h"
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/exception_safety_testing.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 

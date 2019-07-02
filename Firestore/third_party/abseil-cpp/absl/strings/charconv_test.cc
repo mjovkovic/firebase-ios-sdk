@@ -17,11 +17,11 @@
 #include <cstdlib>
 #include <string>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/strings/internal/pow10_helper.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 #ifdef _MSC_FULL_VER
 #define ABSL_COMPILER_DOES_EXACT_ROUNDING 0
@@ -212,7 +212,6 @@ TEST(FromChars, NearRoundingCasesExplicit) {
   EXPECT_EQ(ToFloat("6930161142.e-48"), ldexpf(9891056, -150));
   EXPECT_EQ(ToFloat("25933168707.e-13"), ldexpf(11138211, -32));
   EXPECT_EQ(ToFloat("596428896559.e20"), ldexpf(12333860, 82));
-
 
   EXPECT_EQ(ToDouble("9.e-265"), ldexp(8168427841980010, -930));
   EXPECT_EQ(ToDouble("85.e-037"), ldexp(6360455125664090, -169));
@@ -523,14 +522,13 @@ TEST(FromChars, ReturnValuePtr) {
   EXPECT_EQ(result.ptr - normal.data(), 4);
 
   std::string overflow = "1e1000@#$%@#$%";
-  result = absl::from_chars(overflow.data(),
-                            overflow.data() + overflow.size(), d);
+  result =
+      absl::from_chars(overflow.data(), overflow.data() + overflow.size(), d);
   EXPECT_EQ(result.ec, std::errc::result_out_of_range);
   EXPECT_EQ(result.ptr - overflow.data(), 6);
 
   std::string garbage = "#$%@#$%";
-  result = absl::from_chars(garbage.data(),
-                            garbage.data() + garbage.size(), d);
+  result = absl::from_chars(garbage.data(), garbage.data() + garbage.size(), d);
   EXPECT_EQ(result.ec, std::errc::invalid_argument);
   EXPECT_EQ(result.ptr - garbage.data(), 0);
 }
@@ -652,9 +650,7 @@ TEST(FromChars, NaNFloats) {
 }
 
 // Returns an integer larger than step.  The values grow exponentially.
-int NextStep(int step) {
-  return step + (step >> 2) + 1;
-}
+int NextStep(int step) { return step + (step >> 2) + 1; }
 
 // Test a conversion on a family of input strings, checking that the calculation
 // is correct for in-bounds values, and that overflow and underflow are done

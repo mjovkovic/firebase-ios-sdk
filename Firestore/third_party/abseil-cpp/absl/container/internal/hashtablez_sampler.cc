@@ -31,9 +31,7 @@ namespace container_internal {
 constexpr int HashtablezInfo::kMaxStackDepth;
 
 namespace {
-ABSL_CONST_INIT std::atomic<bool> g_hashtablez_enabled{
-   false
-};
+ABSL_CONST_INIT std::atomic<bool> g_hashtablez_enabled{false};
 ABSL_CONST_INIT std::atomic<int32_t> g_hashtablez_sample_parameter{1 << 10};
 ABSL_CONST_INIT std::atomic<int32_t> g_hashtablez_max_samples{1 << 20};
 
@@ -76,7 +74,7 @@ int64_t GetGeometricVariable(int64_t mean) {
         // created and destroyed repeatedly.
         ABSL_CONST_INIT static std::atomic<uint32_t> global_rand(0);
         uint64_t r = reinterpret_cast<uint64_t>(&rng) +
-                   global_rand.fetch_add(1, std::memory_order_relaxed);
+                     global_rand.fetch_add(1, std::memory_order_relaxed);
         for (int i = 0; i < 20; ++i) {
           r = NextRandom(r);
         }

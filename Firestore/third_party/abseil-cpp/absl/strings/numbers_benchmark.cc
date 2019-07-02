@@ -18,9 +18,9 @@
 #include <type_traits>
 #include <vector>
 
-#include "benchmark/benchmark.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/strings/numbers.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 

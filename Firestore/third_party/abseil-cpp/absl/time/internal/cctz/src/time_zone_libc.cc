@@ -86,19 +86,19 @@ OffsetAbbr get_offset_abbr(const T& tm, decltype(&T::__tm_gmtoff) = nullptr,
 #endif  // !defined(__tm_gmtoff) && !defined(__tm_zone)
 #endif
 
-inline std::tm* gm_time(const std::time_t *timep, std::tm *result) {
+inline std::tm* gm_time(const std::time_t* timep, std::tm* result) {
 #if defined(_WIN32) || defined(_WIN64)
-    return gmtime_s(result, timep) ? nullptr : result;
+  return gmtime_s(result, timep) ? nullptr : result;
 #else
-    return gmtime_r(timep, result);
+  return gmtime_r(timep, result);
 #endif
 }
 
-inline std::tm* local_time(const std::time_t *timep, std::tm *result) {
+inline std::tm* local_time(const std::time_t* timep, std::tm* result) {
 #if defined(_WIN32) || defined(_WIN64)
-    return localtime_s(result, timep) ? nullptr : result;
+  return localtime_s(result, timep) ? nullptr : result;
 #else
-    return localtime_r(timep, result);
+  return localtime_r(timep, result);
 #endif
 }
 
@@ -191,8 +191,8 @@ time_zone::absolute_lookup TimeZoneLibC::BreakTime(
   }
 
   const year_t year = tmp->tm_year + year_t{1900};
-  al.cs = civil_second(year, tmp->tm_mon + 1, tmp->tm_mday,
-                       tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
+  al.cs = civil_second(year, tmp->tm_mon + 1, tmp->tm_mday, tmp->tm_hour,
+                       tmp->tm_min, tmp->tm_sec);
   std::tie(al.offset, al.abbr) = get_offset_abbr(*tmp);
   if (!local_) al.abbr = "UTC";  // as expected by cctz
   al.is_dst = tmp->tm_isdst > 0;

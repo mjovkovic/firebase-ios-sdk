@@ -104,7 +104,7 @@ TEST(BigUnsigned, MultiplyByBigUnsigned) {
   }
   {
     // Multiply various powers of 10 together.
-    for (int a = 0 ; a < 700; a += 25) {
+    for (int a = 0; a < 700; a += 25) {
       SCOPED_TRACE(a);
       BigUnsigned<84> a_value("3" + std::string(a, '0'));
       for (int b = 0; b < (700 - a); b += 25) {
@@ -197,7 +197,6 @@ TEST(BigUnsigned, TenToTheNth) {
     }
   }
 }
-
 
 }  // namespace strings_internal
 }  // namespace absl

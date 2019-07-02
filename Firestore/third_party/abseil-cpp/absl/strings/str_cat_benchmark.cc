@@ -17,8 +17,8 @@
 #include <cstdint>
 #include <string>
 
-#include "benchmark/benchmark.h"
 #include "absl/strings/substitute.h"
+#include "benchmark/benchmark.h"
 
 namespace {
 
@@ -27,9 +27,7 @@ const char kStringTwo[] = "There was a std::string benchmark";
 
 // We want to include negative numbers in the benchmark, so this function
 // is used to count 0, 1, -1, 2, -2, 3, -3, ...
-inline int IncrementAlternatingSign(int i) {
-  return i > 0 ? -i : 1 - i;
-}
+inline int IncrementAlternatingSign(int i) { return i > 0 ? -i : 1 - i; }
 
 void BM_Sum_By_StrCat(benchmark::State& state) {
   int i = 0;

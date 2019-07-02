@@ -78,7 +78,7 @@ static int GetNumCPUs() {
 static double GetNominalCPUFrequency() {
   DWORD data;
   DWORD data_size = sizeof(data);
-  #pragma comment(lib, "shlwapi.lib")  // For SHGetValue().
+#pragma comment(lib, "shlwapi.lib")  // For SHGetValue().
   if (SUCCEEDED(
           SHGetValueA(HKEY_LOCAL_MACHINE,
                       "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
@@ -184,7 +184,8 @@ static double MeasureTscFrequencyWithSleep(int sleep_nanoseconds) {
   struct timespec ts;
   ts.tv_sec = 0;
   ts.tv_nsec = sleep_nanoseconds;
-  while (nanosleep(&ts, &ts) != 0 && errno == EINTR) {}
+  while (nanosleep(&ts, &ts) != 0 && errno == EINTR) {
+  }
   auto t1 = GetTimeTscPair();
   double elapsed_ticks = t1.tsc - t0.tsc;
   double elapsed_time = (t1.time - t0.time) * 1e-9;
@@ -276,9 +277,7 @@ double NominalCPUFrequency() {
 
 #if defined(_WIN32)
 
-pid_t GetTID() {
-  return GetCurrentThreadId();
-}
+pid_t GetTID() { return GetCurrentThreadId(); }
 
 #elif defined(__linux__)
 
@@ -286,9 +285,7 @@ pid_t GetTID() {
 #define SYS_gettid __NR_gettid
 #endif
 
-pid_t GetTID() {
-  return syscall(SYS_gettid);
-}
+pid_t GetTID() { return syscall(SYS_gettid); }
 
 #elif defined(__akaros__)
 
@@ -309,8 +306,7 @@ pid_t GetTID() {
   // TODO(dcross): Akaros anticipates moving the thread ID to the uthread
   // structure at some point. We should modify this code to remove the cast
   // when that happens.
-  if (in_vcore_context())
-    return 0;
+  if (in_vcore_context()) return 0;
   return reinterpret_cast<struct pthread_tcb *>(current_uthread)->id;
 }
 
@@ -333,7 +329,7 @@ static absl::base_internal::SpinLock tid_lock(
 // We set a bit per thread in this array to indicate that an ID is in
 // use. ID 0 is unused because it is the default value returned by
 // pthread_getspecific().
-static std::vector<uint32_t>* tid_array GUARDED_BY(tid_lock) = nullptr;
+static std::vector<uint32_t> *tid_array GUARDED_BY(tid_lock) = nullptr;
 static constexpr int kBitsPerWord = 32;  // tid_array is uint32_t.
 
 // Returns the TID to tid_array.

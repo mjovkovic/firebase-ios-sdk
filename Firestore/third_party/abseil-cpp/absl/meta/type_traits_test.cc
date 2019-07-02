@@ -430,10 +430,10 @@ TEST(TypeTraitsTest, TestTrivialDestructor) {
 
   // Verify that simple_pairs of types without trivial destructors
   // are not marked as trivial.
-  EXPECT_FALSE((absl::is_trivially_destructible<
-                simple_pair<int, std::string>>::value));
-  EXPECT_FALSE((absl::is_trivially_destructible<
-                simple_pair<std::string, int>>::value));
+  EXPECT_FALSE(
+      (absl::is_trivially_destructible<simple_pair<int, std::string>>::value));
+  EXPECT_FALSE(
+      (absl::is_trivially_destructible<simple_pair<std::string, int>>::value));
 
   // array of such types is trivial
   using int10 = int[10];
@@ -1109,7 +1109,7 @@ TEST(TypeTraitsTest, TestDecay) {
   ABSL_INTERNAL_EXPECT_ALIAS_EQUIVALENCE(decay, int[][1]);
 
   ABSL_INTERNAL_EXPECT_ALIAS_EQUIVALENCE(decay, int());
-  ABSL_INTERNAL_EXPECT_ALIAS_EQUIVALENCE(decay, int(float));  // NOLINT
+  ABSL_INTERNAL_EXPECT_ALIAS_EQUIVALENCE(decay, int(float));      // NOLINT
   ABSL_INTERNAL_EXPECT_ALIAS_EQUIVALENCE(decay, int(char, ...));  // NOLINT
 }
 
@@ -1269,8 +1269,7 @@ TEST(TypeTraitsTest, IsMoveAssignable) {
 
 namespace adl_namespace {
 
-struct DeletedSwap {
-};
+struct DeletedSwap {};
 
 void swap(DeletedSwap&, DeletedSwap&) = delete;
 

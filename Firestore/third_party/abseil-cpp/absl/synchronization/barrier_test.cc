@@ -17,10 +17,9 @@
 #include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/synchronization/mutex.h"
 #include "absl/time/clock.h"
-
+#include "gtest/gtest.h"
 
 TEST(Barrier, SanityTest) {
   constexpr int kNumThreads = 10;

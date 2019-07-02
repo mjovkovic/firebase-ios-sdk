@@ -18,11 +18,11 @@
 #include <type_traits>
 #include <utility>
 
-#include "gtest/gtest.h"
 #include "absl/base/config.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/meta/type_traits.h"
 #include "absl/strings/string_view.h"
+#include "gtest/gtest.h"
 
 struct Hashable {};
 
@@ -63,9 +63,9 @@ struct StructorListener {
 // 4522: multiple assignment operators specified
 // We wrote multiple of them to test that the correct overloads are selected.
 #ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4521)
-#pragma warning( disable : 4522)
+#pragma warning(push)
+#pragma warning(disable : 4521)
+#pragma warning(disable : 4522)
 #endif
 struct Listenable {
   static StructorListener* listener;
@@ -99,7 +99,7 @@ struct Listenable {
   ~Listenable() { ++listener->destruct; }
 };
 #ifdef _MSC_VER
-#pragma warning( pop )
+#pragma warning(pop)
 #endif
 
 StructorListener* Listenable::listener = nullptr;
@@ -983,9 +983,8 @@ TEST(optionalTest, PointerStuff) {
 // Skip that test to make the build green again when using the old compiler.
 // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59296 is fixed in 4.9.1.
 #if defined(__GNUC__) && !defined(__clang__)
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
+#define GCC_VERSION \
+  (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #if GCC_VERSION < 40901
 #define ABSL_SKIP_OVERLOAD_TEST_DUE_TO_GCC_BUG
 #endif
@@ -1195,7 +1194,6 @@ void optionalTest_Comparisons_EXPECT_GREATER(T x, U y) {
   EXPECT_TRUE(x >= y);
 }
 
-
 template <typename T, typename U, typename V>
 void TestComparisons() {
   absl::optional<T> ae, a2{2}, a4{4};
@@ -1287,7 +1285,6 @@ TEST(optionalTest, Comparisons) {
   absl::optional<std::string> e2;
   EXPECT_TRUE(e1 == e2);
 }
-
 
 TEST(optionalTest, SwapRegression) {
   StructorListener listener;

@@ -35,13 +35,13 @@
 #include <utility>
 #include <vector>
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include "absl/container/flat_hash_set.h"
 #include "absl/hash/hash_testing.h"
 #include "absl/hash/internal/spy_hash_state.h"
 #include "absl/meta/type_traits.h"
 #include "absl/numeric/int128.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -49,8 +49,7 @@ using absl::Hash;
 using absl::hash_internal::SpyHashState;
 
 template <typename T>
-class HashValueIntTest : public testing::Test {
-};
+class HashValueIntTest : public testing::Test {};
 TYPED_TEST_SUITE_P(HashValueIntTest);
 
 template <typename T>
@@ -81,8 +80,8 @@ TYPED_TEST_P(HashValueIntTest, FastPath) {
 }
 
 REGISTER_TYPED_TEST_CASE_P(HashValueIntTest, BasicUsage, FastPath);
-using IntTypes = testing::Types<unsigned char, char, int, int32_t, int64_t, uint32_t,
-                                uint64_t, size_t>;
+using IntTypes = testing::Types<unsigned char, char, int, int32_t, int64_t,
+                                uint32_t, uint64_t, size_t>;
 INSTANTIATE_TYPED_TEST_CASE_P(My, HashValueIntTest, IntTypes);
 
 enum LegacyEnum { kValue1, kValue2, kValue3 };
@@ -205,7 +204,7 @@ TEST(HashValueTest, CombineContiguousWorks) {
 
 struct DummyDeleter {
   template <typename T>
-  void operator() (T* ptr) {}
+  void operator()(T* ptr) {}
 };
 
 struct SmartPointerEq {
@@ -278,23 +277,21 @@ TEST(HashValueTest, Strings) {
   const std::string huge = std::string(5000, 'a');
 
   EXPECT_TRUE(absl::VerifyTypeImplementsAbslHashCorrectly(std::make_tuple(
-      std::string(), absl::string_view(),
-      std::string(""), absl::string_view(""),
-      std::string(small), absl::string_view(small),
-      std::string(dup), absl::string_view(dup),
-      std::string(large), absl::string_view(large),
-      std::string(huge), absl::string_view(huge))));
+      std::string(), absl::string_view(), std::string(""),
+      absl::string_view(""), std::string(small), absl::string_view(small),
+      std::string(dup), absl::string_view(dup), std::string(large),
+      absl::string_view(large), std::string(huge), absl::string_view(huge))));
 
   // Also check that nested types maintain the same hash.
   const WrapInTuple t{};
   EXPECT_TRUE(absl::VerifyTypeImplementsAbslHashCorrectly(std::make_tuple(
       //
-      t(std::string()), t(absl::string_view()),
-      t(std::string("")), t(absl::string_view("")),
-      t(std::string(small)), t(absl::string_view(small)),
-      t(std::string(dup)), t(absl::string_view(dup)),
-      t(std::string(large)), t(absl::string_view(large)),
-      t(std::string(huge)), t(absl::string_view(huge)))));
+      t(std::string()), t(absl::string_view()), t(std::string("")),
+      t(absl::string_view("")), t(std::string(small)),
+      t(absl::string_view(small)), t(std::string(dup)),
+      t(absl::string_view(dup)), t(std::string(large)),
+      t(absl::string_view(large)), t(std::string(huge)),
+      t(absl::string_view(huge)))));
 
   // Make sure that hashing a `const char*` does not use its std::string-value.
   EXPECT_NE(SpyHash(static_cast<const char*>("ABC")),
@@ -335,8 +332,7 @@ TEST(HashValueTest, StdBitset) {
 }  // namespace
 
 template <typename T>
-class HashValueSequenceTest : public testing::Test {
-};
+class HashValueSequenceTest : public testing::Test {};
 TYPED_TEST_SUITE_P(HashValueSequenceTest);
 
 TYPED_TEST_P(HashValueSequenceTest, BasicUsage) {
@@ -429,7 +425,7 @@ struct IsHashCallable : std::false_type {};
 
 template <typename T>
 struct IsHashCallable<T, absl::void_t<decltype(std::declval<absl::Hash<T>>()(
-                            std::declval<const T&>()))>> : std::true_type {};
+                             std::declval<const T&>()))>> : std::true_type {};
 
 template <typename T, typename = void>
 struct IsAggregateInitializable : std::false_type {};
@@ -620,8 +616,7 @@ TEST(HashTest, NoOpsAreEquivalent) {
 }
 
 template <typename T>
-class HashIntTest : public testing::Test {
-};
+class HashIntTest : public testing::Test {};
 TYPED_TEST_SUITE_P(HashIntTest);
 
 TYPED_TEST_P(HashIntTest, BasicUsage) {
@@ -638,8 +633,8 @@ TYPED_TEST_P(HashIntTest, BasicUsage) {
 }
 
 REGISTER_TYPED_TEST_CASE_P(HashIntTest, BasicUsage);
-using IntTypes = testing::Types<unsigned char, char, int, int32_t, int64_t, uint32_t,
-                                uint64_t, size_t>;
+using IntTypes = testing::Types<unsigned char, char, int, int32_t, int64_t,
+                                uint32_t, uint64_t, size_t>;
 INSTANTIATE_TYPED_TEST_CASE_P(My, HashIntTest, IntTypes);
 
 struct StructWithPadding {
@@ -719,8 +714,7 @@ struct ConvertibleFromNoOp {
 };
 
 TEST(HashTest, HeterogeneousCall) {
-  EXPECT_NE(Hash<ConvertibleFromNoOp>()(NoOp()),
-            Hash<NoOp>()(NoOp()));
+  EXPECT_NE(Hash<ConvertibleFromNoOp>()(NoOp()), Hash<NoOp>()(NoOp()));
 }
 
 TEST(IsUniquelyRepresentedTest, SanityTest) {

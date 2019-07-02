@@ -36,10 +36,9 @@
 // This preprocessor token is also defined in raw_io.cc.  If you need to copy
 // this, consider moving both to config.h instead.
 #if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || \
-    defined(__Fuchsia__) || defined(__native_client__) || \
+    defined(__Fuchsia__) || defined(__native_client__) ||               \
     defined(__EMSCRIPTEN__)
 #include <unistd.h>
-
 
 #define ABSL_HAVE_POSIX_WRITE 1
 #define ABSL_LOW_LEVEL_WRITE_SUPPORTED 1
@@ -72,9 +71,11 @@
 // whitelisted set of platforms for which we expect not to be able to raw log.
 
 ABSL_CONST_INIT static absl::base_internal::AtomicHook<
-    absl::raw_logging_internal::LogPrefixHook> log_prefix_hook;
+    absl::raw_logging_internal::LogPrefixHook>
+    log_prefix_hook;
 ABSL_CONST_INIT static absl::base_internal::AtomicHook<
-    absl::raw_logging_internal::AbortHook> abort_hook;
+    absl::raw_logging_internal::AbortHook>
+    abort_hook;
 
 #ifdef ABSL_LOW_LEVEL_WRITE_SUPPORTED
 static const char kTruncated[] = " ... (message truncated)\n";
@@ -85,8 +86,8 @@ static const char kTruncated[] = " ... (message truncated)\n";
 // kTruncated[].
 inline static bool VADoRawLog(char** buf, int* size, const char* format,
                               va_list ap) ABSL_PRINTF_ATTRIBUTE(3, 0);
-inline static bool VADoRawLog(char** buf, int* size,
-                              const char* format, va_list ap) {
+inline static bool VADoRawLog(char** buf, int* size, const char* format,
+                              va_list ap) {
   int n = vsnprintf(*buf, *size, format, ap);
   bool result = true;
   if (n < 0 || n > *size) {
@@ -94,7 +95,7 @@ inline static bool VADoRawLog(char** buf, int* size,
     if (static_cast<size_t>(*size) > sizeof(kTruncated)) {
       n = *size - sizeof(kTruncated);  // room for truncation message
     } else {
-      n = 0;                           // no room for truncation message
+      n = 0;  // no room for truncation message
     }
   }
   *size -= n;
@@ -183,7 +184,7 @@ void RawLogVA(absl::LogSeverity severity, const char* file, int line,
 
 namespace absl {
 namespace raw_logging_internal {
-void SafeWriteToStderr(const char *s, size_t len) {
+void SafeWriteToStderr(const char* s, size_t len) {
 #if defined(ABSL_HAVE_SYSCALL_WRITE)
   syscall(SYS_write, STDERR_FILENO, s, len);
 #elif defined(ABSL_HAVE_POSIX_WRITE)
@@ -192,8 +193,8 @@ void SafeWriteToStderr(const char *s, size_t len) {
   _write(/* stderr */ 2, s, len);
 #else
   // stderr logging unsupported on this platform
-  (void) s;
-  (void) len;
+  (void)s;
+  (void)len;
 #endif
 }
 
@@ -219,7 +220,7 @@ static void DefaultInternalLog(absl::LogSeverity severity, const char* file,
 bool RawLoggingFullySupported() {
 #ifdef ABSL_LOW_LEVEL_WRITE_SUPPORTED
   return true;
-#else  // !ABSL_LOW_LEVEL_WRITE_SUPPORTED
+#else   // !ABSL_LOW_LEVEL_WRITE_SUPPORTED
   return false;
 #endif  // !ABSL_LOW_LEVEL_WRITE_SUPPORTED
 }

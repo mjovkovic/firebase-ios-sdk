@@ -93,5 +93,4 @@ TEST(BitsTest, CountTrailingZerosNonZero32) {
   }
 }
 
-
 }  // namespace

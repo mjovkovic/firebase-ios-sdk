@@ -17,9 +17,9 @@
 #include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
-#include "gtest/gtest.h"
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace {

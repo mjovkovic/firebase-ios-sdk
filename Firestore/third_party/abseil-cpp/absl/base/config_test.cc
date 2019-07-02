@@ -16,8 +16,8 @@
 
 #include <cstdint>
 
-#include "gtest/gtest.h"
 #include "absl/synchronization/internal/thread_pool.h"
+#include "gtest/gtest.h"
 
 namespace {
 

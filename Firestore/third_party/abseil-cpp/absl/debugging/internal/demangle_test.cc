@@ -17,17 +17,17 @@
 #include <cstdlib>
 #include <string>
 
-#include "gtest/gtest.h"
 #include "absl/base/internal/raw_logging.h"
 #include "absl/debugging/internal/stack_consumption.h"
 #include "absl/memory/memory.h"
+#include "gtest/gtest.h"
 
 namespace absl {
 namespace debugging_internal {
 namespace {
 
 // A wrapper function for Demangle() to make the unit test simple.
-static const char *DemangleIt(const char * const mangled) {
+static const char *DemangleIt(const char *const mangled) {
   static char demangled[4096];
   if (Demangle(mangled, demangled, sizeof(demangled))) {
     return demangled;
@@ -138,29 +138,29 @@ TEST(Demangle, DemangleStackConsumption) {
   EXPECT_LT(stack_consumed, kStackConsumptionUpperLimit);
 
   const std::string nested_mangled_name0 = NestedMangledName(0);
-  demangled = DemangleStackConsumption(nested_mangled_name0.c_str(),
-                                       &stack_consumed);
+  demangled =
+      DemangleStackConsumption(nested_mangled_name0.c_str(), &stack_consumed);
   EXPECT_STREQ("a", demangled);
   EXPECT_GT(stack_consumed, 0);
   EXPECT_LT(stack_consumed, kStackConsumptionUpperLimit);
 
   const std::string nested_mangled_name1 = NestedMangledName(1);
-  demangled = DemangleStackConsumption(nested_mangled_name1.c_str(),
-                                       &stack_consumed);
+  demangled =
+      DemangleStackConsumption(nested_mangled_name1.c_str(), &stack_consumed);
   EXPECT_STREQ("a<>", demangled);
   EXPECT_GT(stack_consumed, 0);
   EXPECT_LT(stack_consumed, kStackConsumptionUpperLimit);
 
   const std::string nested_mangled_name2 = NestedMangledName(2);
-  demangled = DemangleStackConsumption(nested_mangled_name2.c_str(),
-                                       &stack_consumed);
+  demangled =
+      DemangleStackConsumption(nested_mangled_name2.c_str(), &stack_consumed);
   EXPECT_STREQ("a<>", demangled);
   EXPECT_GT(stack_consumed, 0);
   EXPECT_LT(stack_consumed, kStackConsumptionUpperLimit);
 
   const std::string nested_mangled_name3 = NestedMangledName(3);
-  demangled = DemangleStackConsumption(nested_mangled_name3.c_str(),
-                                       &stack_consumed);
+  demangled =
+      DemangleStackConsumption(nested_mangled_name3.c_str(), &stack_consumed);
   EXPECT_STREQ("a<>", demangled);
   EXPECT_GT(stack_consumed, 0);
   EXPECT_LT(stack_consumed, kStackConsumptionUpperLimit);
@@ -168,15 +168,13 @@ TEST(Demangle, DemangleStackConsumption) {
 
 #endif  // Stack consumption tests
 
-static void TestOnInput(const char* input) {
+static void TestOnInput(const char *input) {
   static const int kOutSize = 1048576;
   auto out = absl::make_unique<char[]>(kOutSize);
   Demangle(input, out.get(), kOutSize);
 }
 
-TEST(DemangleRegression, NegativeLength) {
-  TestOnInput("_ZZn4");
-}
+TEST(DemangleRegression, NegativeLength) { TestOnInput("_ZZn4"); }
 
 TEST(DemangleRegression, DeeplyNestedArrayType) {
   const int depth = 100000;

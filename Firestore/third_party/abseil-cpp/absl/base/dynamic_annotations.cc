@@ -26,7 +26,7 @@
    and provides its own definitions of the functions. */
 
 #ifndef DYNAMIC_ANNOTATIONS_EXTERNAL_IMPL
-# define DYNAMIC_ANNOTATIONS_EXTERNAL_IMPL 0
+#define DYNAMIC_ANNOTATIONS_EXTERNAL_IMPL 0
 #endif
 
 /* Each function is empty and called (via a macro) only in debug mode.
@@ -42,30 +42,22 @@
 extern "C" {
 #endif
 
-void AnnotateRWLockCreate(const char *, int,
-                          const volatile void *){}
-void AnnotateRWLockDestroy(const char *, int,
-                           const volatile void *){}
-void AnnotateRWLockAcquired(const char *, int,
-                            const volatile void *, long){}
-void AnnotateRWLockReleased(const char *, int,
-                            const volatile void *, long){}
-void AnnotateBenignRace(const char *, int,
-                        const volatile void *,
-                        const char *){}
-void AnnotateBenignRaceSized(const char *, int,
-                             const volatile void *,
-                             size_t,
+void AnnotateRWLockCreate(const char *, int, const volatile void *) {}
+void AnnotateRWLockDestroy(const char *, int, const volatile void *) {}
+void AnnotateRWLockAcquired(const char *, int, const volatile void *, long) {}
+void AnnotateRWLockReleased(const char *, int, const volatile void *, long) {}
+void AnnotateBenignRace(const char *, int, const volatile void *,
+                        const char *) {}
+void AnnotateBenignRaceSized(const char *, int, const volatile void *, size_t,
                              const char *) {}
-void AnnotateThreadName(const char *, int,
-                        const char *){}
-void AnnotateIgnoreReadsBegin(const char *, int){}
-void AnnotateIgnoreReadsEnd(const char *, int){}
-void AnnotateIgnoreWritesBegin(const char *, int){}
-void AnnotateIgnoreWritesEnd(const char *, int){}
-void AnnotateEnableRaceDetection(const char *, int, int){}
-void AnnotateMemoryIsInitialized(const char *, int,
-                                 const volatile void *mem, size_t size) {
+void AnnotateThreadName(const char *, int, const char *) {}
+void AnnotateIgnoreReadsBegin(const char *, int) {}
+void AnnotateIgnoreReadsEnd(const char *, int) {}
+void AnnotateIgnoreWritesBegin(const char *, int) {}
+void AnnotateIgnoreWritesEnd(const char *, int) {}
+void AnnotateEnableRaceDetection(const char *, int, int) {}
+void AnnotateMemoryIsInitialized(const char *, int, const volatile void *mem,
+                                 size_t size) {
 #if __has_feature(memory_sanitizer)
   __msan_unpoison(mem, size);
 #else
@@ -74,8 +66,8 @@ void AnnotateMemoryIsInitialized(const char *, int,
 #endif
 }
 
-void AnnotateMemoryIsUninitialized(const char *, int,
-                                   const volatile void *mem, size_t size) {
+void AnnotateMemoryIsUninitialized(const char *, int, const volatile void *mem,
+                                   size_t size) {
 #if __has_feature(memory_sanitizer)
   __msan_allocated_memory(mem, size);
 #else
@@ -126,4 +118,4 @@ double ValgrindSlowdown(void) {
 #ifdef __cplusplus
 }  // extern "C"
 #endif
-#endif  /* DYNAMIC_ANNOTATIONS_EXTERNAL_IMPL == 0 */
+#endif /* DYNAMIC_ANNOTATIONS_EXTERNAL_IMPL == 0 */
